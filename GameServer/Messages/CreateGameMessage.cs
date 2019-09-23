@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameServer.Models
+namespace GameServer.Messages
 {
-    class SocketMessage
+    class CreateGameMessage
     {
-        public int type { get; set; }
-
-        public object data { get; set; }
+        public const int TYPE = 2;
     }
 }

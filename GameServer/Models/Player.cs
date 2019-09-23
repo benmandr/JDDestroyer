@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SuperWebSocket;
 using Newtonsoft.Json;
 
 namespace GameServer.Models
@@ -8,15 +9,17 @@ namespace GameServer.Models
     class Player
     {
         public string name { get; set; }
-        public Position position { get; set; }
+        public WebSocketSession session { get; set; }
 
-
-        public static Player createFromJson(string jsonString)
+        public Player(string name, WebSocketSession session)
         {
+            this.name = name;
+            this.session = session;
+        }
 
-            Player player = JsonConvert.DeserializeObject<Player>(jsonString);
-
-            return player;
+        public void sendMessage(string message)
+        {
+            session.Send(message);
         }
     }
 }

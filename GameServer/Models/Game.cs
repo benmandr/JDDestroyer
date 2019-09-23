@@ -1,55 +1,117 @@
 ﻿
 using System;
 using SuperWebSocket;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace GameServer.Models
 {
     class Game
     {
-        Player P1 { get; set; }
-        Player P2 { get; set; }
-        Player P3 { get; set; }
-        Player P4 { get; set; }
+        GamePlayer P1 { get; set; }
+        GamePlayer P2 { get; set; }
+        GamePlayer P3 { get; set; }
+        GamePlayer P4 { get; set; }
 
-        private static WebSocketServer wsServer;
+        List<Enemy> enemies = new List<Enemy>();
 
-        public Game()
+        public Game(GamePlayer gamePlayer)
         {
-            wsServer = new WebSocketServer();
-            int port = 8088;
-            wsServer.Setup(port);
-            wsServer.NewSessionConnected += WsServer_NewSessionConnected;
-            wsServer.NewMessageReceived += WsServer_NewMessageReceived;
-            wsServer.NewDataReceived += WsServer_NewDataReceived;
-            wsServer.SessionClosed += WsServer_SessionClosed;
-            wsServer.Start();
-            Console.WriteLine("Server is running on port " + port + ". Press ENTER to exit....");
-            Console.ReadKey();
+            gamePlayer.game = this;
+            gamePlayer.position = new Position(0, 0);
+            P1 = gamePlayer;
+            enemySpawner();
         }
 
-        private static void WsServer_SessionClosed(WebSocketSession session, SuperSocket.SocketBase.CloseReason value)
+        public void addPlayer(GamePlayer gamePlayer)
         {
-            Console.WriteLine("SessionClosed");
+            if (P1 == null)
+                P1 = gamePlayer;
+            else if (P2 == null)
+                P2 = gamePlayer;
+            else if (P3 == null)
+                P3 = gamePlayer;
+            else if (P4 == null)
+                P4 = gamePlayer;
+
+            gamePlayer.position = new Position(0, 50);
+            gamePlayer.game = this;
+            sendMessage(gamePlayer.player.name + " has just joined", gamePlayer);
         }
 
-        private static void WsServer_NewDataReceived(WebSocketSession session, byte[] value)
+        public void removePlayer(GamePlayer leavingPlayer)
         {
-            Console.WriteLine("NewDataReceived");
-            session.Send("NewDataReceived");
-        }
-
-        private static void WsServer_NewMessageReceived(WebSocketSession session, string value)
-        {
-            Console.WriteLine("NewMessageReceived: " + value);
-            if (value == "Hello server")
+            sendMessage(leavingPlayer.player.name + " disconnected", leavingPlayer);
+            if (leavingPlayer.Equals(P1))
             {
-                session.Send("Hello client");
+                P1 = null;
+                return;
+            }
+            if (leavingPlayer.Equals(P2))
+            {
+                P2 = null;
+                return;
+            }
+            if (leavingPlayer.Equals(P3))
+            {
+                P3 = null;
+                return;
+            }
+            if (leavingPlayer.Equals(P4))
+            {
+                P4 = null;
+                return;
             }
         }
 
-        private static void WsServer_NewSessionConnected(WebSocketSession session)
+        public void sendMessage(string msg, GamePlayer except)
         {
-            Console.WriteLine("NewSessionConnected");
+            foreach (GamePlayer gamePlayer in getPlayers())
+            {
+                if (gamePlayer != null && (except == null || except.player.session.SessionID != gamePlayer.player.session.SessionID))
+                {
+                    gamePlayer.sendMessage(msg);
+                }
+            }
+        }
+
+        public bool isEmpty()
+        {
+            foreach (GamePlayer gamePlayer in getPlayers())
+            {
+                if (gamePlayer != null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void enemySpawner()
+        {
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    if (enemies.Count < 1)
+                        enemies.Add(new Enemy(this, new Position(0, 0)));
+                    Thread.Sleep(5000);
+                }
+            }).Start();
+        }
+
+        public void sendMessage(string msg)
+        {
+            sendMessage(msg, null);
+        }
+
+        public IEnumerable<GamePlayer> getPlayers()
+        {
+            yield return P1;
+            yield return P2;
+            yield return P3;
+            yield return P4;
         }
     }
 }

@@ -64,10 +64,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\CreateGameMessage.cs" />
     <Compile Include="Messages\MoveMessage.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="Models\Controller.cs" />
+    <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Program.cs" />

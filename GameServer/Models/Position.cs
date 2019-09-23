@@ -15,14 +15,16 @@ namespace GameServer.Models
             this.y = y;
         }
 
-        public void addX(float x)
+        public Position addX(float x)
         {
             this.x += x;
+            return this;
         }
 
-        public void addY(float y)
+        public Position addY(float y)
         {
             this.y += y;
+            return this;
         }
     }
 }
