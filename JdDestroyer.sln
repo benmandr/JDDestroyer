@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameClient", "GameClient\GameClient.csproj", "{CD024FA4-C855-4FD5-A1AE-A347A499CC0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer2", "GameServer2\GameServer2.csproj", "{D2542D85-B9EC-41D0-A5B9-00E588599DEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{372D30F4-31DD-484D-B1F6-444DE68E18BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{CD024FA4-C855-4FD5-A1AE-A347A499CC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD024FA4-C855-4FD5-A1AE-A347A499CC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD024FA4-C855-4FD5-A1AE-A347A499CC0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2542D85-B9EC-41D0-A5B9-00E588599DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2542D85-B9EC-41D0-A5B9-00E588599DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2542D85-B9EC-41D0-A5B9-00E588599DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2542D85-B9EC-41D0-A5B9-00E588599DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372D30F4-31DD-484D-B1F6-444DE68E18BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372D30F4-31DD-484D-B1F6-444DE68E18BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372D30F4-31DD-484D-B1F6-444DE68E18BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372D30F4-31DD-484D-B1F6-444DE68E18BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

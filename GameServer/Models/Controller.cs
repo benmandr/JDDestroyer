@@ -1,19 +1,15 @@
-﻿
-using System;
+﻿using System;
 using SuperWebSocket;
+using Newtonsoft.Json;
+using GameServer.Messages;
 
 namespace GameServer.Models
 {
-    class Game
+    class Controller
     {
-        Player P1 { get; set; }
-        Player P2 { get; set; }
-        Player P3 { get; set; }
-        Player P4 { get; set; }
-
         private static WebSocketServer wsServer;
 
-        public Game()
+        public Controller()
         {
             wsServer = new WebSocketServer();
             int port = 8088;
@@ -40,7 +36,17 @@ namespace GameServer.Models
 
         private static void WsServer_NewMessageReceived(WebSocketSession session, string value)
         {
+
+            SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(value);
+
             Console.WriteLine("NewMessageReceived: " + value);
+            Console.WriteLine("type: " + bsObj.type);
+            switch(bsObj.type){
+                case MoveMessage.TYPE:
+
+                    break;
+            }
+            Console.WriteLine("data: " + bsObj.data);
             if (value == "Hello server")
             {
                 session.Send("Hello client");
@@ -51,5 +57,7 @@ namespace GameServer.Models
         {
             Console.WriteLine("NewSessionConnected");
         }
+
+
     }
 }
