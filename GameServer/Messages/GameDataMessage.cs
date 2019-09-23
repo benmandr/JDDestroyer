@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GameServer.Models;
-
 namespace GameServer.Messages
 {
-    class MoveMessage
+    class GameDataMessage
     {
-        public const int TYPE = 1;
-
-        public Position position { get; set; }
-
-
+        public const int TYPE = 5;
     }
 }

@@ -28,14 +28,14 @@ namespace GameServer.Models
             {
                 while (true)
                 {
-                    Thread.Sleep(100);
-                    setPosition(position.addX(5));
-                    Thread.Sleep(100);
-                    setPosition(position.addY(5));
-                    Thread.Sleep(100);
-                    setPosition(position.addX(-5));
-                    Thread.Sleep(100);
-                    setPosition(position.addY(-5));
+                    Thread.Sleep(Config.ENEMYMOVERATE);
+                    setPosition(position.addX(Config.MOVESPEED));
+                    Thread.Sleep(Config.ENEMYMOVERATE);
+                    setPosition(position.addY(Config.MOVESPEED));
+                    Thread.Sleep(Config.ENEMYMOVERATE);
+                    setPosition(position.subtractX(Config.MOVESPEED));
+                    Thread.Sleep(Config.ENEMYMOVERATE);
+                    setPosition(position.subtractY(Config.MOVESPEED));
                 }
             }).Start();
         }

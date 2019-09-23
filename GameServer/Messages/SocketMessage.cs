@@ -10,6 +10,6 @@ namespace GameServer.Models
     {
         public int type { get; set; }
 
-        public object data { get; set; }
+        public string data { get; set; }
     }
 }

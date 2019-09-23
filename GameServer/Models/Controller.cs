@@ -33,6 +33,7 @@ namespace GameServer.Models
                 gamePlayer.game.removePlayer(gamePlayer);
                 if (gamePlayer.game.isEmpty())
                 {
+                    game.spawner.disable();
                     gamePlayer.game = null;
                     game = null;
                 }
@@ -43,14 +44,22 @@ namespace GameServer.Models
         private void ParseMessage(WebSocketSession session, string value)
         {
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(value);
+            GamePlayer gamePlayer = getGamePlayer(session);
 
             switch (bsObj.type)
             {
-                case MoveMessage.TYPE:
-
-                    Position position = JsonConvert.DeserializeObject<Position>(bsObj.data.ToString());
-
-                    MovePlayer(session, position);
+                case MoveRightMessage.TYPE:
+                    if (gamePlayer != null)
+                    {
+                        gamePlayer.MoveRight();
+                    }
+                    break;
+                case MoveLeftMessage.TYPE:
+                    gamePlayer = getGamePlayer(session);
+                    if (gamePlayer != null)
+                    {
+                        gamePlayer.MoveLeft();
+                    }
                     break;
             }
         }
@@ -70,16 +79,6 @@ namespace GameServer.Models
                 gamePlayer.sendMessage("Game joined");
             }
             sessionPlayers[session.SessionID] = gamePlayer;
-        }
-
-        private void MovePlayer(WebSocketSession session, Position position)
-        {
-            GamePlayer gamePlayer = getGamePlayer(session);
-            if (gamePlayer != null)
-            {
-                gamePlayer.game.sendMessage("Player `" + gamePlayer.player.name + "` moved from [" + gamePlayer.position.x + "," + gamePlayer.position.y + "] to [" + position.x + "," + position.y + "]", gamePlayer);
-                gamePlayer.position = position;
-            }
         }
 
         private GamePlayer getGamePlayer(WebSocketSession session)

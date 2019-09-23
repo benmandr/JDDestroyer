@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using GameServer.Models;
 namespace GameServer.Messages
 {
-    class CreateGameMessage
+    class PlayerDataMessage
     {
-        public const int TYPE = 2;
+        public const int TYPE = 4;
     }
 }
