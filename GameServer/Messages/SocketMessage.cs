@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models
 {
-    class SocketMessage
+    public class SocketMessage
     {
         public int type { get; set; }
 

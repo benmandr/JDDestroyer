@@ -2,7 +2,7 @@
 using System.Threading;
 namespace GameServer.Models
 {
-    class Enemy
+    public class Enemy
     {
         public Position position { get; set; }
         private Game game;

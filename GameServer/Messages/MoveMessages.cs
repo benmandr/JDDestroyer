@@ -7,16 +7,16 @@ using GameServer.Models;
 
 namespace GameServer.Messages
 {
-    class MoveRightMessage
+    public class MoveRightMessage
     {
         public const int TYPE = 1;
     }
-    class MoveLeftMessage
+    public class MoveLeftMessage
     {
         public const int TYPE = 2;
     }
 
-    class PositionChangedMessage
+    public class PositionChangedMessage
     {
         public const int TYPE = 3;
 

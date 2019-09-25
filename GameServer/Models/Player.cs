@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace GameServer.Models
 {
-    class Player
+    public class Player
     {
         public static long IdIncrement = 1;
 
@@ -16,6 +16,12 @@ namespace GameServer.Models
 
         [JsonIgnore]
         public WebSocketSession session { get; set; }
+
+        public Player(long id, string name)
+        {
+            this.id = id;
+            this.name = name;
+        }
 
         public Player(string name, WebSocketSession session)
         {

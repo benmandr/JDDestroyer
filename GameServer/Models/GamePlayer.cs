@@ -8,7 +8,7 @@ using GameServer.Messages;
 
 namespace GameServer.Models
 {
-    class GamePlayer
+    public class GamePlayer
     {
         public Player player { get; set; }
         public Position position { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GameServer.Models;
 namespace GameServer.Messages
 {
-    class GameDataMessage
+    public class GameDataMessage
     {
         public const int TYPE = 5;
     }

@@ -6,9 +6,8 @@ using System.Threading;
 
 namespace GameServer.Models
 {
-    class EnemySpawner
+    public class EnemySpawner
     {
-
         public Game game { get; set; }
 
         private Thread spawnThread;
@@ -24,8 +23,8 @@ namespace GameServer.Models
             {
                 while (true)
                 {
-                    if (game.enemies.Count < Config.MAXENEMIES)
-                        game.enemies.Add(new Enemy(game, new Position(0, 0)));
+                    if (game.enemyCount() < Config.MAXENEMIES)
+                        game.addEnemy(new Enemy(game, new Position(0, 0)));
                     Thread.Sleep(Config.ENEMYSPAWNSPEED);
                 }
             }).Start();

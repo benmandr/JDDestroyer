@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 using GameServer.Models;
 namespace GameServer.Messages
 {
-    class PlayerDataMessage
+    public class PlayerDataMessage
     {
         public const int TYPE = 4;
+
+        public long id { get; set; }
+        public string name { get; set; }
+        public Position position { get; set; }
+
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameServer
 {
-    static class Config
+    public static class Config
     {
         public const double MOVESPEED = 5;
         public const double MAXENEMIES = 2;

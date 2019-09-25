@@ -7,27 +7,44 @@ using Newtonsoft.Json;
 
 namespace GameServer.Models
 {
-    class Game
+    public class Game
     {
-        GamePlayer P1 { get; set; }
-        GamePlayer P2 { get; set; }
-        GamePlayer P3 { get; set; }
-        GamePlayer P4 { get; set; }
+        public string name { get; set; }
+        public GamePlayer P1 { get; set; }
+        public GamePlayer P2 { get; set; }
+        public GamePlayer P3 { get; set; }
+        public GamePlayer P4 { get; set; }
 
         [JsonIgnore]
-        public List<Enemy> enemies = new List<Enemy>();
+        public List<Enemy> enemies{ get;set; }
 
         [JsonIgnore]
         public EnemySpawner spawner { get; set; }
 
+        public void addEnemy(Enemy enemy)
+        {
+            enemies.Add(enemy);
+        }
+        public int enemyCount()
+        {
+            return enemies.Count;
+        }
+
+
         public Game(GamePlayer gamePlayer)
         {
+            enemies = new List<Enemy>();
+            name = "JdDestroyer";
             gamePlayer.game = this;
             gamePlayer.position = new Position(0, 0);
             gamePlayer.moveStrategy = new P1MoveStrategy();
             P1 = gamePlayer;
             spawner = new EnemySpawner(this);
             //  spawner.enable();
+        }
+
+        public Game()
+        {
         }
 
         public void addPlayer(GamePlayer gamePlayer)
@@ -121,6 +138,16 @@ namespace GameServer.Models
             yield return P2;
             yield return P3;
             yield return P4;
+        }
+
+        public GamePlayer getPlayer(long id)
+        {
+            foreach(GamePlayer gamePlayer in getPlayers())
+            {
+                if (gamePlayer.player.id == id)
+                    return gamePlayer;
+            }
+            return null;
         }
     }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models
 {
-    interface IMoveStrategy
+    public interface IMoveStrategy
     {
         void MoveRight(Position position);
         void MoveLeft(Position position);
     }
 
-    class P1MoveStrategy : IMoveStrategy
+    public class P1MoveStrategy : IMoveStrategy
     {
         public void MoveRight(Position position)
         {
@@ -24,7 +24,7 @@ namespace GameServer.Models
         }
     }
 
-    class P2MoveStrategy : IMoveStrategy
+    public class P2MoveStrategy : IMoveStrategy
     {
         public void MoveRight(Position position)
         {
@@ -36,7 +36,7 @@ namespace GameServer.Models
         }
     }
 
-    class P3MoveStrategy : IMoveStrategy
+    public class P3MoveStrategy : IMoveStrategy
     {
         public void MoveRight(Position position)
         {
@@ -48,7 +48,7 @@ namespace GameServer.Models
         }
     }
 
-    class P4MoveStrategy : IMoveStrategy
+    public class P4MoveStrategy : IMoveStrategy
     {
         public void MoveRight(Position position)
         {

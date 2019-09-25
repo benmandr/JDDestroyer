@@ -6,7 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using System.Windows.Forms;
+using GameServer;
+using GameServer.Models;
+using GameServer.Messages;
+using WebSocketSharp;
 
 namespace GameClient
 {
@@ -14,28 +19,39 @@ namespace GameClient
     {
         Bitmap BackBuffer;
         Bitmap FrontBuffer;
+
         //Score management
         int bestScore = 0; //SERVER VAR
-        string name = "Lohas"; //SERVER VAR
         string scoreTextBox;
         //Player
         Point PlayerPos;
-        int playerSpeed = 10;
-        int PlayerSize;
+        double playerSpeed = Config.MOVESPEED;
+        int PlayerSize = 10;
 
+
+        Player currentPlayer = null;
+        GamePlayer currentGamePlayer = null;
+        Game currentGame = null;
+        WebSocket webSocket;
+
+        public int getDistance(double value)
+        {
+            return (int)(ClientSize.Width / 100 * value);
+        }
 
         public Form1()
         {
             InitializeComponent();
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
-           // Go full screen with fixed square size
+            // Go full screen with fixed square size
             Text = "JDDestroyer";
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
             StartPosition = FormStartPosition.CenterScreen;
-            int ScreenHeight = (int)(Screen.PrimaryScreen.Bounds.Height - (Screen.PrimaryScreen.Bounds.Height * 0.1));
+            int ScreenHeight = (int)(Screen.PrimaryScreen.Bounds.Height * 0.6);
             ClientSize = new Size(ScreenHeight, ScreenHeight);
+
             //Set up the updating
             Timer GameTimer = new Timer();
             GameTimer.Interval = 10;
@@ -44,6 +60,59 @@ namespace GameClient
             Load += new EventHandler(Init);
             Paint += new PaintEventHandler(FormPaint);
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
+            Connect();
+        }
+
+
+        void Connect()
+        {
+            webSocket = new WebSocket("ws://localhost:8088");
+
+            webSocket.OnMessage += parseMessage;
+
+            webSocket.Connect();
+        }
+
+        void parseMessage(object sender, MessageEventArgs e)
+        {
+            SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(e.Data);
+
+            switch (bsObj.type)
+            {
+                case PositionChangedMessage.TYPE:
+                    PositionChangedMessage positionChange = JsonConvert.DeserializeObject<PositionChangedMessage>(bsObj.data);
+
+                    GamePlayer gamePlayer = currentGame.getPlayer(positionChange.playerId);
+                    gamePlayer.position = positionChange.position;
+                    break;
+                case PlayerDataMessage.TYPE:
+                    PlayerDataMessage playerData = JsonConvert.DeserializeObject<PlayerDataMessage>(bsObj.data);
+                    if (currentPlayer == null)
+                    {
+                        currentPlayer = new Player(playerData.id, playerData.name);
+                        currentGamePlayer = new GamePlayer(currentPlayer);
+                        currentGamePlayer.game = currentGame;
+                    }
+                    break;
+                case GameDataMessage.TYPE:
+                    Game game = JsonConvert.DeserializeObject<Game>(bsObj.data);
+                    if (currentGame == null)
+                    {
+                        currentGame = new Game();
+                    }
+                    currentGame.P1 = game.P1;
+                    currentGame.P2 = game.P2;
+                    currentGame.P3 = game.P3;
+                    currentGame.P4 = game.P4;
+                    currentGame.enemies = game.enemies;
+                    break;
+            }
+        }
+
+        void sendMessage(string data)
+        {
+            if (webSocket != null)
+                webSocket.Send(data);
         }
 
         //Controls
@@ -51,18 +120,28 @@ namespace GameClient
         {
             Console.WriteLine("Player POS" + PlayerPos.X);
             Console.WriteLine("Barrier:" + ClientSize.Width * 0.25);
-            if (e.KeyCode == Keys.Left && PlayerPos.X > ClientSize.Width * 0.25)
-                PlayerPos.X -= 1 * playerSpeed;
-            else if (e.KeyCode == Keys.Right && PlayerPos.X + PlayerSize < ClientSize.Width * 0.75)
-                PlayerPos.X += 1 * playerSpeed;
-            else if (e.KeyCode == Keys.Up)
+            if (e.KeyCode == Keys.Left)
+            {
+                if (PlayerPos.X > ClientSize.Width * 0.25)
+                {
+                    PlayerPos.X -= 1 * getDistance(playerSpeed);
+                }
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                if (PlayerPos.X + getDistance(PlayerSize) < ClientSize.Width * 0.75)
+                {
+                    PlayerPos.X += 1 * getDistance(playerSpeed);
+                }
+            }
+            else if (e.KeyCode == Keys.Space)
                 bestScore += 1;
         }
 
         //Update paint
         void FormPaint(object sender, PaintEventArgs e)
         {
-            if(BackBuffer != null)
+            if (BackBuffer != null)
             {
                 e.Graphics.DrawImageUnscaled(BackBuffer, Point.Empty);
                 e.Graphics.DrawImageUnscaled(FrontBuffer, Point.Empty);
@@ -78,12 +157,11 @@ namespace GameClient
             }
             if (PlayerPos != null)
             {
-                PlayerPos = new Point(0,0);
+                PlayerPos = new Point(0, 0);
             }
-            BackBuffer = new Bitmap(ClientSize.Width,ClientSize.Height);
+            BackBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
             FrontBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
             PlayerPos = new Point((int)(ClientSize.Width * 0.26), ClientSize.Height);
-            PlayerSize = ClientSize.Width / 8;
             using (var e = Graphics.FromImage(BackBuffer))
             {
                 int length = ClientSize.Width;
@@ -115,18 +193,40 @@ namespace GameClient
                 {
                     graphic.Clear(Color.Transparent);
                     //Update the score
-                    graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", 18), Brushes.White, (float)(ClientSize.Width * 0.75), 28);
-                    graphic.FillRectangle(Brushes.Green, PlayerPos.X, PlayerPos.Y - PlayerSize, PlayerSize, PlayerSize);
-                    graphic.DrawString("P1", new Font("Comic Sans MS", 30), Brushes.White, (int)(PlayerPos.X + 20), PlayerPos.Y - 70);
                 }
                 Invalidate();
             }
         }
 
+        void DrawPlayers()
+        {
+            if (BackBuffer != null)
+            {
+                using (var graphic = Graphics.FromImage(FrontBuffer))
+                {
+                    foreach (GamePlayer gamePlayer in currentGame.getPlayers())
+                    {
+                        Brush color = Brushes.Red;
+                        if (gamePlayer.player.id == currentPlayer.id)
+                        {
+                            color = Brushes.Green;
+                        }
+                        graphic.FillRectangle(color, getDistance(gamePlayer.position.x), getDistance(gamePlayer.position.y) - getDistance(PlayerSize), getDistance(PlayerSize), getDistance(PlayerSize));
+                    }
+                    graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", 18), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
+                }
+                Invalidate();
+            }
+
+        }
+
         void Tick(object sender, EventArgs e)
         {
-            scoreTextBox = name + bestScore.ToString();
-            Draw();
+            if (currentPlayer != null)
+            {
+                scoreTextBox = currentPlayer.name + ": " + bestScore.ToString();
+                Draw();
+            }
         }
     }
 }
