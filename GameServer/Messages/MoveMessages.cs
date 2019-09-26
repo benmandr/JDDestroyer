@@ -19,7 +19,6 @@ namespace GameServer.Messages
     public class PositionChangedMessage
     {
         public const int TYPE = 3;
-
         public long playerId { get; set; }
 
         public Position position { get; set; }

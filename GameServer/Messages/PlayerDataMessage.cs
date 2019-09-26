@@ -9,7 +9,7 @@ namespace GameServer.Messages
     public class PlayerDataMessage
     {
         public const int TYPE = 4;
-
+        public int type = TYPE;
         public long id { get; set; }
         public string name { get; set; }
         public Position position { get; set; }

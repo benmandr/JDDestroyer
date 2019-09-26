@@ -22,6 +22,9 @@ namespace GameServer.Models
             this.id = id;
             this.name = name;
         }
+        public Player()
+        {
+        }
 
         public Player(string name, WebSocketSession session)
         {

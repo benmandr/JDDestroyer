@@ -25,13 +25,16 @@ namespace GameClient
         string scoreTextBox;
         //Player
         Point PlayerPos;
-        double playerSpeed = Config.MOVESPEED;
         int PlayerSize = 10;
-
 
         Player currentPlayer = null;
         GamePlayer currentGamePlayer = null;
+
         Game currentGame = null;
+
+
+
+
         WebSocket webSocket;
 
         public int getDistance(double value)
@@ -41,6 +44,7 @@ namespace GameClient
 
         public Form1()
         {
+            Console.WriteLine("Asdasdasd");
             InitializeComponent();
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
             // Go full screen with fixed square size
@@ -60,9 +64,10 @@ namespace GameClient
             Load += new EventHandler(Init);
             Paint += new PaintEventHandler(FormPaint);
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
-            Connect();
-        }
 
+            Connect();
+            //  InitData();
+        }
 
         void Connect()
         {
@@ -75,16 +80,43 @@ namespace GameClient
 
         void parseMessage(object sender, MessageEventArgs e)
         {
+            Console.WriteLine("Geting");
+            Console.WriteLine(e.Data);
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(e.Data);
 
             switch (bsObj.type)
             {
+                case EnemySpawnMessage.TYPE:
+
+                    if (currentGame != null)
+                    {
+                        EnemySpawnMessage enemyData = JsonConvert.DeserializeObject<EnemySpawnMessage>(bsObj.data);
+                        switch (enemyData.type)
+                        {
+                            default:
+                            case RedEnemy.TYPE:
+                                currentGame.enemies.Add(new RedEnemy(enemyData.position));
+                                break;
+                            case GreenEnemy.TYPE:
+                                currentGame.enemies.Add(new GreenEnemy(enemyData.position));
+                                break;
+                            case BlueEnemy.TYPE:
+                                currentGame.enemies.Add(new BlueEnemy(enemyData.position));
+                                break;
+
+                        }
+                    }
+                    break;
+
                 case PositionChangedMessage.TYPE:
                     PositionChangedMessage positionChange = JsonConvert.DeserializeObject<PositionChangedMessage>(bsObj.data);
 
                     GamePlayer gamePlayer = currentGame.getPlayer(positionChange.playerId);
                     gamePlayer.position = positionChange.position;
                     break;
+
+
+
                 case PlayerDataMessage.TYPE:
                     PlayerDataMessage playerData = JsonConvert.DeserializeObject<PlayerDataMessage>(bsObj.data);
                     if (currentPlayer == null)
@@ -92,47 +124,112 @@ namespace GameClient
                         currentPlayer = new Player(playerData.id, playerData.name);
                         currentGamePlayer = new GamePlayer(currentPlayer);
                         currentGamePlayer.game = currentGame;
+                        currentGamePlayer.position = playerData.position;
+                        connectPlayerWithGame();
                     }
                     break;
+
+
+
                 case GameDataMessage.TYPE:
                     Game game = JsonConvert.DeserializeObject<Game>(bsObj.data);
                     if (currentGame == null)
                     {
                         currentGame = new Game();
                     }
-                    currentGame.P1 = game.P1;
-                    currentGame.P2 = game.P2;
-                    currentGame.P3 = game.P3;
-                    currentGame.P4 = game.P4;
+                    currentGame.name = game.name;
+
+
+                    if (game.P1 != null)
+                    {
+                        currentGame.P1 = game.P1;
+                        currentGame.P1.moveStrategy = new P1MoveStrategy();
+                    }
+                    if (game.P2 != null)
+                    {
+                        currentGame.P2 = game.P2;
+                        currentGame.P2.moveStrategy = new P2MoveStrategy();
+                    }
+                    if (game.P3 != null)
+                    {
+                        currentGame.P3 = game.P3;
+                        currentGame.P3.moveStrategy = new P3MoveStrategy();
+                    }
+                    if (game.P4 != null)
+                    {
+                        currentGame.P4 = game.P4;
+                        currentGame.P4.moveStrategy = new P4MoveStrategy();
+                    }
                     currentGame.enemies = game.enemies;
+                    if (currentGamePlayer != null)
+                    {
+                        currentGamePlayer.game = currentGame;
+                    }
+                    connectPlayerWithGame();
                     break;
             }
         }
 
+        void connectPlayerWithGame()
+        {
+            if (currentGame != null && currentPlayer != null && currentGamePlayer != null)
+            {
+                if (currentGame.P1 != null && currentGame.P1.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveStrategy = currentGame.P1.moveStrategy;
+                    currentGame.P1 = currentGamePlayer;
+                    return;
+                }
+
+                if (currentGame.P2 != null && currentGame.P2.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveStrategy = currentGame.P2.moveStrategy;
+                    currentGame.P2 = currentGamePlayer;
+                    return;
+                }
+                if (currentGame.P3 != null && currentGame.P3.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveStrategy = currentGame.P3.moveStrategy;
+                    currentGame.P3 = currentGamePlayer;
+                    return;
+                }
+                if (currentGame.P4 != null && currentGame.P4.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveStrategy = currentGame.P4.moveStrategy;
+                    currentGame.P4 = currentGamePlayer;
+                    return;
+                }
+            }
+        }
+
+
         void sendMessage(string data)
         {
             if (webSocket != null)
+            {
+                Console.WriteLine("Sending");
+                Console.WriteLine(data);
+
                 webSocket.Send(data);
+            }
         }
 
         //Controls
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("Player POS" + PlayerPos.X);
-            Console.WriteLine("Barrier:" + ClientSize.Width * 0.25);
             if (e.KeyCode == Keys.Left)
             {
-                if (PlayerPos.X > ClientSize.Width * 0.25)
-                {
-                    PlayerPos.X -= 1 * getDistance(playerSpeed);
-                }
+                currentGamePlayer.MoveLeft();
+                SocketMessage message = new SocketMessage();
+                message.type = MoveLeftMessage.TYPE;
+                sendMessage(JsonConvert.SerializeObject(message));
             }
             else if (e.KeyCode == Keys.Right)
             {
-                if (PlayerPos.X + getDistance(PlayerSize) < ClientSize.Width * 0.75)
-                {
-                    PlayerPos.X += 1 * getDistance(playerSpeed);
-                }
+                currentGamePlayer.MoveRight();
+                SocketMessage message = new SocketMessage();
+                message.type = MoveRightMessage.TYPE;
+                sendMessage(JsonConvert.SerializeObject(message));
             }
             else if (e.KeyCode == Keys.Space)
                 bestScore += 1;
@@ -168,7 +265,7 @@ namespace GameClient
                 //Main canvas color
                 e.FillRectangle(Brushes.WhiteSmoke, new Rectangle(0, 0, length, length));
                 //Middle square
-                Rectangle middleSquare = new Rectangle(length / 4, length / 4, length / 2, length / 2);
+                Rectangle middleSquare = new Rectangle(getDistance(Config.CORNERSIZE), getDistance(Config.CORNERSIZE), getDistance(Config.INNERSQUARESIZE), getDistance(Config.INNERSQUARESIZE));
                 e.FillRectangle(Brushes.Gray, middleSquare);
                 //Add border
                 Pen borderPen = new Pen(Color.FromArgb(105, 105, 105), 4);
@@ -185,6 +282,17 @@ namespace GameClient
             }
         }
 
+        public void drawEnemy(Enemy enemy)
+        {
+            if (FrontBuffer != null)
+            {
+                using (var graphic = Graphics.FromImage(FrontBuffer))
+                {
+                    graphic.FillRectangle(new SolidBrush(enemy.getColor()), getDistance(enemy.position.x), getDistance(enemy.position.y) - getDistance(PlayerSize / 2), getDistance(PlayerSize), getDistance(PlayerSize));
+                }
+            }
+        }
+
         void Draw()
         {
             if (BackBuffer != null)
@@ -196,28 +304,37 @@ namespace GameClient
                 }
                 Invalidate();
             }
+            DrawPlayers();
         }
 
         void DrawPlayers()
         {
-            if (BackBuffer != null)
+            if (FrontBuffer != null && currentGame != null && currentGamePlayer != null && currentPlayer != null)
             {
                 using (var graphic = Graphics.FromImage(FrontBuffer))
                 {
                     foreach (GamePlayer gamePlayer in currentGame.getPlayers())
                     {
-                        Brush color = Brushes.Red;
-                        if (gamePlayer.player.id == currentPlayer.id)
+                        if (gamePlayer != null)
                         {
-                            color = Brushes.Green;
+                            Brush color = Brushes.Red;
+                            if (gamePlayer.player.id == currentPlayer.id)
+                            {
+                                color = Brushes.Green;
+                            }
+                            graphic.FillRectangle(color, getDistance(gamePlayer.position.x), getDistance(gamePlayer.position.y) - getDistance(PlayerSize / 2), getDistance(PlayerSize), getDistance(PlayerSize));
                         }
-                        graphic.FillRectangle(color, getDistance(gamePlayer.position.x), getDistance(gamePlayer.position.y) - getDistance(PlayerSize), getDistance(PlayerSize), getDistance(PlayerSize));
                     }
+
+                    foreach (Enemy enemy in currentGame.enemies)
+                    {
+                        drawEnemy(enemy);
+                    }
+
                     graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", 18), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
                 }
                 Invalidate();
             }
-
         }
 
         void Tick(object sender, EventArgs e)

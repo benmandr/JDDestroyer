@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameServer.Models;
-
+﻿using GameServer.Models;
+using System;
 namespace GameServer
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Controller firstGame = new Controller();
+            Controller.getInstance().initiateConnection();
         }
     }
 }

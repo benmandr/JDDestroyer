@@ -14,6 +14,8 @@ namespace GameServer.Models
 
     public class P1MoveStrategy : IMoveStrategy
     {
+        public P1MoveStrategy() {
+        }
         public void MoveRight(Position position)
         {
             position.addX(Config.MOVESPEED);
@@ -26,6 +28,9 @@ namespace GameServer.Models
 
     public class P2MoveStrategy : IMoveStrategy
     {
+        public P2MoveStrategy()
+        {
+        }
         public void MoveRight(Position position)
         {
             position.subtractY(Config.MOVESPEED);
@@ -38,6 +43,9 @@ namespace GameServer.Models
 
     public class P3MoveStrategy : IMoveStrategy
     {
+        public P3MoveStrategy()
+        {
+        }
         public void MoveRight(Position position)
         {
             position.subtractX(Config.MOVESPEED);
@@ -50,6 +58,9 @@ namespace GameServer.Models
 
     public class P4MoveStrategy : IMoveStrategy
     {
+        public P4MoveStrategy()
+        {
+        }
         public void MoveRight(Position position)
         {
             position.addY(Config.MOVESPEED);

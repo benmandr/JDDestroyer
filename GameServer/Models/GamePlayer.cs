@@ -12,7 +12,9 @@ namespace GameServer.Models
     {
         public Player player { get; set; }
         public Position position { get; set; }
+        [JsonIgnore]
         public IMoveStrategy moveStrategy { get; set; }
+        [JsonIgnore]
         public Game game { get; set; }
 
         public long score { get; set; }
@@ -32,20 +34,22 @@ namespace GameServer.Models
         public void MoveRight()
         {
             moveStrategy.MoveRight(position);
-            PositionChanged();
         }
 
         public void MoveLeft()
         {
             moveStrategy.MoveLeft(position);
-            PositionChanged();
         }
 
         public void PositionChanged() {
             PositionChangedMessage message = new PositionChangedMessage();
             message.position = position;
             message.playerId = player.id;
-            game.sendMessage(JsonConvert.SerializeObject(message), this);
+
+            SocketMessage socketMessage = new SocketMessage();
+            socketMessage.type = PositionChangedMessage.TYPE;
+            socketMessage.data = JsonConvert.SerializeObject(message);
+            game.sendMessage(JsonConvert.SerializeObject(socketMessage), this);
         }
 
         public bool Equals(GamePlayer obj)
@@ -54,7 +58,7 @@ namespace GameServer.Models
             {
                 return false;
             }
-            return player.session.SessionID == obj.player.session.SessionID;
+            return player.id == obj.player.id;
         }
     }
 }

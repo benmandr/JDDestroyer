@@ -12,8 +12,10 @@ namespace GameServer.Models
         private Dictionary<string, GamePlayer> sessionPlayers = new Dictionary<string, GamePlayer>();
         private Game game = null;
         private int playerCount = 0;
-        public Controller()
+
+        public void initiateConnection()
         {
+
             wsServer = new WebSocketServer();
             int port = 8088;
             wsServer.Setup(port);
@@ -25,15 +27,21 @@ namespace GameServer.Models
             Console.ReadKey();
         }
 
+        private static Controller instance = new Controller();
+        public static Controller getInstance()
+        {            
+            return instance;
+        }
+
         private void Disconnect(WebSocketSession session, SuperSocket.SocketBase.CloseReason value)
         {
             GamePlayer gamePlayer = getGamePlayer(session);
+            Console.WriteLine("player " + gamePlayer.player.name + " disconnected");
             if (gamePlayer != null)
             {
                 gamePlayer.game.removePlayer(gamePlayer);
                 if (gamePlayer.game.isEmpty())
                 {
-                    game.spawner.disable();
                     gamePlayer.game = null;
                     game = null;
                 }
@@ -43,6 +51,9 @@ namespace GameServer.Models
 
         private void ParseMessage(WebSocketSession session, string value)
         {
+            Console.WriteLine("Geting");
+            Console.WriteLine(value);
+
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(value);
             GamePlayer gamePlayer = getGamePlayer(session);
 
@@ -52,6 +63,8 @@ namespace GameServer.Models
                     if (gamePlayer != null)
                     {
                         gamePlayer.MoveRight();
+                        gamePlayer.PositionChanged();
+                        Console.WriteLine("player " + gamePlayer.player.name + " move right");
                     }
                     break;
                 case MoveLeftMessage.TYPE:
@@ -59,6 +72,8 @@ namespace GameServer.Models
                     if (gamePlayer != null)
                     {
                         gamePlayer.MoveLeft();
+                        gamePlayer.PositionChanged();
+                        Console.WriteLine("player " + gamePlayer.player.name + " move left");
                     }
                     break;
             }
@@ -67,17 +82,43 @@ namespace GameServer.Models
         private void CreatePlayer(WebSocketSession session)
         {
             GamePlayer gamePlayer = new GamePlayer(new Player("Destroyer" + playerCount++, session));
-            gamePlayer.sendMessage("Player created. Name:" + gamePlayer.player.name);
+
             if (game == null)
             {
                 game = new Game(gamePlayer);
-                game.sendMessage("Game created");
+                Console.WriteLine("Game created");
             }
             else
             {
                 game.addPlayer(gamePlayer);
-                gamePlayer.sendMessage("Game joined");
+                Console.WriteLine("Game joined");
             }
+
+            //Send player data message to client
+            PlayerDataMessage playerData = new PlayerDataMessage();
+            playerData.position = gamePlayer.position;
+            playerData.name = gamePlayer.player.name;
+            playerData.id = gamePlayer.player.id;
+
+            SocketMessage playerDataMessage = new SocketMessage();
+            playerDataMessage.type = PlayerDataMessage.TYPE;
+            playerDataMessage.data = JsonConvert.SerializeObject(playerData);
+            Console.WriteLine(JsonConvert.SerializeObject(playerDataMessage));
+            Console.WriteLine("Sending");
+            gamePlayer.sendMessage(JsonConvert.SerializeObject(playerDataMessage));
+            ////////////////////
+
+            //Send game data messaget to client
+            SocketMessage gameMessage = new SocketMessage();
+            gameMessage.type = GameDataMessage.TYPE;
+            gameMessage.data = JsonConvert.SerializeObject(game);
+            Console.WriteLine("Sending");
+            Console.WriteLine(JsonConvert.SerializeObject(gameMessage));
+            game.sendMessage(JsonConvert.SerializeObject(gameMessage));
+            ///////////////////////////
+
+
+
             sessionPlayers[session.SessionID] = gamePlayer;
         }
 
@@ -90,6 +131,5 @@ namespace GameServer.Models
             }
             return null;
         }
-
     }
 }

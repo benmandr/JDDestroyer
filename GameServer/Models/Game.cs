@@ -15,32 +15,28 @@ namespace GameServer.Models
         public GamePlayer P3 { get; set; }
         public GamePlayer P4 { get; set; }
 
-        [JsonIgnore]
-        public List<Enemy> enemies{ get;set; }
+        public List<Enemy> enemies { get; set; }
+
 
         [JsonIgnore]
-        public EnemySpawner spawner { get; set; }
+        public List<GamePlayerEnemyObserver> enemyObservers { get; set; }
+        [JsonIgnore]
+        public Thread spawnThread;
 
-        public void addEnemy(Enemy enemy)
-        {
-            enemies.Add(enemy);
-        }
-        public int enemyCount()
-        {
-            return enemies.Count;
-        }
 
 
         public Game(GamePlayer gamePlayer)
         {
             enemies = new List<Enemy>();
+            enemyObservers = new List<GamePlayerEnemyObserver>();
             name = "JdDestroyer";
             gamePlayer.game = this;
-            gamePlayer.position = new Position(0, 0);
+            gamePlayer.position = Position.P1InitialPosition();
             gamePlayer.moveStrategy = new P1MoveStrategy();
             P1 = gamePlayer;
-            spawner = new EnemySpawner(this);
             //  spawner.enable();
+            spawnEnemies();
+            enemyObservers.Add(new GamePlayerEnemyObserver(gamePlayer));
         }
 
         public Game()
@@ -53,31 +49,72 @@ namespace GameServer.Models
             {
                 gamePlayer.moveStrategy = new P1MoveStrategy();
                 P1 = gamePlayer;
+                gamePlayer.position = Position.P1InitialPosition();
             }
             else if (P2 == null)
             {
                 gamePlayer.moveStrategy = new P2MoveStrategy();
                 P2 = gamePlayer;
+                gamePlayer.position = Position.P2InitialPosition();
             }
             else if (P3 == null)
             {
                 gamePlayer.moveStrategy = new P3MoveStrategy();
                 P3 = gamePlayer;
+                gamePlayer.position = Position.P3InitialPosition();
             }
             else if (P4 == null)
             {
                 gamePlayer.moveStrategy = new P4MoveStrategy();
                 P4 = gamePlayer;
+                gamePlayer.position = Position.P4InitialPosition();
             }
 
-            gamePlayer.position = new Position(0, 50);
             gamePlayer.game = this;
-            sendMessage(gamePlayer.player.name + " has just joined", gamePlayer);
+
+            enemyObservers.Add(new GamePlayerEnemyObserver(gamePlayer));
         }
+
+
+
+        public void spawnEnemies()
+        {
+            Console.WriteLine(enemies.Count);
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    if (enemies.Count < Config.MAXENEMIES)
+                    {
+                        int[] types = { RedEnemy.TYPE, GreenEnemy.TYPE, BlueEnemy.TYPE };
+                        Random rand = new Random();
+
+                        int index = rand.Next(types.Length);
+                        Enemy newEnemy = EnemyFactory.getInstance().getEnemy(types[index]);
+                        if (newEnemy != null)
+                        {
+                            enemies.Add(newEnemy);
+                            notifyPlayers(newEnemy);
+                        }
+                    }
+
+                    Thread.Sleep(Config.ENEMYSPAWNSPEED);
+                }
+
+            }).Start();
+        }
+        public void notifyPlayers(Enemy enemy)
+        {
+            foreach (GamePlayerEnemyObserver observer in enemyObservers)
+            {
+                observer.update(enemy);
+            }
+        }
+
+
 
         public void removePlayer(GamePlayer leavingPlayer)
         {
-            sendMessage(leavingPlayer.player.name + " disconnected", leavingPlayer);
             if (leavingPlayer.Equals(P1))
             {
                 P1 = null;
@@ -142,7 +179,7 @@ namespace GameServer.Models
 
         public GamePlayer getPlayer(long id)
         {
-            foreach(GamePlayer gamePlayer in getPlayers())
+            foreach (GamePlayer gamePlayer in getPlayers())
             {
                 if (gamePlayer.player.id == id)
                     return gamePlayer;

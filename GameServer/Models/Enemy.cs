@@ -1,30 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Drawing;
 using System.Threading;
+
 namespace GameServer.Models
 {
-    public class Enemy
+    public abstract class Enemy
     {
         public Position position { get; set; }
-        private Game game;
 
-
-        public Enemy(Game game, Position position)
+        public Enemy(Position position)
         {
-            this.game = game;
             this.position = position;
-            sendMessage("Enemy spawned at [" + position.x + ", " + position.y + "]");
-            enemyMove();
         }
+        Thread moveThread = null;
+        public Enemy()
+        {
+        }
+        abstract public Color getColor();
+        abstract public int getType { get; }
 
         public void setPosition(Position position)
         {
             this.position = position;
-            sendMessage("Enemy position changed [" + position.x + ", " + position.y + "]");
         }
 
         public void enemyMove()
         {
-            new Thread(() =>
+            /*
+            moveThread = new Thread(() =>
             {
                 while (true)
                 {
@@ -38,11 +44,14 @@ namespace GameServer.Models
                     setPosition(position.subtractY(Config.MOVESPEED));
                 }
             }).Start();
+            */
         }
 
-        public void sendMessage(string message)
+        ~Enemy()
         {
-            game.sendMessage(message);
+            // Your code
+            if (moveThread != null)
+                moveThread.Abort();
         }
     }
 }

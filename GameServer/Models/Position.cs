@@ -9,6 +9,27 @@ namespace GameServer.Models
         public double x { get; set; }
         public double y { get; set; }
 
+
+        public static Position P1InitialPosition()
+        {
+            return new Position(50, 100);
+        }
+
+        public static Position P2InitialPosition()
+        {
+            return new Position(100, 50);
+        }
+
+        public static Position P3InitialPosition()
+        {
+            return new Position(50, 0);
+        }
+
+        public static Position P4InitialPosition()
+        {
+            return new Position(0, 50);
+        }
+
         public Position(double x, double y)
         {
             this.x = x;
