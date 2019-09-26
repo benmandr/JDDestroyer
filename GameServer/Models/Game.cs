@@ -1,7 +1,5 @@
 ﻿using System;
-using SuperWebSocket;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
 
@@ -15,6 +13,7 @@ namespace GameServer.Models
         public GamePlayer P3 { get; set; }
         public GamePlayer P4 { get; set; }
 
+        [JsonIgnore]
         public List<Enemy> enemies { get; set; }
 
 

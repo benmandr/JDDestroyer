@@ -117,6 +117,18 @@ namespace GameServer.Models
             game.sendMessage(JsonConvert.SerializeObject(gameMessage));
             ///////////////////////////
 
+            //Send enemies List
+            foreach(Enemy enemy in game.enemies)
+            {
+                EnemySpawnMessage messageData = new EnemySpawnMessage(enemy.position, enemy.getType);
+
+                SocketMessage message = new SocketMessage();
+                message.type = EnemySpawnMessage.TYPE;
+
+                message.data = JsonConvert.SerializeObject(messageData);
+                gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
+            }
+            ///////////////////////////
 
 
             sessionPlayers[session.SessionID] = gamePlayer;

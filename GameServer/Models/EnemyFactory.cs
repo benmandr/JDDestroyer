@@ -17,8 +17,12 @@ namespace GameServer.Models
 
         private static Position getRandomInMiddle() {
             Random random = new Random();
-            double x = random.NextDouble() * (Config.CORNERSIZE - Config.CORNERSIZE + Config.INNERSQUARESIZE) + Config.CORNERSIZE;
-            double y = random.NextDouble() * (Config.CORNERSIZE - Config.CORNERSIZE + Config.INNERSQUARESIZE) + Config.CORNERSIZE;
+            double min = Config.CORNERSIZE + Config.ENEMYSIZE / 2;
+            double max = Config.INNERSQUARESIZE + Config.CORNERSIZE - Config.ENEMYSIZE/2;
+
+
+            double x = random.NextDouble() * (max - min) + min;
+            double y = random.NextDouble() * (max - min) + min;
 
             return new Position(x, y);
         }

@@ -24,11 +24,6 @@ namespace GameServer.Models
             message.type = EnemySpawnMessage.TYPE;
             message.data = JsonConvert.SerializeObject(messageData);
 
-            string jsonTypeNameAll = JsonConvert.SerializeObject(enemy, Formatting.Indented, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            });
-
             gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
         }
     }

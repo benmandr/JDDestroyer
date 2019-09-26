@@ -12,22 +12,22 @@ namespace GameServer.Models
 
         public static Position P1InitialPosition()
         {
-            return new Position(50, 100);
+            return new Position(50, 100-Config.PLAYERSIZE/2);
         }
 
         public static Position P2InitialPosition()
         {
-            return new Position(100, 50);
+            return new Position(100 - Config.PLAYERSIZE / 2, 50);
         }
 
         public static Position P3InitialPosition()
         {
-            return new Position(50, 0);
+            return new Position(50, 0 + Config.PLAYERSIZE / 2);
         }
 
         public static Position P4InitialPosition()
         {
-            return new Position(0, 50);
+            return new Position(0 + Config.PLAYERSIZE / 2, 50);
         }
 
         public Position(double x, double y)
