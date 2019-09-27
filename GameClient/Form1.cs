@@ -65,7 +65,7 @@ namespace GameClient
 
         void Connect()
         {
-            webSocket = new WebSocket("ws://23.101.139.207:8088");
+            webSocket = new WebSocket(Config.SERVER_HOST + ":" + Config.SERVER_PORT);
 
             webSocket.OnMessage += parseMessage;
 

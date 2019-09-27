@@ -17,7 +17,7 @@ namespace GameServer.Models
         {
 
             wsServer = new WebSocketServer();
-            int port = 8088;
+            int port = Config.SERVER_PORT;
             wsServer.Setup(port);
             wsServer.NewSessionConnected += CreatePlayer;
             wsServer.NewMessageReceived += ParseMessage;
