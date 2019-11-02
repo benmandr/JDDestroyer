@@ -8,8 +8,14 @@ namespace GameServer.Models
 {
     class EnemyFactory
     {
+        private static Dictionary<int, Enemy> enemyStore = new Dictionary<int, Enemy>();
         private static EnemyFactory instance = new EnemyFactory();
-        private static Dictionary<int, Enemy> enemyMap = new Dictionary<int, Enemy>();
+    
+        public EnemyFactory()
+        {
+            fillStore();
+        }
+
         public static EnemyFactory getInstance()
         {
             return instance;
@@ -30,29 +36,16 @@ namespace GameServer.Models
         public Enemy getEnemy(int enemyType)
         {
             Position position = getRandomInMiddle();
-            switch (enemyType)
-            {
-                case RedEnemy.TYPE:
-                    return new RedEnemy(position);  //@todo
-                case GreenEnemy.TYPE:
-                    return new GreenEnemy(position);  //@todo
-                case BlueEnemy.TYPE:
-                    return new BlueEnemy(position);  //@todo
-            }
-            return null;
+            Enemy clonedEnemy = (Enemy)enemyStore[enemyType].Clone();
+            clonedEnemy.setPosition(position);
+            return clonedEnemy;
         }
 
-        private void addEnemies()
+        private void fillStore()
         {
-            Console.WriteLine("Started creating enemies");
-            Console.WriteLine("Enemy type red: " + RedEnemy.TYPE);
-            enemyMap.Add(RedEnemy.TYPE, new RedEnemy(getRandomInMiddle()));
-            Console.WriteLine("Enemy type green: " + GreenEnemy.TYPE);
-
-            enemyMap.Add(GreenEnemy.TYPE, new GreenEnemy(getRandomInMiddle()));
-            Console.WriteLine("Enemy type blue: " + BlueEnemy.TYPE);
-
-            enemyMap.Add(BlueEnemy.TYPE, new BlueEnemy(getRandomInMiddle()));
+            enemyStore.Add(RedEnemy.TYPE, new RedEnemy(getRandomInMiddle()));
+            enemyStore.Add(GreenEnemy.TYPE, new GreenEnemy(getRandomInMiddle()));
+            enemyStore.Add(BlueEnemy.TYPE, new BlueEnemy(getRandomInMiddle()));
         }
     }
 }
