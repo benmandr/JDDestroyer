@@ -9,7 +9,7 @@ namespace GameServer.Models
     class EnemyFactory
     {
         private static EnemyFactory instance = new EnemyFactory();
-
+        private static Map<int, Enemy> enemyMap
         public static EnemyFactory getInstance()
         {
             return instance;

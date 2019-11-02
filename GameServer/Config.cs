@@ -5,7 +5,7 @@
 
         //Server settings
         public const int SERVER_PORT = 8088;
-        public const string SERVER_HOST = "localhost";//AZURE: "ws://23.101.139.207";
+        public const string SERVER_HOST = "ws://localhost";//AZURE: "ws://23.101.139.207";
 
         //Player settings
         public const double MOVESPEED = 5;

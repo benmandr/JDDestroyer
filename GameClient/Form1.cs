@@ -20,8 +20,7 @@ namespace GameClient
         Bitmap BackBuffer;
         Bitmap FrontBuffer;
 
-        //Score management
-        int bestScore = 0; //SERVER VAR
+        int bestScore = 0;
         string scoreTextBox;
 
         Player currentPlayer = null;
@@ -32,7 +31,7 @@ namespace GameClient
         WebSocket webSocket;
         private readonly object x = new object();
 
-        public int getDistance(double value)
+        public int GetDistance(double value)
         {
             return (int)(value * ClientSize.Width / 100);
         }
@@ -41,7 +40,6 @@ namespace GameClient
         {
             InitializeComponent();
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
-            // Go full screen with fixed square size
             Text = "JDDestroyer";
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -49,35 +47,28 @@ namespace GameClient
             StartPosition = FormStartPosition.CenterScreen;
             int ScreenHeight = (int)(Screen.PrimaryScreen.Bounds.Height * 0.6);
             ClientSize = new Size(ScreenHeight, ScreenHeight);
-
-            //Set up the updating
-            Timer GameTimer = new Timer();
-            GameTimer.Interval = 10;
+            Timer GameTimer = new Timer
+            {
+                Interval = 10
+            };
             GameTimer.Tick += new EventHandler(Tick);
             GameTimer.Start();
             Load += new EventHandler(Init);
             Paint += new PaintEventHandler(FormPaint);
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
-
             Connect();
-            //  InitData();
         }
 
         void Connect()
         {
             webSocket = new WebSocket(Config.SERVER_HOST + ":" + Config.SERVER_PORT);
-
-            webSocket.OnMessage += parseMessage;
-
+            webSocket.OnMessage += ParseMessage;
             webSocket.Connect();
         }
 
-        void parseMessage(object sender, MessageEventArgs e)
+        void ParseMessage(object sender, MessageEventArgs e)
         {
-            Console.WriteLine("Geting");
-            Console.WriteLine(e.Data);
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(e.Data);
-
             switch (bsObj.type)
             {
                 case EnemySpawnMessage.TYPE:
@@ -100,7 +91,6 @@ namespace GameClient
                                 case BlueEnemy.TYPE:
                                     enemies.Add(new BlueEnemy(enemyData.position));
                                     break;
-
                             }
                         }
                     }
@@ -113,21 +103,19 @@ namespace GameClient
                     gamePlayer.position = positionChange.position;
                     break;
 
-
-
                 case PlayerDataMessage.TYPE:
                     PlayerDataMessage playerData = JsonConvert.DeserializeObject<PlayerDataMessage>(bsObj.data);
                     if (currentPlayer == null)
                     {
                         currentPlayer = new Player(playerData.id, playerData.name);
-                        currentGamePlayer = new GamePlayer(currentPlayer);
-                        currentGamePlayer.game = currentGame;
-                        currentGamePlayer.position = playerData.position;
-                        connectPlayerWithGame();
+                        currentGamePlayer = new GamePlayer(currentPlayer)
+                        {
+                            game = currentGame,
+                            position = playerData.position
+                        };
+                        ConnectPlayerWithGame();
                     }
                     break;
-
-
 
                 case GameDataMessage.TYPE:
                     Game game = JsonConvert.DeserializeObject<Game>(bsObj.data);
@@ -136,7 +124,6 @@ namespace GameClient
                         currentGame = new Game();
                     }
                     currentGame.name = game.name;
-
 
                     if (game.P1 != null)
                     {
@@ -163,12 +150,12 @@ namespace GameClient
                     {
                         currentGamePlayer.game = currentGame;
                     }
-                    connectPlayerWithGame();
+                    ConnectPlayerWithGame();
                     break;
             }
         }
 
-        void connectPlayerWithGame()
+        void ConnectPlayerWithGame()
         {
             if (currentGame != null && currentPlayer != null && currentGamePlayer != null)
             {
@@ -201,13 +188,10 @@ namespace GameClient
         }
 
 
-        void sendMessage(string data)
+        void SendMessage(string data)
         {
             if (webSocket != null)
             {
-                Console.WriteLine("Sending");
-                Console.WriteLine(data);
-
                 webSocket.Send(data);
             }
         }
@@ -218,16 +202,20 @@ namespace GameClient
             if (e.KeyCode == Keys.Left)
             {
                 currentGamePlayer.MoveLeft();
-                SocketMessage message = new SocketMessage();
-                message.type = MoveLeftMessage.TYPE;
-                sendMessage(JsonConvert.SerializeObject(message));
+                SocketMessage message = new SocketMessage
+                {
+                    type = MoveLeftMessage.TYPE
+                };
+                SendMessage(JsonConvert.SerializeObject(message));
             }
             else if (e.KeyCode == Keys.Right)
             {
                 currentGamePlayer.MoveRight();
-                SocketMessage message = new SocketMessage();
-                message.type = MoveRightMessage.TYPE;
-                sendMessage(JsonConvert.SerializeObject(message));
+                SocketMessage message = new SocketMessage
+                {
+                    type = MoveRightMessage.TYPE
+                };
+                SendMessage(JsonConvert.SerializeObject(message));
             }
             else if (e.KeyCode == Keys.Space)
                 bestScore += 1;
@@ -256,33 +244,35 @@ namespace GameClient
             {
                 int length = ClientSize.Width;
                 //Main canvas color
-                e.FillRectangle(Brushes.WhiteSmoke, new Rectangle(0, 0, getDistance(100), length));
+                e.FillRectangle(Brushes.WhiteSmoke, new Rectangle(0, 0, GetDistance(100), length));
                 //Middle square
 
-                Rectangle middleSquare = new Rectangle(getDistance(Config.CORNERSIZE), getDistance(Config.CORNERSIZE), getDistance(Config.INNERSQUARESIZE), getDistance(Config.INNERSQUARESIZE));
+                Rectangle middleSquare = new Rectangle(GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE), GetDistance(Config.INNERSQUARESIZE), GetDistance(Config.INNERSQUARESIZE));
                 e.FillRectangle(Brushes.Gray, middleSquare);
                 //Add border
-                Pen borderPen = new Pen(Color.FromArgb(105, 105, 105), 4);
-                borderPen.Alignment = System.Drawing.Drawing2D.PenAlignment.Inset;
+                Pen borderPen = new Pen(Color.FromArgb(105, 105, 105), 4)
+                {
+                    Alignment = System.Drawing.Drawing2D.PenAlignment.Inset
+                };
                 e.DrawRectangle(borderPen, middleSquare);
                 //Corner squares
-                int cornerCord = getDistance(Config.CORNERSIZE + Config.INNERSQUARESIZE);
-                e.FillRectangle(Brushes.Black, new Rectangle(0, 0, getDistance(Config.CORNERSIZE), getDistance(Config.CORNERSIZE)));
-                e.FillRectangle(Brushes.Black, new Rectangle(0, cornerCord, getDistance(Config.CORNERSIZE), getDistance(Config.CORNERSIZE)));
-                e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, 0, getDistance(Config.CORNERSIZE), getDistance(Config.CORNERSIZE)));
-                e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, cornerCord, getDistance(Config.CORNERSIZE), getDistance(Config.CORNERSIZE)));
+                int cornerCord = GetDistance(Config.CORNERSIZE + Config.INNERSQUARESIZE);
+                e.FillRectangle(Brushes.Black, new Rectangle(0, 0, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
+                e.FillRectangle(Brushes.Black, new Rectangle(0, cornerCord, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
+                e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, 0, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
+                e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, cornerCord, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
                 //Score title
                 e.DrawString("Best score:", new Font("Comic Sans MS", 18), Brushes.White, (float)(length * 0.75), 0);
             }
         }
 
-        public void drawEnemy(Enemy enemy)
+        public void DrawEnemy(Enemy enemy)
         {
             if (FrontBuffer != null)
             {
                 using (var graphic = Graphics.FromImage(FrontBuffer))
                 {
-                    graphic.FillRectangle(new SolidBrush(enemy.getColor()), getDistance(enemy.position.x) - getDistance(Config.ENEMYSIZE / 2), getDistance(enemy.position.y) - getDistance(Config.ENEMYSIZE / 2), getDistance(Config.ENEMYSIZE), getDistance(Config.ENEMYSIZE));
+                    graphic.FillRectangle(new SolidBrush(enemy.getColor()), GetDistance(enemy.position.x) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(enemy.position.y) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(Config.ENEMYSIZE), GetDistance(Config.ENEMYSIZE));
                 }
             }
         }
@@ -316,14 +306,14 @@ namespace GameClient
                             {
                                 color = Brushes.Green;
                             }
-                            graphic.FillRectangle(color, getDistance(gamePlayer.position.x) - getDistance(Config.PLAYERSIZE / 2), getDistance(gamePlayer.position.y) - getDistance(Config.PLAYERSIZE / 2), getDistance(Config.PLAYERSIZE), getDistance(Config.PLAYERSIZE));
+                            graphic.FillRectangle(color, GetDistance(gamePlayer.position.x) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(gamePlayer.position.y) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(Config.PLAYERSIZE), GetDistance(Config.PLAYERSIZE));
                         }
                     }
                     lock (x)
                     {
                         foreach (Enemy enemy in enemies)
                         {
-                            drawEnemy(enemy);
+                            DrawEnemy(enemy);
                         }
                     }
 

@@ -16,13 +16,10 @@ namespace GameServer.Models
         [JsonIgnore]
         public List<Enemy> enemies { get; set; }
 
-
         [JsonIgnore]
         public List<GamePlayerEnemyObserver> enemyObservers { get; set; }
         [JsonIgnore]
         public Thread spawnThread;
-
-
 
         public Game(GamePlayer gamePlayer)
         {
@@ -75,7 +72,6 @@ namespace GameServer.Models
         }
 
 
-
         public void spawnEnemies()
         {
             Console.WriteLine(enemies.Count);
@@ -109,8 +105,6 @@ namespace GameServer.Models
                 observer.update(enemy);
             }
         }
-
-
 
         public void removePlayer(GamePlayer leavingPlayer)
         {

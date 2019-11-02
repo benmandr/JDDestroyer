@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace GameServer.Models
 {
-    public abstract class Enemy
+    public abstract class Enemy : ICloneable
     {
         public Position position { get; set; }
 
@@ -45,6 +45,11 @@ namespace GameServer.Models
                 }
             }).Start();
             */
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
 
         ~Enemy()
