@@ -10,6 +10,7 @@ namespace GameServer.Models
     {
         void MoveRight(Position position);
         void MoveLeft(Position position);
+
     }
 
     public class P1MoveStrategy : IMoveStrategy

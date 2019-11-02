@@ -30,7 +30,6 @@ namespace GameServer.Models
             gamePlayer.position = Position.P1InitialPosition();
             gamePlayer.moveStrategy = new P1MoveStrategy();
             P1 = gamePlayer;
-            //  spawner.enable();
             spawnEnemies();
             enemyObservers.Add(new GamePlayerEnemyObserver(gamePlayer));
         }
@@ -98,6 +97,7 @@ namespace GameServer.Models
 
             }).Start();
         }
+
         public void notifyPlayers(Enemy enemy)
         {
             foreach (GamePlayerEnemyObserver observer in enemyObservers)
