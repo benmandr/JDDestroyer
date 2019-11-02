@@ -49,7 +49,16 @@ namespace GameServer.Models
 
         public object Clone()
         {
+            Console.WriteLine("ORIGINAL: " + GetHashCode());
             return this.MemberwiseClone();
+        }
+
+        public object deepClone()
+        {
+            Console.WriteLine("Hash code of original obj:" + GetHashCode().ToString());
+            Enemy deepClone = (Enemy)this.MemberwiseClone();
+            deepClone.position = this.position;
+            return deepClone;
         }
 
         ~Enemy()
