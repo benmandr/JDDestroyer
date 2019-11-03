@@ -272,7 +272,6 @@ namespace GameClient
             {
                 using (var graphic = Graphics.FromImage(FrontBuffer))
                 {
-                    graphic.FillRectangle(new SolidBrush(enemy.getColor()), GetDistance(enemy.position.x) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(enemy.position.y) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(Config.ENEMYSIZE), GetDistance(Config.ENEMYSIZE));
                 }
             }
         }
@@ -309,14 +308,11 @@ namespace GameClient
                             graphic.FillRectangle(color, GetDistance(gamePlayer.position.x) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(gamePlayer.position.y) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(Config.PLAYERSIZE), GetDistance(Config.PLAYERSIZE));
                         }
                     }
-                    lock (x)
+                    foreach (Enemy enemy in enemies)
                     {
-                        foreach (Enemy enemy in enemies)
-                        {
-                            DrawEnemy(enemy);
-                        }
+                        DrawEnemy(enemy);
+                        graphic.FillRectangle(new SolidBrush(enemy.getColor()), GetDistance(enemy.position.x) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(enemy.position.y) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(Config.ENEMYSIZE), GetDistance(Config.ENEMYSIZE));
                     }
-
                     graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", 18), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
                 }
                 Invalidate();

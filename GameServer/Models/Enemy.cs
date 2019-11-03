@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Threading;
+using GameServer.Messages;
+using Newtonsoft.Json;
 
 namespace GameServer.Models
 {
@@ -15,7 +17,6 @@ namespace GameServer.Models
         {
             this.position = position;
         }
-        Thread moveThread = null;
         public Enemy()
         {
         }
@@ -27,15 +28,21 @@ namespace GameServer.Models
             this.position = position;
         }
 
+        public override string ToString()
+        {
+            return position.x + " : " + position.y;
+        }
+
         public void enemyMove()
         {
-            /*
-            moveThread = new Thread(() =>
+
+            new Thread(() =>
             {
                 while (true)
                 {
                     Thread.Sleep(Config.ENEMYMOVERATE);
                     setPosition(position.addX(Config.MOVESPEED));
+
                     Thread.Sleep(Config.ENEMYMOVERATE);
                     setPosition(position.addY(Config.MOVESPEED));
                     Thread.Sleep(Config.ENEMYMOVERATE);
@@ -44,28 +51,31 @@ namespace GameServer.Models
                     setPosition(position.subtractY(Config.MOVESPEED));
                 }
             }).Start();
-            */
+
+        }
+
+        public void notifyMovement()
+        {
+            EnemyMoveMessage messageData = new EnemyMoveMessage(position, this.GetHashCode().ToString());
+
+            SocketMessage message = new SocketMessage();
+            message.type = EnemyMoveMessage.TYPE;
+            message.data = JsonConvert.SerializeObject(messageData);
+
+            //gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
         }
 
         public object Clone()
         {
-            Console.WriteLine("ORIGINAL: " + GetHashCode());
             return this.MemberwiseClone();
         }
 
         public object deepClone()
         {
-            Console.WriteLine("Hash code of original obj:" + GetHashCode().ToString());
             Enemy deepClone = (Enemy)this.MemberwiseClone();
             deepClone.position = this.position;
             return deepClone;
         }
 
-        ~Enemy()
-        {
-            // Your code
-            if (moveThread != null)
-                moveThread.Abort();
-        }
     }
 }

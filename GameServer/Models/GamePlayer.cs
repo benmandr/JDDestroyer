@@ -25,6 +25,7 @@ namespace GameServer.Models
             score = 0;
         }
 
+
         public void sendMessage(string message)
         {
             player.sendMessage(message);

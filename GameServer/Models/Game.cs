@@ -73,7 +73,6 @@ namespace GameServer.Models
 
         public void spawnEnemies()
         {
-            Console.WriteLine(enemies.Count);
             new Thread(() =>
             {
                 while (true)
@@ -88,7 +87,9 @@ namespace GameServer.Models
                         if (newEnemy != null)
                         {
                             enemies.Add(newEnemy);
+                            Console.WriteLine("Enemy hashcode:" + newEnemy.GetHashCode() + "Position: " + newEnemy.ToString());
                             notifyPlayers(newEnemy);
+                            newEnemy.enemyMove();
                         }
                     }
 

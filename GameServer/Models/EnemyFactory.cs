@@ -38,7 +38,6 @@ namespace GameServer.Models
             Position position = getRandomInMiddle();
             //Enemy clonedEnemy = (Enemy)enemyStore[enemyType].deepClone(); //Deep copy
             Enemy clonedEnemy = (Enemy)enemyStore[enemyType].Clone(); //Shallow copy
-            Console.WriteLine("DEEEP: " + clonedEnemy.GetHashCode().ToString());
             clonedEnemy.setPosition(position);
             return clonedEnemy;
         }
