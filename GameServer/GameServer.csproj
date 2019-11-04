@@ -89,8 +89,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulletAdapter.cs" />
     <Compile Include="BulletMover.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="EnemyAdapter.cs" />
     <Compile Include="Messages\EnemyMoveMessage.cs" />
     <Compile Include="Messages\EnemySpawnMessage.cs" />
     <Compile Include="Messages\GameDataMessage.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToBullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
