@@ -7,6 +7,7 @@ using System.Threading;
 using GameServer.Messages;
 using Newtonsoft.Json;
 using GameServer.Geometry;
+using System.Reflection;
 
 namespace GameServer.Models
 {
@@ -36,18 +37,13 @@ namespace GameServer.Models
 
         public void Walk()
         {
-
-        }
-
-        public void notifyMovement()
-        {
-            EnemyMoveMessage messageData = new EnemyMoveMessage(position, this.GetHashCode().ToString());
-
-            SocketMessage message = new SocketMessage();
-            message.type = EnemyMoveMessage.TYPE;
-            message.data = JsonConvert.SerializeObject(messageData);
-
-            //gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
+            Console.WriteLine("Position before rand" + position.ToString());
+            Position currentPosition = position;
+            string[] moves = { "subtractX", "subtractY", "addX", "addY" };
+            Random rnd = new Random();
+            MethodInfo moveMethod = currentPosition.GetType().GetMethod(moves[rnd.Next(0, 3)]);
+            moveMethod.Invoke(currentPosition, null);
+            Console.WriteLine("Position after rand" + currentPosition.ToString());
         }
 
         public object Clone()
