@@ -96,13 +96,13 @@
     <Compile Include="Messages\PlayerDataMessage.cs" />
     <Compile Include="Messages\MoveMessages.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
-    <Compile Include="Models\Controller.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\BlueEnemy.cs" />
-    <Compile Include="Models\GamePlayerEnemyObserver.cs" />
+    <Compile Include="GamePlayerEnemyObserver.cs" />
     <Compile Include="Models\GreenEnemy.cs" />
     <Compile Include="Models\RedEnemy.cs" />
-    <Compile Include="Models\EnemyFactory.cs" />
+    <Compile Include="EnemyFactory.cs" />
     <Compile Include="Models\GameFacade.cs" />
     <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\MoveStrategy.cs" />
