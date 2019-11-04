@@ -27,7 +27,7 @@ namespace GameServer.Models
             gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
         }
 
-        public void bulletList(List<Bullet> bullets)
+        public void bulletListChange(List<Bullet> bullets)
         {
             BulletsDataMessage messageData = new BulletsDataMessage(bullets);
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using GameServer.Geometry;
 
 namespace GameServer.Models
 {
@@ -19,24 +21,28 @@ namespace GameServer.Models
             {
                 gamePlayer.moveStrategy = new P1MoveStrategy();
                 P1 = gamePlayer;
+                gamePlayer.color = Color.Red;
                 gamePlayer.position = Position.P1InitialPosition();
             }
             else if (P2 == null)
             {
                 gamePlayer.moveStrategy = new P2MoveStrategy();
                 P2 = gamePlayer;
+                gamePlayer.color = Color.Green;
                 gamePlayer.position = Position.P2InitialPosition();
             }
             else if (P3 == null)
             {
                 gamePlayer.moveStrategy = new P3MoveStrategy();
                 P3 = gamePlayer;
+                gamePlayer.color = Color.Blue;
                 gamePlayer.position = Position.P3InitialPosition();
             }
             else if (P4 == null)
             {
                 gamePlayer.moveStrategy = new P4MoveStrategy();
                 P4 = gamePlayer;
+                gamePlayer.color = Color.Purple;
                 gamePlayer.position = Position.P4InitialPosition();
             }
             gamePlayer.game = game;

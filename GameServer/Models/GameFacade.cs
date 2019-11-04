@@ -29,7 +29,7 @@ namespace GameServer.Models
         {
             gamePlayers = new GamePlayers();
             enemyObservers = new List<GamePlayerEnemyObserver>();
-            bulletMover = new BulletMover(enemyObservers);
+            bulletMover = new BulletMover();
             gamePlayers = new GamePlayers();
             enemySpawner = new Enemies();
             notifier = new Notifier();
@@ -40,17 +40,15 @@ namespace GameServer.Models
             name = "JdDestroyer";
             enemySpawner.Start(notifier, enemyObservers);
             bulletMover.Start();
-                gamePlayer.color = Color.Green;
-                gamePlayer.color = Color.Red;
-                gamePlayer.color = Color.Blue;
-                gamePlayer.color = Color.Purple;
                            // newEnemy.Walk();
         }
 
         public void AddPlayer(GamePlayer gamePlayer)
         {
             gamePlayers.addPlayer(gamePlayer, this);
-            enemyObservers.Add(new GamePlayerEnemyObserver(gamePlayer));
+            GamePlayerEnemyObserver observer = new GamePlayerEnemyObserver(gamePlayer);
+            enemyObservers.Add(observer);
+            bulletMover.addObserver(observer);
         }
     }
 }

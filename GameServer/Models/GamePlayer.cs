@@ -29,7 +29,7 @@ namespace GameServer.Models
             if(game.bulletMover != null)
             {
                 game.bulletMover.bullets.Add(bullet);
-                game.enemyObservers.ForEach(x => x.bulletListChange(game.bulletMover.bullets));
+                game.bulletMover.notify();
             }
         }
 

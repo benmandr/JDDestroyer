@@ -37,7 +37,7 @@ namespace GameServer.Models
                         {
                             enemies.Add(newEnemy);
                             notifier.notifyPlayers(newEnemy, observers);
-                            newEnemy.enemyMove();
+                           // newEnemy.enemyMove();
                         }
                     }
 

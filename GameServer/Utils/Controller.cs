@@ -93,6 +93,7 @@ namespace GameServer.Models
             playerData.position = gamePlayer.position;
             playerData.name = gamePlayer.player.name;
             playerData.id = gamePlayer.player.id;
+            playerData.color = gamePlayer.color;
 
             SocketMessage playerDataMessage = new SocketMessage();
             playerDataMessage.type = PlayerDataMessage.TYPE;
