@@ -50,7 +50,7 @@ namespace GameServer.Models
 
         private void ParseMessage(WebSocketSession session, string value)
         {
-            Console.WriteLine("Geting");
+            Console.WriteLine("Getting");
             Console.WriteLine(value);
 
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(value);
@@ -58,6 +58,13 @@ namespace GameServer.Models
 
             switch (bsObj.type)
             {
+                case ShootMessage.TYPE:
+                    if (gamePlayer != null)
+                    {
+                        gamePlayer.Shoot();
+                        Console.WriteLine("player " + gamePlayer.player.name + " is shooting !");
+                    }
+                    break;
                 case MoveRightMessage.TYPE:
                     if (gamePlayer != null)
                     {
@@ -97,6 +104,7 @@ namespace GameServer.Models
             playerData.position = gamePlayer.position;
             playerData.name = gamePlayer.player.name;
             playerData.id = gamePlayer.player.id;
+            playerData.color = gamePlayer.color;
 
             SocketMessage playerDataMessage = new SocketMessage();
             playerDataMessage.type = PlayerDataMessage.TYPE;

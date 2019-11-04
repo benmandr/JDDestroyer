@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GameServer.Models;
+using System.Drawing;
+using GameServer.Geometry;
 namespace GameServer.Messages
 {
     public class PlayerDataMessage
@@ -13,6 +15,6 @@ namespace GameServer.Messages
         public long id { get; set; }
         public string name { get; set; }
         public Position position { get; set; }
-
+        public Color color { get; set; }
     }
 }

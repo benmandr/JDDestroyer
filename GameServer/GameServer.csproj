@@ -91,6 +91,13 @@
   <ItemGroup>
     <Compile Include="BulletMover.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Geometry\Bounds.cs" />
+    <Compile Include="Geometry\Directions\Direction.cs" />
+    <Compile Include="Geometry\Directions\DirectionRight.cs" />
+    <Compile Include="Geometry\Directions\DirectionLeft.cs" />
+    <Compile Include="Geometry\Directions\DirectionBottom.cs" />
+    <Compile Include="Geometry\Directions\DirectionTop.cs" />
+    <Compile Include="Geometry\Position.cs" />
     <Compile Include="Messages\EnemyMoveMessage.cs" />
     <Compile Include="Messages\EnemySpawnMessage.cs" />
     <Compile Include="Messages\GameDataMessage.cs" />
@@ -100,6 +107,7 @@
     <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Models\Bullet.cs" />
+    <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\BlueEnemy.cs" />
     <Compile Include="GamePlayerEnemyObserver.cs" />
@@ -110,7 +118,6 @@
     <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\MoveStrategy.cs" />
     <Compile Include="Models\Player.cs" />
-    <Compile Include="Models\Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

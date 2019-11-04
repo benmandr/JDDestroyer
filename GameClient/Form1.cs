@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using GameServer;
+using GameServer.Geometry;
 using GameServer.Models;
 using GameServer.Messages;
 using WebSocketSharp;
@@ -30,6 +31,9 @@ namespace GameClient
 
         WebSocket webSocket;
         private readonly object x = new object();
+        private readonly object bulletLock = new object();
+
+        List<Bullet> bullets = new List<Bullet>();
 
         public int GetDistance(double value)
         {
@@ -103,6 +107,17 @@ namespace GameClient
                     gamePlayer.position = positionChange.position;
                     break;
 
+                case BulletsDataMessage.TYPE:
+                    BulletsDataMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataMessage>(bsObj.data);
+                    lock (bulletLock)
+                    {
+                        bullets = new List<Bullet>();
+                        if (bulletsData.bulletList != null)
+                        {
+                            bulletsData.bulletList.ForEach(x => bullets.Add(x));
+                        }
+                    }
+                    break;
                 case PlayerDataMessage.TYPE:
                     PlayerDataMessage playerData = JsonConvert.DeserializeObject<PlayerDataMessage>(bsObj.data);
                     if (currentPlayer == null)
@@ -111,12 +126,12 @@ namespace GameClient
                         currentGamePlayer = new GamePlayer(currentPlayer)
                         {
                             game = currentGame,
-                            position = playerData.position
+                            position = playerData.position,
+                            color = playerData.color
                         };
                         ConnectPlayerWithGame();
                     }
                     break;
-
                 case GameDataMessage.TYPE:
                     GameFacade game = JsonConvert.DeserializeObject<GameFacade>(bsObj.data);
                     if (currentGame == null)
@@ -218,7 +233,13 @@ namespace GameClient
                 SendMessage(JsonConvert.SerializeObject(message));
             }
             else if (e.KeyCode == Keys.Space)
-                bestScore += 1;
+            {
+                SocketMessage message = new SocketMessage
+                {
+                    type = ShootMessage.TYPE
+                };
+                SendMessage(JsonConvert.SerializeObject(message));
+            }
         }
 
         //Update paint
@@ -291,12 +312,7 @@ namespace GameClient
                     {
                         if (gamePlayer != null)
                         {
-                            Brush color = Brushes.Red;
-                            if (gamePlayer.player.id == currentPlayer.id)
-                            {
-                                color = Brushes.Green;
-                            }
-                            graphic.FillRectangle(color, GetDistance(gamePlayer.position.x) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(gamePlayer.position.y) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(Config.PLAYERSIZE), GetDistance(Config.PLAYERSIZE));
+                            graphic.FillRectangle(new SolidBrush(gamePlayer.color), GetDistance(gamePlayer.position.x) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(gamePlayer.position.y) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(Config.PLAYERSIZE), GetDistance(Config.PLAYERSIZE));
                         }
                     }
                     lock (x)
@@ -305,6 +321,14 @@ namespace GameClient
                         {
                             graphic.FillRectangle(new SolidBrush(enemy.getColor()), GetDistance(enemy.position.x) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(enemy.position.y) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(Config.ENEMYSIZE), GetDistance(Config.ENEMYSIZE));
                         }
+                    }
+                    lock (bulletLock)
+                    {
+                        if (bullets != null)
+                            foreach (Bullet bullet in bullets)
+                            {
+                                graphic.FillRectangle(new SolidBrush(bullet.color), GetDistance(bullet.position.x) - GetDistance(Config.BULLETWIDTH / 2), GetDistance(bullet.position.y) - GetDistance(Config.BULLETWIDTH / 2), GetDistance(Config.BULLETWIDTH), GetDistance(Config.BULLETWIDTH));
+                            }
                     }
                     graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", 18), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
                 }

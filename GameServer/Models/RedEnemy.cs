@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Drawing;
+using GameServer.Geometry;
 
 namespace GameServer.Models
 {

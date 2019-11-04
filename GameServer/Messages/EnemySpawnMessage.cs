@@ -1,6 +1,7 @@
 ﻿using GameServer.Models;
 using System.Drawing;
 using System;
+using GameServer.Geometry;
 namespace GameServer.Messages
 {
     public class EnemySpawnMessage

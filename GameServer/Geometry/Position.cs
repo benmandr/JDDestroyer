@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GameServer.Models
+namespace GameServer.Geometry
 {
     public class Position : ICloneable
     {

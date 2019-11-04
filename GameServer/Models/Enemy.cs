@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Threading;
 using GameServer.Messages;
 using Newtonsoft.Json;
+using GameServer.Geometry;
 
 namespace GameServer.Models
 {

@@ -5,25 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using GameServer.Messages;
+using System.Drawing;
 
+using GameServer.Geometry;
 namespace GameServer.Models
 {
     public class GamePlayer
     {
         public Player player { get; set; }
         public Position position { get; set; }
+        public Color color { get; set; }
+
         [JsonIgnore]
         public IMoveStrategy moveStrategy { get; set; }
         [JsonIgnore]
         public GameFacade game { get; set; }
         public long score { get; set; }
 
+
         public void Shoot()
         {
-            Bullet bullet = new Bullet();
+            Bullet bullet = new Bullet(this);
             if(game.bulletMover != null)
             {
                 game.bulletMover.bullets.Add(bullet);
+                game.enemyObservers.ForEach(x => x.bulletListChange(game.bulletMover.bullets));
             }
         }
 

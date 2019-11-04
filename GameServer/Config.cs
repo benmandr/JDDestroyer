@@ -20,7 +20,8 @@
         public const double ENEMYSIZE = 5;
 
         //Bullet settings
-        public const int BULLETSPEED = 500;
+        public const int BULLETSPEED = 50;
+        public const double BULLETWIDTH = 2;
 
         //Map settings
         public const double INNERSQUARESIZE = 60;

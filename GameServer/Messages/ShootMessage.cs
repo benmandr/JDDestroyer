@@ -10,7 +10,7 @@ namespace GameServer.Messages
 
     public class BulletsDataMessage
     {
-        public const int TYPE = 10;
+        public const int TYPE = 9;
         public List<Bullet> bulletList { get; set; }
 
         public BulletsDataMessage(List<Bullet> bullets)
