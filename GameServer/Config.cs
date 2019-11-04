@@ -22,5 +22,7 @@
         //Map settings
         public const double INNERSQUARESIZE = 60;
         public const double CORNERSIZE = (100 - INNERSQUARESIZE) / 2;
+        public const double PLAYERBOUND = CORNERSIZE + PLAYERSIZE / 2;
+        public const double PLAYERBOUND2 = 100 - PLAYERBOUND;
     }
 }

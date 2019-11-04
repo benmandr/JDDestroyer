@@ -10,6 +10,18 @@ namespace GameServer.Models
         public double y { get; set; }
 
 
+        public static bool PlayerOutOfBounds(Position position) {
+            if(position.x < Config.PLAYERBOUND && (position.y < Config.PLAYERBOUND || position.y > Config.PLAYERBOUND2))
+            {
+                return true;
+            }
+            if (position.x > Config.PLAYERBOUND2 && (position.y < Config.PLAYERBOUND || position.y > Config.PLAYERBOUND2))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static Position P1InitialPosition()
         {
             return new Position(50, 100-Config.PLAYERSIZE/2);

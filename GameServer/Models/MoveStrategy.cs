@@ -10,21 +10,30 @@ namespace GameServer.Models
     {
         void MoveRight(Position position);
         void MoveLeft(Position position);
-
     }
 
     public class P1MoveStrategy : IMoveStrategy
     {
         public P1MoveStrategy() {
+
         }
         public void MoveRight(Position position)
         {
             position.addX(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.subtractX(Config.MOVESPEED);
+            }
         }
         public void MoveLeft(Position position)
         {
             position.subtractX(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.addX(Config.MOVESPEED);
+            }
         }
+
     }
 
     public class P2MoveStrategy : IMoveStrategy
@@ -35,10 +44,18 @@ namespace GameServer.Models
         public void MoveRight(Position position)
         {
             position.subtractY(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.addY(Config.MOVESPEED);
+            }
         }
         public void MoveLeft(Position position)
         {
             position.addY(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.subtractY(Config.MOVESPEED);
+            }
         }
     }
 
@@ -50,10 +67,18 @@ namespace GameServer.Models
         public void MoveRight(Position position)
         {
             position.subtractX(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.addX(Config.MOVESPEED);
+            }
         }
         public void MoveLeft(Position position)
         {
             position.addX(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.subtractX(Config.MOVESPEED);
+            }
         }
     }
 
@@ -65,10 +90,18 @@ namespace GameServer.Models
         public void MoveRight(Position position)
         {
             position.addY(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.subtractY(Config.MOVESPEED);
+            }
         }
         public void MoveLeft(Position position)
         {
             position.subtractY(Config.MOVESPEED);
+            if (Position.PlayerOutOfBounds(position))
+            {
+                position.addY(Config.MOVESPEED);
+            }
         }
     }
 }
