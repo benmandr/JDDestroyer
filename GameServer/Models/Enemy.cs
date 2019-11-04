@@ -7,6 +7,7 @@ using System.Threading;
 using GameServer.Messages;
 using Newtonsoft.Json;
 using GameServer.Geometry;
+using System.Reflection;
 
 namespace GameServer.Models
 {
@@ -36,9 +37,9 @@ namespace GameServer.Models
 
         public void Walk()
         {
-
-        }
-
+            Console.WriteLine("Position before rand" + position.ToString());
+            Position currentPosition = position;
+            string[] moves = { "subtractX", "subtractY", "addX", "addY" };
         public object Clone()
         {
             return this.MemberwiseClone();
