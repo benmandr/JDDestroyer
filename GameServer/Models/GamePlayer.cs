@@ -27,13 +27,11 @@ namespace GameServer.Models
             }
         }
 
-
         public GamePlayer(Player player)
         {
             this.player = player;
             score = 0;
         }
-
 
         public void sendMessage(string message)
         {

@@ -18,17 +18,10 @@ namespace GameServer.Models
         public Notifier notifier { get; set; }
 
         [JsonIgnore]
-        public Enemies enemies { get; set; }
+        public Enemies enemySpawner { get; set; }
 
         [JsonIgnore]
         public BulletMover bulletMover;
-
-        public void createGame()
-        {
-            name = "JdDestroyer";
-            enemies.spawnEnemies(notifier, enemyObservers);
-            bulletMover.start();
-        }
 
         public GameFacade()
         {
@@ -36,14 +29,21 @@ namespace GameServer.Models
             enemyObservers = new List<GamePlayerEnemyObserver>();
             bulletMover = new BulletMover();
             gamePlayers = new GamePlayers();
-            enemies = new Enemies();
+            enemySpawner = new Enemies();
             notifier = new Notifier();
+        }
+
+        public void StartGame()
+        {
+            name = "JdDestroyer";
+            enemySpawner.Start(notifier, enemyObservers);
+            bulletMover.Start();
         }
 
         public void AddPlayer(GamePlayer gamePlayer)
         {
-            GamePlayerEnemyObserver newObserver = gamePlayers.addPlayer(gamePlayer, this);
-            enemyObservers.Add(newObserver);
+            gamePlayers.addPlayer(gamePlayer, this);
+            enemyObservers.Add(new GamePlayerEnemyObserver(gamePlayer));
         }
     }
 }

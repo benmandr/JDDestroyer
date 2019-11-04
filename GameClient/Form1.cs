@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using GameServer;
@@ -76,7 +71,6 @@ namespace GameClient
                     if (currentGame != null)
                     {
                         EnemySpawnMessage enemyData = JsonConvert.DeserializeObject<EnemySpawnMessage>(bsObj.data);
-                        Console.WriteLine(enemyData);
 
                         lock (x)
                         {
@@ -120,7 +114,6 @@ namespace GameClient
 
                 case GameDataMessage.TYPE:
                     GameFacade game = JsonConvert.DeserializeObject<GameFacade>(bsObj.data);
-                    Console.WriteLine(game);
                     if (currentGame == null)
                     {
                         currentGame = new GameFacade();
@@ -147,7 +140,7 @@ namespace GameClient
                         currentGame.gamePlayers.P4 = game.gamePlayers.P4;
                         currentGame.gamePlayers.P4.moveStrategy = new P4MoveStrategy();
                     }
-                    currentGame.enemies.enemies = new List<Enemy>();
+                    currentGame.enemySpawner.enemies = new List<Enemy>();
                     if (currentGamePlayer != null)
                     {
                         currentGamePlayer.game = currentGame;
