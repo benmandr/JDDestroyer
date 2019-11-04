@@ -15,6 +15,12 @@ namespace GameServer.Models
     {
         public Position position { get; set; }
 
+        [JsonIgnore]
+        private static Random randomInstance = new Random();
+
+        //[JsonIgnore]
+        //private 
+
         public Enemy(Position position)
         {
             this.position = position;
@@ -37,13 +43,12 @@ namespace GameServer.Models
 
         public void Walk()
         {
-            Console.WriteLine("Position before rand" + position.ToString());
             Position currentPosition = position;
             string[] moves = { "subtractX", "subtractY", "addX", "addY" };
-            Random rnd = new Random();
-            MethodInfo moveMethod = currentPosition.GetType().GetMethod(moves[rnd.Next(0, 3)]);
-            moveMethod.Invoke(currentPosition, new object[] { 0 });
-            Console.WriteLine("Position after rand" + currentPosition.ToString());
+            Console.WriteLine(moves[randomInstance.Next(0, moves.Length - 1)]);
+            MethodInfo moveMethod = currentPosition.GetType().GetMethod(moves[randomInstance.Next(0, moves.Length)]);
+            moveMethod.Invoke(currentPosition, new object[] { 1 });
+            //TODO: Bounds, TimeIntervals on move
         }
         public object Clone()
         {
