@@ -19,31 +19,39 @@ namespace GameServer.Models
         {
             if (P1 == null)
             {
-                gamePlayer.moveStrategy = new P1MoveStrategy();
                 P1 = gamePlayer;
                 gamePlayer.color = Color.Red;
                 gamePlayer.position = Position.P1InitialPosition();
+                IMoveStrategy strategy = new P1MoveStrategy();
+                gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
+                gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
             }
             else if (P2 == null)
             {
-                gamePlayer.moveStrategy = new P2MoveStrategy();
                 P2 = gamePlayer;
                 gamePlayer.color = Color.Green;
                 gamePlayer.position = Position.P2InitialPosition();
+                IMoveStrategy strategy = new P2MoveStrategy();
+                gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
+                gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
             }
             else if (P3 == null)
             {
-                gamePlayer.moveStrategy = new P3MoveStrategy();
                 P3 = gamePlayer;
                 gamePlayer.color = Color.Blue;
                 gamePlayer.position = Position.P3InitialPosition();
+                IMoveStrategy strategy = new P3MoveStrategy();
+                gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
+                gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
             }
             else if (P4 == null)
             {
-                gamePlayer.moveStrategy = new P4MoveStrategy();
                 P4 = gamePlayer;
                 gamePlayer.color = Color.Purple;
                 gamePlayer.position = Position.P4InitialPosition();
+                IMoveStrategy strategy = new P4MoveStrategy();
+                gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
+                gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
             }
             gamePlayer.game = game;
         }

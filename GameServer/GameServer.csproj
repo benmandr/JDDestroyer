@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Commands.cs" />
     <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
     <Compile Include="Utils\BulletMover.cs" />
@@ -111,7 +112,7 @@
     <Compile Include="Utils\Controller.cs" />
     <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\Enemy.cs" />
-    <Compile Include="Models\BlueEnemy.cs" /> 
+    <Compile Include="Models\BlueEnemy.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\GamePlayers.cs" />
     <Compile Include="Utils\GamePlayerEnemyObserver.cs" />

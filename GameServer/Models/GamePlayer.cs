@@ -17,7 +17,9 @@ namespace GameServer.Models
         public Color color { get; set; }
 
         [JsonIgnore]
-        public IMoveStrategy moveStrategy { get; set; }
+        public MoveLeftCommand moveLeft { get; set; }
+        [JsonIgnore]
+        public MoveRightCommand moveRight { get; set; }
         [JsonIgnore]
         public GameFacade game { get; set; }
         public long score { get; set; }
@@ -44,14 +46,26 @@ namespace GameServer.Models
             player.sendMessage(message);
         }
 
-        public void MoveRight()
+        public bool MoveRight()
         {
-            moveStrategy.MoveRight(position);
+            moveRight.Execute();
+            if (Position.PlayerOutOfBounds(position))
+            {
+                moveRight.Undo();
+                return false;
+            }
+            return true;
         }
 
-        public void MoveLeft()
+        public bool MoveLeft()
         {
-            moveStrategy.MoveLeft(position);
+            moveLeft.Execute();
+            if (Position.PlayerOutOfBounds(position))
+            {
+                moveLeft.Undo();
+                return false;
+            }
+            return true;
         }
 
         public void PositionChanged() {

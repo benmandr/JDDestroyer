@@ -61,16 +61,20 @@ namespace GameServer.Models
                 case MoveRightMessage.TYPE:
                     if (gamePlayer != null)
                     {
-                        gamePlayer.MoveRight();
-                        gamePlayer.PositionChanged();
+                        if (gamePlayer.MoveRight())
+                        {
+                            gamePlayer.PositionChanged();
+                        }
                     }
                     break;
                 case MoveLeftMessage.TYPE:
                     gamePlayer = getGamePlayer(session);
                     if (gamePlayer != null)
                     {
-                        gamePlayer.MoveLeft();
-                        gamePlayer.PositionChanged();
+                        if (gamePlayer.MoveLeft())
+                        {
+                            gamePlayer.PositionChanged();
+                        }
                     }
                     break;
             }

@@ -138,22 +138,30 @@ namespace GameClient
                     if (game.gamePlayers.P1 != null)
                     {
                         currentGame.gamePlayers.P1 = game.gamePlayers.P1;
-                        currentGame.gamePlayers.P1.moveStrategy = new P1MoveStrategy();
+                        IMoveStrategy strategy = new P1MoveStrategy();
+                        currentGame.gamePlayers.P1.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P1.position);
+                        currentGame.gamePlayers.P1.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P1.position);
                     }
                     if (game.gamePlayers.P2 != null)
                     {
                         currentGame.gamePlayers.P2 = game.gamePlayers.P2;
-                        currentGame.gamePlayers.P2.moveStrategy = new P2MoveStrategy();
+                        IMoveStrategy strategy = new P2MoveStrategy();
+                        currentGame.gamePlayers.P2.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P2.position);
+                        currentGame.gamePlayers.P2.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P2.position);
                     }
                     if (game.gamePlayers.P3 != null)
                     {
                         currentGame.gamePlayers.P3 = game.gamePlayers.P3;
-                        currentGame.gamePlayers.P3.moveStrategy = new P3MoveStrategy();
+                        IMoveStrategy strategy = new P3MoveStrategy();
+                        currentGame.gamePlayers.P3.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P3.position);
+                        currentGame.gamePlayers.P3.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P3.position);
                     }
                     if (game.gamePlayers.P4 != null)
                     {
                         currentGame.gamePlayers.P4 = game.gamePlayers.P4;
-                        currentGame.gamePlayers.P4.moveStrategy = new P4MoveStrategy();
+                        IMoveStrategy strategy = new P4MoveStrategy();
+                        currentGame.gamePlayers.P4.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P4.position);
+                        currentGame.gamePlayers.P4.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P4.position);
                     }
                     currentGame.enemySpawner.enemies = new List<Enemy>();
                     if (currentGamePlayer != null)
@@ -171,26 +179,30 @@ namespace GameClient
             {
                 if (currentGame.gamePlayers.P1 != null && currentGame.gamePlayers.P1.Equals(currentGamePlayer))
                 {
-                    currentGamePlayer.moveStrategy = currentGame.gamePlayers.P1.moveStrategy;
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P1.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P1.moveRight;
                     currentGame.gamePlayers.P1 = currentGamePlayer;
                     return;
                 }
 
                 if (currentGame.gamePlayers.P2 != null && currentGame.gamePlayers.P2.Equals(currentGamePlayer))
                 {
-                    currentGamePlayer.moveStrategy = currentGame.gamePlayers.P2.moveStrategy;
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P2.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P2.moveRight;
                     currentGame.gamePlayers.P2 = currentGamePlayer;
                     return;
                 }
                 if (currentGame.gamePlayers.P3 != null && currentGame.gamePlayers.P3.Equals(currentGamePlayer))
                 {
-                    currentGamePlayer.moveStrategy = currentGame.gamePlayers.P3.moveStrategy;
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P3.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P3.moveRight;
                     currentGame.gamePlayers.P3 = currentGamePlayer;
                     return;
                 }
                 if (currentGame.gamePlayers.P4 != null && currentGame.gamePlayers.P4.Equals(currentGamePlayer))
                 {
-                    currentGamePlayer.moveStrategy = currentGame.gamePlayers.P4.moveStrategy;
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P4.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P4.moveRight;
                     currentGame.gamePlayers.P4 = currentGamePlayer;
                     return;
                 }
@@ -211,21 +223,25 @@ namespace GameClient
         {
             if (e.KeyCode == Keys.Left)
             {
-                currentGamePlayer.MoveLeft();
-                SocketMessage message = new SocketMessage
+                if (currentGamePlayer.MoveLeft())
                 {
-                    type = MoveLeftMessage.TYPE
-                };
-                SendMessage(JsonConvert.SerializeObject(message));
+                    SocketMessage message = new SocketMessage
+                    {
+                        type = MoveLeftMessage.TYPE
+                    };
+                    SendMessage(JsonConvert.SerializeObject(message));
+                }
             }
             else if (e.KeyCode == Keys.Right)
             {
-                currentGamePlayer.MoveRight();
-                SocketMessage message = new SocketMessage
+                if (currentGamePlayer.MoveRight())
                 {
-                    type = MoveRightMessage.TYPE
-                };
-                SendMessage(JsonConvert.SerializeObject(message));
+                    SocketMessage message = new SocketMessage
+                    {
+                        type = MoveRightMessage.TYPE
+                    };
+                    SendMessage(JsonConvert.SerializeObject(message));
+                }
             }
             else if (e.KeyCode == Keys.Space)
             {
