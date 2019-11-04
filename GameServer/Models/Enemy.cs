@@ -42,9 +42,8 @@ namespace GameServer.Models
             string[] moves = { "subtractX", "subtractY", "addX", "addY" };
             Random rnd = new Random();
             MethodInfo moveMethod = currentPosition.GetType().GetMethod(moves[rnd.Next(0, 3)]);
-            moveMethod.Invoke(currentPosition, null);
+            moveMethod.Invoke(currentPosition, new object[] { 0 });
             Console.WriteLine("Position after rand" + currentPosition.ToString());
-
         }
         public object Clone()
         {
