@@ -2,9 +2,9 @@ using GameServer.Models;
 
 namespace GameServer
 {
-    public class BulletAdapter : ToMovable
+    public class BulletAdapter : IMovable
     {
-        private Bullet bullet;
+        public Bullet bullet { get; set; }
         public BulletAdapter(Bullet bullet) {
             this.bullet = bullet;
         }

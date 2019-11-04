@@ -39,17 +39,6 @@ namespace GameServer.Models
 
         }
 
-        public void notifyMovement()
-        {
-            EnemyMoveMessage messageData = new EnemyMoveMessage(position, this.GetHashCode().ToString());
-
-            SocketMessage message = new SocketMessage();
-            message.type = EnemyMoveMessage.TYPE;
-            message.data = JsonConvert.SerializeObject(messageData);
-
-            //gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
-        }
-
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -60,6 +49,19 @@ namespace GameServer.Models
             Enemy deepClone = (Enemy)this.MemberwiseClone();
             deepClone.position = this.position;
             return deepClone;
+        }
+        public static Enemy createFromDummy(EnemyDummy dummy)
+        {
+            switch (dummy.type)
+            {
+                case GreenEnemy.TYPE:
+                    return new GreenEnemy(dummy.position);
+                case BlueEnemy.TYPE:
+                    return new BlueEnemy(dummy.position);
+                case RedEnemy.TYPE:
+                    return new RedEnemy(dummy.position);
+            }
+            return null;
         }
 
     }

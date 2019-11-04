@@ -27,11 +27,10 @@ namespace GameServer.Models
 
         public void Shoot()
         {
-            Bullet bullet = new Bullet(this);
-            if(game.bulletMover != null)
+            if (game.mover != null)
             {
-                game.bulletMover.bullets.Add(bullet);
-                game.bulletMover.notify();
+                Console.WriteLine("Asdasdasdasd");
+                game.mover.addItem(new BulletAdapter(new Bullet(this)));
             }
         }
 
@@ -76,7 +75,9 @@ namespace GameServer.Models
             SocketMessage socketMessage = new SocketMessage();
             socketMessage.type = PositionChangedMessage.TYPE;
             socketMessage.data = JsonConvert.SerializeObject(message);
-            game.notifier.sendMessage(JsonConvert.SerializeObject(socketMessage), game.gamePlayers.getPlayers());
+
+            Console.WriteLine("player position message");
+            game.SendMessage(JsonConvert.SerializeObject(socketMessage));
         }
 
         public bool Equals(GamePlayer obj)

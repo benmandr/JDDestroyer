@@ -70,26 +70,16 @@ namespace GameClient
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(e.Data);
             switch (bsObj.type)
             {
-                case EnemySpawnMessage.TYPE:
-
-                    if (currentGame != null)
+                case EnemiesDataMessage.TYPE:
+                    EnemiesDataMessage enemiesData = JsonConvert.DeserializeObject<EnemiesDataMessage>(bsObj.data);
+                    lock (x)
                     {
-                        EnemySpawnMessage enemyData = JsonConvert.DeserializeObject<EnemySpawnMessage>(bsObj.data);
-
-                        lock (x)
+                        enemies = new List<Enemy>();
+                        if (enemiesData.enemiesList != null)
                         {
-                            switch (enemyData.type)
+                            foreach(EnemyDummy dummy in enemiesData.enemiesList)
                             {
-                                default:
-                                case RedEnemy.TYPE:
-                                    enemies.Add(new RedEnemy(enemyData.position));
-                                    break;
-                                case GreenEnemy.TYPE:
-                                    enemies.Add(new GreenEnemy(enemyData.position));
-                                    break;
-                                case BlueEnemy.TYPE:
-                                    enemies.Add(new BlueEnemy(enemyData.position));
-                                    break;
+                                enemies.Add(Enemy.createFromDummy(dummy));
                             }
                         }
                     }
@@ -103,13 +93,14 @@ namespace GameClient
                     break;
 
                 case BulletsDataMessage.TYPE:
+                   // Console.WriteLine("bullet list");
                     BulletsDataMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataMessage>(bsObj.data);
                     lock (bulletLock)
                     {
                         bullets = new List<Bullet>();
                         if (bulletsData.bulletList != null)
                         {
-                            bulletsData.bulletList.ForEach(x => bullets.Add(x));
+                            bullets = bulletsData.bulletList;
                         }
                     }
                     break;
@@ -163,7 +154,6 @@ namespace GameClient
                         currentGame.gamePlayers.P4.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P4.position);
                         currentGame.gamePlayers.P4.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P4.position);
                     }
-                    currentGame.enemySpawner.enemies = new List<Enemy>();
                     if (currentGamePlayer != null)
                     {
                         currentGamePlayer.game = currentGame;

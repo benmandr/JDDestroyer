@@ -1,5 +1,4 @@
-﻿using GameServer.Utils;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +8,25 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models
 {
-    public class Enemies
+    public class EnemySpawner
     {
-        public List<Enemy> enemies { get; set; }
+        public Mover mover;
 
         public Thread spawnThread;
 
-        public Enemies()
+        public EnemySpawner(Mover mover)
         {
-            enemies = new List<Enemy>();
+            this.mover = mover;
         }
 
-        public void Start(Notifier notifier, List<GamePlayerEnemyObserver> observers)
+
+        public void Start()
         {
             new Thread(() =>
             {
                 while (true)
                 {
-                    if (enemies.Count < Config.MAXENEMIES)
+                    if (mover.GetEnemies().Count < Config.MAXENEMIES)
                     {
                         int[] types = { RedEnemy.TYPE, GreenEnemy.TYPE, BlueEnemy.TYPE };
                         Random rand = new Random();
@@ -35,9 +35,8 @@ namespace GameServer.Models
                         Enemy newEnemy = EnemyFactory.getInstance().getEnemy(types[index]);
                         if (newEnemy != null)
                         {
-                            enemies.Add(newEnemy);
-                            notifier.notifyPlayers(newEnemy, observers);
-                           // newEnemy.enemyMove();
+                            EnemyAdapter adapter = new EnemyAdapter(newEnemy);
+                            mover.addItem(adapter);
                         }
                     }
 

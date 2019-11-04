@@ -67,6 +67,12 @@ namespace GameServer.Models
                         }
                     }
                     break;
+                case ShootMessage.TYPE:
+                    if (gamePlayer != null)
+                    {
+                        gamePlayer.Shoot();
+                    }
+                    break;
                 case MoveLeftMessage.TYPE:
                     gamePlayer = getGamePlayer(session);
                     if (gamePlayer != null)
@@ -93,36 +99,6 @@ namespace GameServer.Models
             game.AddPlayer(gamePlayer);
             Console.WriteLine("Game joined");
 
-            PlayerDataMessage playerData = new PlayerDataMessage();
-            playerData.position = gamePlayer.position;
-            playerData.name = gamePlayer.player.name;
-            playerData.id = gamePlayer.player.id;
-            playerData.color = gamePlayer.color;
-
-            SocketMessage playerDataMessage = new SocketMessage();
-            playerDataMessage.type = PlayerDataMessage.TYPE;
-            playerDataMessage.data = JsonConvert.SerializeObject(playerData);
-            Console.WriteLine(JsonConvert.SerializeObject(playerDataMessage));
-            Console.WriteLine("Sending");
-            gamePlayer.sendMessage(JsonConvert.SerializeObject(playerDataMessage));
-
-            SocketMessage gameMessage = new SocketMessage();
-            gameMessage.type = GameDataMessage.TYPE;
-            gameMessage.data = JsonConvert.SerializeObject(game);
-            Console.WriteLine("Sending");
-            Console.WriteLine(JsonConvert.SerializeObject(gameMessage));
-            game.notifier.sendMessage(JsonConvert.SerializeObject(gameMessage), game.gamePlayers.getPlayers());
-
-            foreach (Enemy enemy in game.enemySpawner.enemies)
-            {
-                EnemySpawnMessage messageData = new EnemySpawnMessage(enemy.position, enemy.getType);
-
-                SocketMessage message = new SocketMessage();
-                message.type = EnemySpawnMessage.TYPE;
-
-                message.data = JsonConvert.SerializeObject(messageData);
-                gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
-            }
             sessionPlayers[session.SessionID] = gamePlayer;
         }
 

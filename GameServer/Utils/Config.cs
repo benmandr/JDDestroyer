@@ -20,10 +20,10 @@
         public const double ENEMYSIZE = 5;
 
         //Bullet settings
-        public const int BULLETSPEED = 20;
         public const double BULLETWIDTH = 2;
 
         //Map settings
+        public const int FRAMESPEED = 20;
         public const double INNERSQUARESIZE = 60;
         public const double CORNERSIZE = (100 - INNERSQUARESIZE) / 2;
         public const double PLAYERBOUND = CORNERSIZE + PLAYERSIZE / 2;

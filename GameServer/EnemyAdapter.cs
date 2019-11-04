@@ -2,10 +2,10 @@ using GameServer.Models;
 
 namespace GameServer
 {
-    public class EnemyAdapter : ToMovable
+    public class EnemyAdapter : IMovable
     {
 
-        private Enemy enemy;
+        public Enemy enemy { get; set; }
         public EnemyAdapter(Enemy enemy)
         {
             this.enemy = enemy;

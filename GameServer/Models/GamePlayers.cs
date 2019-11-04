@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using GameServer.Geometry;
+using System.Collections;
 
 namespace GameServer.Models
 {
@@ -99,13 +100,18 @@ namespace GameServer.Models
             }
             return null;
         }
+
+
         public IEnumerable<GamePlayer> getPlayers()
         {
-            yield return P1;
-            yield return P2;
-            yield return P3;
-            yield return P4;
+            if (P1 != null)
+                yield return P1;
+            if (P2 != null)
+                yield return P2;
+            if (P3 != null)
+                yield return P3;
+            if (P4 != null)
+                yield return P4;
         }
-
     }
 }

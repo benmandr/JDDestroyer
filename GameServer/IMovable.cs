@@ -1,6 +1,6 @@
 namespace GameServer
 {
-    public interface ToMovable
+    public interface IMovable
     {
         void Move();
     }
