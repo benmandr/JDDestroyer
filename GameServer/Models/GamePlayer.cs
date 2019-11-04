@@ -58,7 +58,7 @@ namespace GameServer.Models
             SocketMessage socketMessage = new SocketMessage();
             socketMessage.type = PositionChangedMessage.TYPE;
             socketMessage.data = JsonConvert.SerializeObject(message);
-            game.sendMessage(JsonConvert.SerializeObject(socketMessage), this);
+            game.notifier.sendMessage(JsonConvert.SerializeObject(socketMessage), game.gamePlayers.getPlayers());
         }
 
         public bool Equals(GamePlayer obj)
