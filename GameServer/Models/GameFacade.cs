@@ -21,17 +21,21 @@ namespace GameServer.Models
         [JsonIgnore]
         public Thread spawnThread;
 
+        [JsonIgnore]
+        public BulletMover bulletMover;
 
         public void createGame()
         {
             name = "JdDestroyer";
             spawnEnemies();
+            bulletMover.start();
         }
 
         public GameFacade()
         {
             enemies = new List<Enemy>();
             enemyObservers = new List<GamePlayerEnemyObserver>();
+            bulletMover = new BulletMover();
         }
 
         public void addPlayer(GamePlayer gamePlayer)
@@ -97,7 +101,7 @@ namespace GameServer.Models
 
         public void notifyPlayers(Enemy enemy)
         {
-            enemyObservers.ForEach(x => x.update(enemy));
+            enemyObservers.ForEach(x => x.enemySpawn(enemy));
         }
 
         public void removePlayer(GamePlayer leavingPlayer)

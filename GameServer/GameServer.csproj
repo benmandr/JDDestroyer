@@ -89,14 +89,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulletMover.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Messages\EnemyMoveMessage.cs" />
     <Compile Include="Messages\EnemySpawnMessage.cs" />
     <Compile Include="Messages\GameDataMessage.cs" />
+    <Compile Include="Messages\ShootMessage.cs" />
     <Compile Include="Messages\PlayerDataMessage.cs" />
     <Compile Include="Messages\MoveMessages.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\BlueEnemy.cs" />
     <Compile Include="GamePlayerEnemyObserver.cs" />

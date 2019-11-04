@@ -16,12 +16,23 @@ namespace GameServer.Models
         {
             this.gamePlayer = gamePlayer;
         }
-        public void update(Enemy enemy)
+        public void enemySpawn(Enemy enemy)
         {
             EnemySpawnMessage messageData = new EnemySpawnMessage(enemy.position, enemy.getType);
 
             SocketMessage message = new SocketMessage();
             message.type = EnemySpawnMessage.TYPE;
+            message.data = JsonConvert.SerializeObject(messageData);
+
+            gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
+        }
+
+        public void bulletList(List<Bullet> bullets)
+        {
+            BulletsDataMessage messageData = new BulletsDataMessage(bullets);
+
+            SocketMessage message = new SocketMessage();
+            message.type = BulletsDataMessage.TYPE;
             message.data = JsonConvert.SerializeObject(messageData);
 
             gamePlayer.sendMessage(JsonConvert.SerializeObject(message));

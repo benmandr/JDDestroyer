@@ -18,6 +18,15 @@ namespace GameServer.Models
         public GameFacade game { get; set; }
         public long score { get; set; }
 
+        public void Shoot()
+        {
+            Bullet bullet = new Bullet();
+            if(game.bulletMover != null)
+            {
+                game.bulletMover.bullets.Add(bullet);
+            }
+        }
+
 
         public GamePlayer(Player player)
         {

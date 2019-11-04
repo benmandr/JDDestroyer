@@ -15,7 +15,6 @@ namespace GameServer.Models
 
         public void initiateConnection()
         {
-
             wsServer = new WebSocketServer();
             int port = Config.SERVER_PORT;
             wsServer.Setup(port);

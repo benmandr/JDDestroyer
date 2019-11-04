@@ -19,6 +19,9 @@
         public const int ENEMYSPAWNSPEED = 1000;
         public const double ENEMYSIZE = 5;
 
+        //Bullet settings
+        public const int BULLETSPEED = 500;
+
         //Map settings
         public const double INNERSQUARESIZE = 60;
         public const double CORNERSIZE = (100 - INNERSQUARESIZE) / 2;

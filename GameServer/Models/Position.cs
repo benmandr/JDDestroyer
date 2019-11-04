@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GameServer.Models
 {
-    public class Position
+    public class Position : ICloneable
     {
         public double x { get; set; }
         public double y { get; set; }
@@ -70,6 +70,11 @@ namespace GameServer.Models
         {
             this.y -= y;
             return this;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }
