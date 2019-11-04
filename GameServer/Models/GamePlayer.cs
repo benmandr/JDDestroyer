@@ -33,13 +33,11 @@ namespace GameServer.Models
             }
         }
 
-
         public GamePlayer(Player player)
         {
             this.player = player;
             score = 0;
         }
-
 
         public void sendMessage(string message)
         {
@@ -64,7 +62,7 @@ namespace GameServer.Models
             SocketMessage socketMessage = new SocketMessage();
             socketMessage.type = PositionChangedMessage.TYPE;
             socketMessage.data = JsonConvert.SerializeObject(message);
-            game.sendMessage(JsonConvert.SerializeObject(socketMessage), this);
+            game.notifier.sendMessage(JsonConvert.SerializeObject(socketMessage), game.gamePlayers.getPlayers());
         }
 
         public bool Equals(GamePlayer obj)

@@ -89,9 +89,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
-    <Compile Include="BulletMover.cs" />
-    <Compile Include="Config.cs" /> 
+    <Compile Include="Utils\BulletMover.cs" />
+    <Compile Include="Utils\Config.cs" />
     <Compile Include="Geometry\Bounds.cs" />
     <Compile Include="Geometry\Directions\Direction.cs" />
     <Compile Include="Geometry\Directions\DirectionRight.cs" />
@@ -107,15 +108,16 @@
     <Compile Include="Messages\PlayerDataMessage.cs" />
     <Compile Include="Messages\MoveMessages.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
-    <Compile Include="Controller.cs" />
+    <Compile Include="Utils\Controller.cs" />
     <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\BlueEnemy.cs" /> 
     <Compile Include="Models\Directions.cs" />
-    <Compile Include="GamePlayerEnemyObserver.cs" />
+    <Compile Include="Models\GamePlayers.cs" />
+    <Compile Include="Utils\GamePlayerEnemyObserver.cs" />
     <Compile Include="Models\GreenEnemy.cs" />
     <Compile Include="Models\RedEnemy.cs" />
-    <Compile Include="EnemyFactory.cs" />
+    <Compile Include="Utils\EnemyFactory.cs" />
     <Compile Include="Models\GameFacade.cs" />
     <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\MoveStrategy.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToBullet.cs" />
+    <Compile Include="Utils\Notifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
