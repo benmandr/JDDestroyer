@@ -27,7 +27,7 @@ namespace GameServer.Models
             color = gamePlayer.color;
         }
 
-        public void Move()
+        public void Fly()
         {
             position.subtractY(2);
         }

@@ -39,7 +39,7 @@ namespace GameServer
                     {
                       //  Bounds OuterCircle = Bounds.MainSquare();
                       //  bullets.RemoveAll(x => !OuterCircle.inBounds(x.position));
-                        bullets.ForEach(x => x.Move());
+                        bullets.ForEach(x => x.Fly());
                     }
                     observers.ForEach(x => x.bulletListChange(bullets));
                     Thread.Sleep(Config.BULLETSPEED);

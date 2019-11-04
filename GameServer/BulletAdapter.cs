@@ -9,7 +9,7 @@ namespace GameServer
             this.bullet = bullet;
         }
         
-        public void move()
+        public void Move()
         {
             this.bullet.Fly();
         }

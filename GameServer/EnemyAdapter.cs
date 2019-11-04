@@ -6,14 +6,15 @@ namespace GameServer
     {
 
         private Enemy enemy;
-        public EnemyAdapter(Enemy enemy) {
+        public EnemyAdapter(Enemy enemy)
+        {
             this.enemy = enemy;
         }
-        
 
-        public void move()
+
+        public void Move()
         {
-            this.enemy.walk();
+            enemy.Walk();
         }
     }
 }

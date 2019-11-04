@@ -95,7 +95,7 @@ namespace GameServer.Models
                             enemies.Add(newEnemy);
                             Console.WriteLine("Enemy hashcode:" + newEnemy.GetHashCode() + "Position: " + newEnemy.ToString());
                             notifyPlayers(newEnemy);
-                            newEnemy.enemyMove();
+                           // newEnemy.Walk();
                         }
                     }
 

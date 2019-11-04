@@ -34,24 +34,8 @@ namespace GameServer.Models
             return position.x + " : " + position.y;
         }
 
-        public void enemyMove()
+        public void Walk()
         {
-
-            new Thread(() =>
-            {
-                while (true)
-                {
-                    Thread.Sleep(Config.ENEMYMOVERATE);
-                    setPosition(position.addX(Config.MOVESPEED));
-
-                    Thread.Sleep(Config.ENEMYMOVERATE);
-                    setPosition(position.addY(Config.MOVESPEED));
-                    Thread.Sleep(Config.ENEMYMOVERATE);
-                    setPosition(position.subtractX(Config.MOVESPEED));
-                    Thread.Sleep(Config.ENEMYMOVERATE);
-                    setPosition(position.subtractY(Config.MOVESPEED));
-                }
-            }).Start();
 
         }
 
