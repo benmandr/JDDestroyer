@@ -103,7 +103,7 @@
     <Compile Include="Models\GreenEnemy.cs" />
     <Compile Include="Models\RedEnemy.cs" />
     <Compile Include="Models\EnemyFactory.cs" />
-    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\GameFacade.cs" />
     <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\MoveStrategy.cs" />
     <Compile Include="Models\Player.cs" />

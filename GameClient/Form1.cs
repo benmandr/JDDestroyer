@@ -25,7 +25,7 @@ namespace GameClient
 
         Player currentPlayer = null;
         GamePlayer currentGamePlayer = null;
-        Game currentGame = null;
+        GameFacade currentGame = null;
         List<Enemy> enemies = new List<Enemy>();
 
         WebSocket webSocket;
@@ -118,10 +118,10 @@ namespace GameClient
                     break;
 
                 case GameDataMessage.TYPE:
-                    Game game = JsonConvert.DeserializeObject<Game>(bsObj.data);
+                    GameFacade game = JsonConvert.DeserializeObject<GameFacade>(bsObj.data);
                     if (currentGame == null)
                     {
-                        currentGame = new Game();
+                        currentGame = new GameFacade();
                     }
                     currentGame.name = game.name;
 

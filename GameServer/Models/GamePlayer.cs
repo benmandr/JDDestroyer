@@ -15,7 +15,7 @@ namespace GameServer.Models
         [JsonIgnore]
         public IMoveStrategy moveStrategy { get; set; }
         [JsonIgnore]
-        public Game game { get; set; }
+        public GameFacade game { get; set; }
         public long score { get; set; }
 
 

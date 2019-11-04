@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace GameServer.Models
 {
-    public class Game
+    public class GameFacade
     {
         public string name { get; set; }
         public GamePlayer P1 { get; set; }
@@ -21,21 +21,17 @@ namespace GameServer.Models
         [JsonIgnore]
         public Thread spawnThread;
 
-        public Game(GamePlayer gamePlayer)
+
+        public void createGame()
+        {
+            name = "JdDestroyer";
+            spawnEnemies();
+        }
+
+        public GameFacade()
         {
             enemies = new List<Enemy>();
             enemyObservers = new List<GamePlayerEnemyObserver>();
-            name = "JdDestroyer";
-            gamePlayer.game = this;
-            gamePlayer.position = Position.P1InitialPosition();
-            gamePlayer.moveStrategy = new P1MoveStrategy();
-            P1 = gamePlayer;
-            spawnEnemies();
-            enemyObservers.Add(new GamePlayerEnemyObserver(gamePlayer));
-        }
-
-        public Game()
-        {
         }
 
         public void addPlayer(GamePlayer gamePlayer)
@@ -101,10 +97,7 @@ namespace GameServer.Models
 
         public void notifyPlayers(Enemy enemy)
         {
-            foreach (GamePlayerEnemyObserver observer in enemyObservers)
-            {
-                observer.update(enemy);
-            }
+            enemyObservers.ForEach(x => x.update(enemy));
         }
 
         public void removePlayer(GamePlayer leavingPlayer)
@@ -152,10 +145,6 @@ namespace GameServer.Models
                 }
             }
             return true;
-        }
-
-        public void enemySpawner()
-        {
         }
 
         public void sendMessage(string msg)

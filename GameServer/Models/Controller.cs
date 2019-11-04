@@ -10,7 +10,7 @@ namespace GameServer.Models
     {
         private WebSocketServer wsServer;
         private Dictionary<string, GamePlayer> sessionPlayers = new Dictionary<string, GamePlayer>();
-        private Game game = null;
+        private GameFacade game = null;
         private int playerCount = 0;
 
         public void initiateConnection()
@@ -29,7 +29,7 @@ namespace GameServer.Models
 
         private static Controller instance = new Controller();
         public static Controller getInstance()
-        {            
+        {
             return instance;
         }
 
@@ -85,14 +85,13 @@ namespace GameServer.Models
 
             if (game == null)
             {
-                game = new Game(gamePlayer);
+                game = new GameFacade();
+                game.createGame();
                 Console.WriteLine("Game created");
             }
-            else
-            {
-                game.addPlayer(gamePlayer);
-                Console.WriteLine("Game joined");
-            }
+            game.addPlayer(gamePlayer);
+            Console.WriteLine("Game joined");
+
 
             //Send player data message to client
             PlayerDataMessage playerData = new PlayerDataMessage();
@@ -118,7 +117,7 @@ namespace GameServer.Models
             ///////////////////////////
 
             //Send enemies List
-            foreach(Enemy enemy in game.enemies)
+            foreach (Enemy enemy in game.enemies)
             {
                 EnemySpawnMessage messageData = new EnemySpawnMessage(enemy.position, enemy.getType);
 
