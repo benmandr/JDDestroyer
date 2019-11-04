@@ -10,6 +10,8 @@ namespace GameServer
     {
         public List<IMovable> items;
 
+        private readonly object x = new object();
+
         private Thread moveThread = null;
         public List<GamePlayerObserver> observers = new List<GamePlayerObserver>();
 
@@ -20,17 +22,24 @@ namespace GameServer
 
         public List<Bullet> GetBullets()
         {
-            return items.FindAll(x => x is BulletAdapter).Select(x => (BulletAdapter)x).Select(x => x.bullet).ToList();
+            lock (x)
+            {
+                return items.FindAll(x => x is BulletAdapter).Select(x => (BulletAdapter)x).Select(x => x.bullet).ToList();
+            }
         }
 
         public List<Enemy> GetEnemies()
         {
-            return items.FindAll(x => x is EnemyAdapter).Select(x => (EnemyAdapter)x).Select(x => x.enemy).ToList();
+            lock (x)
+            {
+                return items.FindAll(x => x is EnemyAdapter).Select(x => (EnemyAdapter)x).Select(x => x.enemy).ToList();
+            }
         }
 
         public void addObserver(GamePlayerObserver observer)
         {
             observers.Add(observer);
+
         }
 
         public void Start()
@@ -39,10 +48,13 @@ namespace GameServer
             {
                 while (true)
                 {
-                    if(items.Count > 0)
+                    lock (x)
                     {
-                        items.ForEach(x => x.Move());
-                        notify();
+                        if (items.Count > 0)
+                        {
+                            items.ForEach(x => x.Move());
+                            notify();
+                        }
                     }
                     Thread.Sleep(Config.FRAMESPEED);
                 }
