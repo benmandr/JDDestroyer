@@ -44,12 +44,20 @@ namespace GameServer.Models
         public void Walk()
         {
             long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            if (currentTime - lastMoveTime > Config.ENEMYMOVERATE)
+            if (currentTime - lastMoveTime > Config.ENEMYMOVERATE * 3) //Remove *3
             {
                 lastMoveTime = currentTime;
                 string[] moves = { "subtractX", "subtractY", "addX", "addY" };
-                MethodInfo moveMethod = position.GetType().GetMethod(moves[randomInstance.Next(0, moves.Length)]);
-                moveMethod.Invoke(position, new object[] { 1 });
+                string nextMove = moves[randomInstance.Next(0, moves.Length)];
+
+                Position copiedPosition = new Position(position.x, position.y);
+                MethodInfo moveCopy = copiedPosition.GetType().GetMethod(nextMove);
+                copiedPosition = (Position)moveCopy.Invoke(copiedPosition, new object[] { 1 });
+                if (Bounds.InnerSquare().enemyInBounds(copiedPosition))
+                {
+                    MethodInfo moveMethod = position.GetType().GetMethod(nextMove);
+                    moveMethod.Invoke(position, new object[] { 1 });
+                }
             }
         }
 
@@ -64,6 +72,7 @@ namespace GameServer.Models
             deepClone.position = this.position;
             return deepClone;
         }
+
         public static Enemy createFromDummy(EnemyDummy dummy)
         {
             switch (dummy.type)

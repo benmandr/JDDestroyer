@@ -15,7 +15,7 @@ namespace GameServer.Models
         public GamePlayers gamePlayers { get; set; }
 
         [JsonIgnore]
-        public EnemySpawner enemySpawner { get; set; }
+        public Enemies enemySpawner { get; set; }
 
         [JsonIgnore]
         public Mover mover;
@@ -25,7 +25,7 @@ namespace GameServer.Models
             gamePlayers = new GamePlayers();
             mover = new Mover();
             gamePlayers = new GamePlayers();
-            enemySpawner = new EnemySpawner(mover);
+            enemySpawner = new Enemies(mover);
         }
 
         public void StartGame()

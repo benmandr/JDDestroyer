@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models
 {
-    public class EnemySpawner
+    public class Enemies
     {
         public Mover mover;
 
         public Thread spawnThread;
 
-        public EnemySpawner(Mover mover)
+        public Enemies(Mover mover)
         {
             this.mover = mover;
         }

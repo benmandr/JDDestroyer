@@ -27,7 +27,6 @@ namespace GameServer.Models
             double min = Config.CORNERSIZE + Config.ENEMYSIZE / 2;
             double max = Config.INNERSQUARESIZE + Config.CORNERSIZE - Config.ENEMYSIZE / 2;
 
-
             double x = random.NextDouble() * (max - min) + min;
             double y = random.NextDouble() * (max - min) + min;
 
@@ -36,7 +35,7 @@ namespace GameServer.Models
 
         public Enemy getEnemy(int enemyType)
         {
-            Position position = getRandomInMiddle();
+            Position position = getRandomInMiddle(); //Use geometry instead
             //Enemy clonedEnemy = (Enemy)enemyStore[enemyType].deepClone(); //Deep copy
             Enemy clonedEnemy = (Enemy)enemyStore[enemyType].Clone(); //Shallow copy
             clonedEnemy.setPosition(position);

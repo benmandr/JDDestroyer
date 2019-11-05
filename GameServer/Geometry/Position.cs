@@ -76,5 +76,10 @@ namespace GameServer.Geometry
         {
             return this.MemberwiseClone();
         }
+
+        public override string ToString()
+        {
+            return this.x + " : " + this.y;
+        }
     }
 }

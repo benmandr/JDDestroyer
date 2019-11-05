@@ -68,5 +68,15 @@ namespace GameServer.Geometry
                 se.y = point.y;
             }
         }
+
+        public override string ToString()
+        {
+            return this.nw.ToString() + this.se.ToString();
+        }
+
+        internal bool enemyInBounds(Position copiedPosition)
+        {
+            return true;
+        }
     }
 }
