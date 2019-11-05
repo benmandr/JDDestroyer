@@ -13,11 +13,6 @@ namespace GameServer.Models
         void MoveLeft(Position position);
     }
 
-    
-
-
-
-
     public class P1MoveStrategy : IMoveStrategy
     {
         public P1MoveStrategy() {

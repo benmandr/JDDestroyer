@@ -29,7 +29,6 @@ namespace GameServer.Models
         {
             if (game.mover != null)
             {
-                Console.WriteLine("Asdasdasdasd");
                 game.mover.addItem(new BulletAdapter(new Bullet(this)));
             }
         }
