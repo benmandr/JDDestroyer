@@ -18,12 +18,12 @@ namespace GameServer.Models
         [JsonIgnore]
         private static Random randomInstance = new Random();
 
-        //[JsonIgnore]
-        //private 
+        private long lastMoveTime;
 
         public Enemy(Position position)
         {
             this.position = position;
+            this.lastMoveTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
         public Enemy()
         {
@@ -43,13 +43,16 @@ namespace GameServer.Models
 
         public void Walk()
         {
-            Position currentPosition = position;
-            string[] moves = { "subtractX", "subtractY", "addX", "addY" };
-            Console.WriteLine(moves[randomInstance.Next(0, moves.Length - 1)]);
-            MethodInfo moveMethod = currentPosition.GetType().GetMethod(moves[randomInstance.Next(0, moves.Length)]);
-            moveMethod.Invoke(currentPosition, new object[] { 1 });
-            //TODO: Bounds, TimeIntervals on move
+            long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            if (currentTime - lastMoveTime > Config.ENEMYMOVERATE)
+            {
+                lastMoveTime = currentTime;
+                string[] moves = { "subtractX", "subtractY", "addX", "addY" };
+                MethodInfo moveMethod = position.GetType().GetMethod(moves[randomInstance.Next(0, moves.Length)]);
+                moveMethod.Invoke(position, new object[] { 1 });
+            }
         }
+
         public object Clone()
         {
             return this.MemberwiseClone();

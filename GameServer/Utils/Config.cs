@@ -15,7 +15,7 @@
         //Enemies settings
         public const double MAXENEMIES = 20;
         public const int ENEMYMOVESPEED = 5;
-        public const int ENEMYMOVERATE = 1000;
+        public const int ENEMYMOVERATE = 500;
         public const int ENEMYSPAWNSPEED = 1000;
         public const double ENEMYSIZE = 5;
 
