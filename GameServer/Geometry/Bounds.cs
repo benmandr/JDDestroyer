@@ -8,8 +8,8 @@ namespace GameServer.Geometry
 {
     class Bounds
     {
-        Position nw = null;
-        Position se = null;
+        public Position nw = null;
+        public Position se = null;
 
         public Bounds()
         {
@@ -34,9 +34,27 @@ namespace GameServer.Geometry
             return bounds;
         }
 
+        public static Bounds EnemySquare(Position enemyPos)
+        {
+            Bounds bounds = new Bounds();
+            bounds.addPoint(new Position(enemyPos.x - Config.ENEMYSIZE / 2, enemyPos.y - Config.ENEMYSIZE / 2));
+            bounds.addPoint(new Position(enemyPos.x + Config.ENEMYSIZE / 2, enemyPos.y + Config.ENEMYSIZE / 2));
+            return bounds;
+        }
+
         public bool inBounds(Position position)
         {
             if(nw.x < position.x || nw.y < position.y || se.x > position.x || se.y > position.y)
+            {
+                Console.WriteLine(position.ToString());
+                return false;
+            }
+            return true;
+        }
+
+        public bool inBounds(Bounds bounds)
+        {
+            if (nw.x < bounds.nw.x || nw.y < bounds.nw.y || se.x > bounds.se.x || se.y > bounds.se.y)
             {
                 return false;
             }
@@ -72,11 +90,6 @@ namespace GameServer.Geometry
         public override string ToString()
         {
             return this.nw.ToString() + this.se.ToString();
-        }
-
-        internal bool enemyInBounds(Position copiedPosition)
-        {
-            return true;
         }
     }
 }

@@ -53,11 +53,12 @@ namespace GameServer.Models
                 Position copiedPosition = new Position(position.x, position.y);
                 MethodInfo moveCopy = copiedPosition.GetType().GetMethod(nextMove);
                 copiedPosition = (Position)moveCopy.Invoke(copiedPosition, new object[] { 1 });
-                if (Bounds.InnerSquare().enemyInBounds(copiedPosition))
-                {
+                Bounds enemyBounds = Bounds.EnemySquare(copiedPosition);
+               // if (Bounds.InnerSquare().inBounds(enemyBounds))
+               // {
                     MethodInfo moveMethod = position.GetType().GetMethod(nextMove);
                     moveMethod.Invoke(position, new object[] { 1 });
-                }
+                //}
             }
         }
 
