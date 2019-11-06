@@ -41,7 +41,7 @@ namespace GameServer.Models
             return position.x + " : " + position.y;
         }
 
-        public void Walk()
+        public bool Walk()
         {
             long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             if (currentTime - lastMoveTime > Config.ENEMYMOVERATE) //Remove *3
@@ -62,6 +62,7 @@ namespace GameServer.Models
                     x++;
                 }
             }
+            return true;
         }
 
         public object Clone()

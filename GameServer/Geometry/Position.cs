@@ -103,6 +103,25 @@ namespace GameServer.Geometry
         }
 
 
+        public void invert()
+        {
+            x = 100 - x;
+            y = 100 - y;
+        }
+
+        public void swap()
+        {
+            double j = x;
+            x = y;
+            y = j;
+        }
+
+        public void negative()
+        {
+            x *= -1;
+            y *= -1;
+        }
+
         public void multiply(double value)
         {
             x *= value;

@@ -9,9 +9,9 @@ namespace GameServer
             this.bullet = bullet;
         }
         
-        public void Move()
+        public bool Move()
         {
-            this.bullet.Fly();
+            return bullet.Fly();
         }
     }
 }

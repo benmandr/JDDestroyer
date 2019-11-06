@@ -29,7 +29,7 @@ namespace GameServer.Models
         {
             if (game.mover != null)
             {
-                game.mover.addItem(new BulletAdapter(new Bullet(this, game.gamePlayers.getDirection(this))));
+                game.mover.addItem(new BulletAdapter(new Bullet(this, game.gamePlayers.getDirection(this), game.mover)));
             }
         }
 

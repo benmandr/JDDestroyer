@@ -12,9 +12,9 @@ namespace GameServer
         }
 
 
-        public void Move()
+        public bool Move()
         {
-            enemy.Walk();
+            return enemy.Walk();
         }
     }
 }

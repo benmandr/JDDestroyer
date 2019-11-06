@@ -9,6 +9,7 @@ namespace GameServer
     public class Mover
     {
         public List<IMovable> items;
+        public List<IMovable> newItems = new List<IMovable>();
 
         private readonly object x = new object();
 
@@ -52,15 +53,25 @@ namespace GameServer
                     {
                         if (items.Count > 0)
                         {
-                            items.ForEach(x => x.Move());
+                            items.RemoveAll(item => !item.Move());
                             notify();
                         }
+                        foreach(IMovable item in newItems)
+                        {
+                            items.Add(item);
+                        }
+                        newItems.Clear();
                     }
                     Thread.Sleep(Config.FRAMESPEED);
                 }
 
             });
             moveThread.Start();
+        }
+
+        public void addNew(IMovable item)
+        {
+            newItems.Add(item);
         }
 
         public void addItem(IMovable item)

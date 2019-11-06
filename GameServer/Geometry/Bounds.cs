@@ -45,6 +45,17 @@ namespace GameServer.Geometry
             }
             return true;
         }
+
+        public bool intersects(Bounds bounds)
+        {
+            if (nw.x > bounds.se.x || bounds.nw.x > se.x)
+                return false;
+            if (nw.y > bounds.se.y || bounds.nw.y > se.y)
+                return false;
+
+            return true;
+        }
+
         
         public bool inBounds(Bounds bounds)
         {

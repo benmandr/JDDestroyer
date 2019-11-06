@@ -21,11 +21,11 @@
 
         //Bullet settings
         public const double BULLETWIDTH = 2;
-        public const double BULLETSPEED = 2;
+        public const double BULLETSPEED = 1;
 
         //Map settings
-        public const int FRAMESPEED = 200;
-        public const double INNERSQUARESIZE = 60;
+        public const int FRAMESPEED = 20;
+        public const double INNERSQUARESIZE = 50;
         public const double CORNERSIZE = (100 - INNERSQUARESIZE) / 2;
         public const double PLAYERBOUND = CORNERSIZE + PLAYERSIZE / 2;
         public const double PLAYERBOUND2 = 100 - PLAYERBOUND;
