@@ -14,16 +14,17 @@
 
         //Enemies settings
         public const double MAXENEMIES = 20;
-        public const int ENEMYMOVESPEED = 5;
-        public const int ENEMYMOVERATE = 500;
-        public const int ENEMYSPAWNSPEED = 1000;
+        public const int ENEMYMOVESPEED = 2;
+        public const int ENEMYMOVERATE = 200;
+        public const int ENEMYSPAWNSPEED = 500;
         public const double ENEMYSIZE = 5;
 
         //Bullet settings
         public const double BULLETWIDTH = 2;
+        public const double BULLETSPEED = 2;
 
         //Map settings
-        public const int FRAMESPEED = 20;
+        public const int FRAMESPEED = 200;
         public const double INNERSQUARESIZE = 60;
         public const double CORNERSIZE = (100 - INNERSQUARESIZE) / 2;
         public const double PLAYERBOUND = CORNERSIZE + PLAYERSIZE / 2;

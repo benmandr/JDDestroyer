@@ -44,21 +44,23 @@ namespace GameServer.Models
         public void Walk()
         {
             long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            if (currentTime - lastMoveTime > Config.ENEMYMOVERATE * 3) //Remove *3
+            if (currentTime - lastMoveTime > Config.ENEMYMOVERATE) //Remove *3
             {
                 lastMoveTime = currentTime;
-                string[] moves = { "subtractX", "subtractY", "addX", "addY" };
-                string nextMove = moves[randomInstance.Next(0, moves.Length)];
-
-                Position copiedPosition = new Position(position.x, position.y);
-                MethodInfo moveCopy = copiedPosition.GetType().GetMethod(nextMove);
-                copiedPosition = (Position)moveCopy.Invoke(copiedPosition, new object[] { 1 });
-                Bounds enemyBounds = Bounds.EnemySquare(copiedPosition);
-               // if (Bounds.InnerSquare().inBounds(enemyBounds))
-               // {
-                    MethodInfo moveMethod = position.GetType().GetMethod(nextMove);
-                    moveMethod.Invoke(position, new object[] { 1 });
-                //}
+                string[] moves = { "subtractX", "addX", "subtractY", "addY" };
+                int x = 1;
+                for(int i = randomInstance.Next(0, moves.Length); x < moves.Length; i = (i + 1) % moves.Length)
+                {
+                    Position copiedPosition = new Position(position.x, position.y);
+                    MethodInfo moveCopy = copiedPosition.GetType().GetMethod(moves[i]);
+                    copiedPosition = (Position)moveCopy.Invoke(copiedPosition, new object[] { Config.ENEMYMOVESPEED });
+                    Bounds enemyBounds = new Bounds(copiedPosition, Config.ENEMYSIZE);
+                    if (Bounds.InnerSquare().inBounds(enemyBounds))
+                    {
+                        position = copiedPosition;
+                    }
+                    x++;
+                }
             }
         }
 

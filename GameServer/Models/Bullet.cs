@@ -14,22 +14,28 @@ namespace GameServer.Models
 
         public Position position { get; set; }
         public Color color { get; set; }
-        
+        public bool split = false;
+
+        public Position direction;
+
         public Bullet()
         {
 
         }
 
-        public Bullet(GamePlayer gamePlayer)
+        public Bullet(GamePlayer gamePlayer, Position direction)
         {
             //    id = bulletIncremental++;
             position = (Position)gamePlayer.position.Clone();
             color = gamePlayer.color;
+            this.direction = direction;
         }
 
         public void Fly()
         {
-            position.subtractY(2);
+            Position delta = (Position)direction.Clone();
+            delta.multiply(Config.BULLETSPEED);
+            position.add(delta);
         }
     }
 }

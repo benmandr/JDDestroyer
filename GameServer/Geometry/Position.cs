@@ -22,6 +22,26 @@ namespace GameServer.Geometry
             return false;
         }
 
+        public static Position DirectionTop()
+        {
+            return new Position(0, -1);
+        }
+
+        public static Position DirectionBottom()
+        {
+            return new Position(0, 1);
+        }
+
+        public static Position DirectionLeft()
+        {
+            return new Position(-1, 0);
+        }
+
+        public static Position DirectionRight()
+        {
+            return new Position(1, 0);
+        }
+
         public static Position P1InitialPosition()
         {
             return new Position(50, 100-Config.PLAYERSIZE/2);
@@ -80,6 +100,18 @@ namespace GameServer.Geometry
         public override string ToString()
         {
             return this.x + " : " + this.y;
+        }
+
+
+        public void multiply(double value)
+        {
+            x *= value;
+            y *= value;
+        }
+        public void add(Position value)
+        {
+            x += value.x;
+            y += value.y;
         }
     }
 }

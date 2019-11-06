@@ -95,11 +95,6 @@
     <Compile Include="Utils\Mover.cs" />
     <Compile Include="Utils\Config.cs" />
     <Compile Include="Geometry\Bounds.cs" />
-    <Compile Include="Geometry\Directions\Direction.cs" />
-    <Compile Include="Geometry\Directions\DirectionRight.cs" />
-    <Compile Include="Geometry\Directions\DirectionLeft.cs" />
-    <Compile Include="Geometry\Directions\DirectionBottom.cs" />
-    <Compile Include="Geometry\Directions\DirectionTop.cs" />
     <Compile Include="Geometry\Position.cs" />
     <Compile Include="EnemyAdapter.cs" />
     <Compile Include="Messages\EnemiesDataMessage.cs" />

@@ -15,46 +15,40 @@ namespace GameServer.Geometry
         {
 
         }
+        public Bounds(Position nw, Position se)
+        {
+            this.nw = nw;
+            this.se = se;
+        }
 
         public static Bounds MainSquare()
         {
-            Bounds bounds = new Bounds();
-            bounds.addPoint(new Position(0, 0));
-            bounds.addPoint(new Position(100, 100));
-
-            return bounds;
+            return new Bounds(new Position(0, 0), new Position(100, 100));
         }
 
         public static Bounds InnerSquare()
         {
-            Bounds bounds = new Bounds();
-            bounds.addPoint(new Position(Config.INNERSQUARESIZE, Config.INNERSQUARESIZE));
-            bounds.addPoint(new Position(100 - Config.INNERSQUARESIZE, 100 - Config.INNERSQUARESIZE));
-
-            return bounds;
+            double start = (100 - Config.INNERSQUARESIZE) / 2;         
+            return new Bounds(new Position(start, start), new Position(start + Config.INNERSQUARESIZE, start + Config.INNERSQUARESIZE));
         }
 
-        public static Bounds EnemySquare(Position enemyPos)
+        public Bounds(Position enemyPos, double width)
         {
-            Bounds bounds = new Bounds();
-            bounds.addPoint(new Position(enemyPos.x - Config.ENEMYSIZE / 2, enemyPos.y - Config.ENEMYSIZE / 2));
-            bounds.addPoint(new Position(enemyPos.x + Config.ENEMYSIZE / 2, enemyPos.y + Config.ENEMYSIZE / 2));
-            return bounds;
+            nw = new Position(enemyPos.x - width / 2, enemyPos.y - width / 2);
+            se = new Position(enemyPos.x + width / 2, enemyPos.y + width / 2);
         }
-
         public bool inBounds(Position position)
         {
-            if(nw.x < position.x || nw.y < position.y || se.x > position.x || se.y > position.y)
+            if (nw.x < position.x || nw.y < position.y || se.x > position.x || se.y > position.y)
             {
-                Console.WriteLine(position.ToString());
                 return false;
             }
             return true;
         }
-
+        
         public bool inBounds(Bounds bounds)
         {
-            if (nw.x < bounds.nw.x || nw.y < bounds.nw.y || se.x > bounds.se.x || se.y > bounds.se.y)
+            if (nw.x > bounds.nw.x || nw.y > bounds.nw.y || se.x < bounds.se.x || se.y < bounds.se.y)
             {
                 return false;
             }
@@ -63,7 +57,7 @@ namespace GameServer.Geometry
 
         public void addPoint(Position point)
         {
-            if(nw == null && se == null)
+            if (nw == null && se == null)
             {
                 nw = point;
                 se = point;

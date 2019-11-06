@@ -57,6 +57,28 @@ namespace GameServer.Models
             gamePlayer.game = game;
         }
 
+
+        public Position getDirection(GamePlayer player)
+        {
+            if (player.Equals(P1))
+            {
+                return Position.DirectionTop();
+            }
+            if (player.Equals(P2))
+            {
+                return Position.DirectionLeft();
+            }
+            if (player.Equals(P3))
+            {
+                return Position.DirectionBottom();
+            }
+            if (player.Equals(P4))
+            {
+                return Position.DirectionRight();
+            }
+            return null;
+        }
+
         public void removePlayer(GamePlayer leavingPlayer)
         {
             if (leavingPlayer.Equals(P1))
