@@ -135,5 +135,13 @@ namespace GameServer.Models
             if (P4 != null)
                 yield return P4;
         }
+
+        public void SendMessage(string message)
+        {
+            foreach (GamePlayer player in getPlayers())
+            
+                player.sendMessage(message);
+            }
+        }
     }
 }

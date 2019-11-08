@@ -96,7 +96,23 @@ namespace GameServer.Models
                 game.StartGame();
                 Console.WriteLine("Game created");
             }
+
+
             game.AddPlayer(gamePlayer);
+
+            PlayerDataMessage playerData = new PlayerDataMessage();
+            playerData.position = gamePlayer.position;
+            playerData.name = gamePlayer.player.name;
+            playerData.id = gamePlayer.player.id;
+            playerData.color = gamePlayer.color;
+
+            SocketMessage playerDataMessage = new SocketMessage();
+            playerDataMessage.type = PlayerDataMessage.TYPE;
+            playerDataMessage.data = JsonConvert.SerializeObject(playerData);
+            Console.WriteLine(JsonConvert.SerializeObject(playerDataMessage));
+            gamePlayer.sendMessage(JsonConvert.SerializeObject(playerDataMessage));
+
+
             Console.WriteLine("Game joined");
 
             sessionPlayers[session.SessionID] = gamePlayer;
