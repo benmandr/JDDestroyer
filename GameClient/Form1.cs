@@ -4,7 +4,6 @@ using System.Drawing;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using GameServer;
-using GameServer.Geometry;
 using GameServer.Models;
 using GameServer.Messages;
 using WebSocketSharp;
@@ -23,6 +22,7 @@ namespace GameClient
         GamePlayer currentGamePlayer = null;
         GameFacade currentGame = null;
         List<Enemy> enemies = new List<Enemy>();
+        private long ping = 0;
 
         WebSocket webSocket;
         private readonly object x = new object();
@@ -68,6 +68,7 @@ namespace GameClient
         void ParseMessage(object sender, MessageEventArgs e)
         {
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(e.Data);
+            ping = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond - bsObj.sendTime;
             switch (bsObj.type)
             {
                 case EnemiesDataMessage.TYPE:
@@ -284,7 +285,7 @@ namespace GameClient
                 e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, 0, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
                 e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, cornerCord, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
                 //Score title
-                e.DrawString("Best score:", new Font("Comic Sans MS", 18), Brushes.White, (float)(length * 0.75), 0);
+                e.DrawString("Best score:", new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, (float)(length * 0.75), 0);
             }
         }
 
@@ -331,7 +332,8 @@ namespace GameClient
                                 graphic.FillRectangle(new SolidBrush(bullet.color), GetDistance(bullet.position.x) - GetDistance(Config.BULLETWIDTH / 2), GetDistance(bullet.position.y) - GetDistance(Config.BULLETWIDTH / 2), GetDistance(Config.BULLETWIDTH), GetDistance(Config.BULLETWIDTH));
                             }
                     }
-                    graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", 18), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
+                    graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
+                    graphic.DrawString("Ping:" + ping + " ms", new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, 0, 0);
                 }
                 Invalidate();
             }

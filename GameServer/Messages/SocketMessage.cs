@@ -11,5 +11,7 @@ namespace GameServer.Models
         public int type { get; set; }
 
         public string data { get; set; }
+
+        public long sendTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
 }
