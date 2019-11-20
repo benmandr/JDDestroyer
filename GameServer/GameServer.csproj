@@ -93,9 +93,11 @@
     <Compile Include="Geometry\BulletSplitLeft.cs" />
     <Compile Include="Geometry\BulletSplitFront.cs" />
     <Compile Include="Geometry\BulletSplitRight.cs" />
+    <Compile Include="Messages\GoldenToothMessage.cs" />
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
+    <Compile Include="Models\GoldenTooth.cs" />
     <Compile Include="Utils\Mover.cs" />
     <Compile Include="Utils\Config.cs" />
     <Compile Include="Geometry\Bounds.cs" />
