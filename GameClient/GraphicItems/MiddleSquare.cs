@@ -23,7 +23,7 @@ namespace GameClient.GraphicItems
                 int cornerSize = Proportion.ClientSize(Config.CORNERSIZE);
                 int innerSize = Proportion.ClientSize(Config.INNERSQUARESIZE);
                 Rectangle middleSquare = new Rectangle(cornerSize, cornerSize, innerSize, innerSize);
-                g.FillRectangle(Brushes.WhiteSmoke, middleSquare);
+                g.FillRectangle(Brushes.Gray, middleSquare);
                 Pen borderPen = new Pen(Color.FromArgb(105, 105, 105), 4)
                 {
                     Alignment = System.Drawing.Drawing2D.PenAlignment.Inset

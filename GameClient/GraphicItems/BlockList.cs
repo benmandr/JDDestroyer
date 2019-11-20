@@ -8,12 +8,13 @@ namespace GameClient.GraphicItems
 {
     class BlockList : GraphicItem
     {
-        List<GraphicItem> blocks;
+        List<GraphicItem> blocks = new List<GraphicItem>();
 
-        public BlockList(List<GraphicItem> enemyBlocks)
+        public void Add(GraphicItem item)
         {
-            this.blocks = enemyBlocks;
+            blocks.Add(item);
         }
+
 
         public void Draw()
         {

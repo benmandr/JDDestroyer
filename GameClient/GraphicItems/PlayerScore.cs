@@ -11,7 +11,7 @@ namespace GameClient.GraphicItems
     class PlayerScore : GraphicItem
     {
         Bitmap buffer { get; set; }
-        public PlayerScore(Bitmap buffer, int windowWidth)
+        public PlayerScore(Bitmap buffer)
         {
             this.buffer = buffer;
         }

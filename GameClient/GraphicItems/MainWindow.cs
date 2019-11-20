@@ -19,6 +19,7 @@ namespace GameClient.GraphicItems
         {
             using (var g = Graphics.FromImage(buffer))
             {
+                Console.WriteLine("draw bg");
                 Rectangle main = new Rectangle(0, 0, Proportion.ClientSize(100), Proportion.windowWidth);
                 g.FillRectangle(Brushes.WhiteSmoke, main);
             }
