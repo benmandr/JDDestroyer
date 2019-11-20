@@ -22,6 +22,9 @@ namespace GameClient
         GamePlayer currentGamePlayer = null;
         GameFacade currentGame = null;
         List<Enemy> enemies = new List<Enemy>();
+
+        GoldenTooth goldenTooth = null;
+
         private long ping = 0;
 
         WebSocket webSocket;
@@ -94,7 +97,7 @@ namespace GameClient
                     break;
 
                 case BulletsDataMessage.TYPE:
-                   // Console.WriteLine("bullet list");
+                    // Console.WriteLine("bullet list");
                     BulletsDataMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataMessage>(bsObj.data);
                     lock (bulletLock)
                     {
@@ -104,6 +107,15 @@ namespace GameClient
                             bullets = bulletsData.bulletList;
                         }
                     }
+                    break;
+
+                case GoldenToothMessage.TYPE:
+                    GoldenToothMessage goldenToothData = JsonConvert.DeserializeObject<GoldenToothMessage>(bsObj.data);
+                    if(goldenTooth == null)
+                    {
+                        goldenTooth = new GoldenTooth();
+                    }
+                    goldenTooth.position = goldenToothData.position;
                     break;
                 case PlayerDataMessage.TYPE:
                     PlayerDataMessage playerData = JsonConvert.DeserializeObject<PlayerDataMessage>(bsObj.data);
@@ -334,6 +346,11 @@ namespace GameClient
                     }
                     graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
                     graphic.DrawString("Ping:" + ping + " ms", new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, 0, 0);
+
+                    
+                    //GoldenTooth
+                    if(goldenTooth != null)
+                        graphic.FillRectangle(new SolidBrush(Color.Yellow), GetDistance(goldenTooth.position.x) - GetDistance(Config.GOLDENTOOTHSIZE / 2), GetDistance(goldenTooth.position.y) - GetDistance(Config.GOLDENTOOTHSIZE / 2), GetDistance(Config.GOLDENTOOTHSIZE), GetDistance(Config.GOLDENTOOTHSIZE));
                 }
                 Invalidate();
             }

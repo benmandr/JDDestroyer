@@ -33,6 +33,7 @@ namespace GameServer.Models
             name = "JdDestroyer";
             enemySpawner.Start();
             mover.Start();
+            addGoldenTooth();
         }
 
         public void AddPlayer(GamePlayer gamePlayer)
@@ -47,6 +48,14 @@ namespace GameServer.Models
         public void SendMessage(string message)
         {
             gamePlayers.SendMessage(message);
+        }
+
+        public void addGoldenTooth()
+        {
+            GoldenTooth goldenTooth = new GoldenTooth();
+            goldenTooth.position = new Position(50, 50);
+            goldenTooth.direction = Position.DirectionRight();
+            mover.addItem(goldenTooth);
         }
     }
 }

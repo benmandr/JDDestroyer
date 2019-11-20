@@ -37,6 +37,14 @@ namespace GameServer
             }
         }
 
+        public GoldenTooth GetGoldenTooth()
+        {
+            lock (x)
+            {
+                return (GoldenTooth)items.Find(x => x is GoldenTooth);
+            }
+        }
+
         public void addObserver(GamePlayerObserver observer)
         {
             observers.Add(observer);
@@ -87,6 +95,10 @@ namespace GameServer
 
             List<Enemy> enemies = GetEnemies();
             observers.ForEach(x => x.EnemyListChange(enemies));
+
+            GoldenTooth goldenTooth = GetGoldenTooth();
+            if(goldenTooth != null)
+                observers.ForEach(x => x.GoldenToothPosition(goldenTooth));
         }
     }
 }

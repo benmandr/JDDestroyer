@@ -39,6 +39,17 @@ namespace GameServer.Models
             gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
         }
 
+        public void GoldenToothPosition(GoldenTooth goldenTooth)
+        {
+            GoldenToothMessage messageData = new GoldenToothMessage(goldenTooth);
+
+            SocketMessage message = new SocketMessage();
+            message.type = GoldenToothMessage.TYPE;
+            message.data = JsonConvert.SerializeObject(messageData);
+
+            gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
+        }
+
         public void PlayerListChange(GameFacade game)
         {
             SocketMessage gameMessage = new SocketMessage();

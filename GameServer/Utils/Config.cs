@@ -20,6 +20,9 @@
         public const int ENEMYSPAWNSPEED = 500;
         public const double ENEMYSIZE = 5;
 
+        //Golden Tooth
+        public const double GOLDENTOOTHSIZE = 2;
+
         //Bullet settings
         public const double BULLETWIDTH = 2;
         public const double BULLETSPEED = 1;
