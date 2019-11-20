@@ -7,6 +7,7 @@ using GameServer;
 using GameServer.Models;
 using GameServer.Messages;
 using WebSocketSharp;
+using GameClient.GraphicItems;
 
 namespace GameClient
 {
@@ -15,10 +16,8 @@ namespace GameClient
         Bitmap BackBuffer;
         Bitmap FrontBuffer;
 
-        int bestScore = 0;
-        string scoreTextBox;
-
         Player currentPlayer = null;
+        GamePlayer currentGamePlayer = null;
         GameFacade currentGame = null;
         List<Enemy> enemies = new List<Enemy>();
 
@@ -33,6 +32,7 @@ namespace GameClient
         private bool showScoreTable = false;
 
         List<Bullet> bullets = new List<Bullet>();
+        List<GraphicItem> graphicItems = new List<GraphicItem>();
 
         public int GetDistance(double value)
         {
@@ -82,12 +82,8 @@ namespace GameClient
                     {
                         enemies = new List<Enemy>();
                         if (enemiesData.enemiesList != null)
-                        {
                             foreach (EnemyDummy dummy in enemiesData.enemiesList)
-                            {
                                 enemies.Add(Enemy.createFromDummy(dummy));
-                            }
-                        }
                     }
                     break;
 
@@ -99,24 +95,19 @@ namespace GameClient
                     break;
 
                 case BulletsDataMessage.TYPE:
-                    // Console.WriteLine("bullet list");
                     BulletsDataMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataMessage>(bsObj.data);
                     lock (bulletLock)
                     {
                         bullets = new List<Bullet>();
                         if (bulletsData.bulletList != null)
-                        {
                             bullets = bulletsData.bulletList;
-                        }
                     }
                     break;
 
                 case GoldenToothMessage.TYPE:
                     GoldenToothMessage goldenToothData = JsonConvert.DeserializeObject<GoldenToothMessage>(bsObj.data);
-                    if(goldenTooth == null)
-                    {
+                    if (goldenTooth == null)
                         goldenTooth = new GoldenTooth();
-                    }
                     goldenTooth.position = goldenToothData.position;
                     break;
                 case PlayerDataMessage.TYPE:
@@ -125,14 +116,20 @@ namespace GameClient
                     if (currentPlayer == null)
                     {
                         currentPlayer = new Player(playerData.id, playerData.name);
+                        currentGamePlayer = new GamePlayer(currentPlayer)
+                        {
+                            game = currentGame,
+                            position = playerData.position,
+                            color = playerData.color
+                        };
+                        lock (playerLock)
+                            ConnectPlayerWithGame();
                     }
                     break;
                 case GameDataMessage.TYPE:
                     GameFacade game = JsonConvert.DeserializeObject<GameFacade>(bsObj.data);
                     if (currentGame == null)
-                    {
                         currentGame = new GameFacade();
-                    }
                     currentGame.name = game.name;
                     lock (playerLock)
                     {
@@ -164,40 +161,73 @@ namespace GameClient
                             currentGame.gamePlayers.P4.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P4.position);
                             currentGame.gamePlayers.P4.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P4.position);
                         }
+                        if (currentGamePlayer != null)
+                            currentGamePlayer.game = currentGame;
+                        ConnectPlayerWithGame();
                     }
                     break;
             }
         }
 
+        void ConnectPlayerWithGame()
+        {
+            if (currentGame != null && currentPlayer != null && currentGamePlayer != null)
+            {
+                if (currentGame.gamePlayers.P1 != null && currentGame.gamePlayers.P1.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P1.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P1.moveRight;
+                    currentGame.gamePlayers.P1 = currentGamePlayer;
+                    return;
+                }
+
+                if (currentGame.gamePlayers.P2 != null && currentGame.gamePlayers.P2.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P2.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P2.moveRight;
+                    currentGame.gamePlayers.P2 = currentGamePlayer;
+                    return;
+                }
+                if (currentGame.gamePlayers.P3 != null && currentGame.gamePlayers.P3.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P3.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P3.moveRight;
+                    currentGame.gamePlayers.P3 = currentGamePlayer;
+                    return;
+                }
+                if (currentGame.gamePlayers.P4 != null && currentGame.gamePlayers.P4.Equals(currentGamePlayer))
+                {
+                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P4.moveLeft;
+                    currentGamePlayer.moveRight = currentGame.gamePlayers.P4.moveRight;
+                    currentGame.gamePlayers.P4 = currentGamePlayer;
+                    return;
+                }
+            }
+        }
 
         void SendMessage(string data)
         {
             if (webSocket != null)
-            {
                 webSocket.Send(data);
-            }
         }
 
-        //Controls
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
+            if (e.KeyCode == Keys.Left && currentGamePlayer.MoveLeft())
             {
-                    SocketMessage message = new SocketMessage
-                    {
-                        type = MoveLeftMessage.TYPE
-                    };
-                    SendMessage(JsonConvert.SerializeObject(message));
-                
+                SocketMessage message = new SocketMessage
+                {
+                    type = MoveLeftMessage.TYPE
+                };
+                SendMessage(JsonConvert.SerializeObject(message));
             }
-            else if (e.KeyCode == Keys.Right)
+            else if (e.KeyCode == Keys.Right && currentGamePlayer.MoveRight())
             {
-                    SocketMessage message = new SocketMessage
-                    {
-                        type = MoveRightMessage.TYPE
-                    };
-                    SendMessage(JsonConvert.SerializeObject(message));
-                
+                SocketMessage message = new SocketMessage
+                {
+                    type = MoveRightMessage.TYPE
+                };
+                SendMessage(JsonConvert.SerializeObject(message));
             }
             else if (e.KeyCode == Keys.Space)
             {
@@ -216,12 +246,9 @@ namespace GameClient
         void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Tab)
-            {
                 this.showScoreTable = false;
-            }
         }
 
-        //Update paint
         void FormPaint(object sender, PaintEventArgs e)
         {
             if (BackBuffer != null)
@@ -238,127 +265,47 @@ namespace GameClient
                 BackBuffer.Dispose();
                 FrontBuffer.Dispose();
             }
+            Proportion.windowWidth = ClientSize.Width;
             BackBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
             FrontBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
-            using (var e = Graphics.FromImage(BackBuffer))
-            {
-                int length = ClientSize.Width;
-                //Main canvas color
-                e.FillRectangle(Brushes.WhiteSmoke, new Rectangle(0, 0, GetDistance(100), length));
-                //Middle square
-                Rectangle middleSquare = new Rectangle(GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE), GetDistance(Config.INNERSQUARESIZE), GetDistance(Config.INNERSQUARESIZE));
-                e.FillRectangle(Brushes.Gray, middleSquare);
-                //Add border
-                Pen borderPen = new Pen(Color.FromArgb(105, 105, 105), 4)
-                {
-                    Alignment = System.Drawing.Drawing2D.PenAlignment.Inset
-                };
-                e.DrawRectangle(borderPen, middleSquare);
-                //Corner squares
-                int cornerCord = GetDistance(Config.CORNERSIZE + Config.INNERSQUARESIZE);
-                e.FillRectangle(Brushes.Black, new Rectangle(0, 0, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
-                e.FillRectangle(Brushes.Black, new Rectangle(0, cornerCord, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
-                e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, 0, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
-                e.FillRectangle(Brushes.Black, new Rectangle(cornerCord, cornerCord, GetDistance(Config.CORNERSIZE), GetDistance(Config.CORNERSIZE)));
-                //Score title
-                e.DrawString("Best score:", new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, (float)(length * 0.75), 0);
-            }
-        }
-
-
-        void Draw()
-        {
-            if (BackBuffer != null)
-            {
-                using (var graphic = Graphics.FromImage(FrontBuffer))
-                {
-                    graphic.Clear(Color.Transparent);
-                }
-                Invalidate();
-            }
-            DrawPlayers();
-        }
-
-        void DrawPlayers()
-        {
-            if (FrontBuffer != null && currentGame != null && currentPlayer != null)
-            {
-                using (var graphic = Graphics.FromImage(FrontBuffer))
-                {
-                    foreach (GamePlayer gamePlayer in currentGame.gamePlayers.getPlayers())
-                    {
-                        if (gamePlayer != null)
-                        {
-                            graphic.FillRectangle(new SolidBrush(gamePlayer.color), GetDistance(gamePlayer.position.x) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(gamePlayer.position.y) - GetDistance(Config.PLAYERSIZE / 2), GetDistance(Config.PLAYERSIZE), GetDistance(Config.PLAYERSIZE));
-                        }
-                    }
-                    lock (x)
-                    {
-                        foreach (Enemy enemy in enemies)
-                        {
-                            graphic.FillRectangle(new SolidBrush(enemy.getColor()), GetDistance(enemy.position.x) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(enemy.position.y) - GetDistance(Config.ENEMYSIZE / 2), GetDistance(Config.ENEMYSIZE), GetDistance(Config.ENEMYSIZE));
-                        }
-                    }
-                    lock (bulletLock)
-                    {
-                        if (bullets != null)
-                            foreach (Bullet bullet in bullets)
-                            {
-                                graphic.FillRectangle(new SolidBrush(bullet.color), GetDistance(bullet.position.x) - GetDistance(Config.BULLETWIDTH / 2), GetDistance(bullet.position.y) - GetDistance(Config.BULLETWIDTH / 2), GetDistance(Config.BULLETWIDTH), GetDistance(Config.BULLETWIDTH));
-                            }
-                    }
-                    graphic.DrawString(scoreTextBox, new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, (float)(ClientSize.Width * 0.8), 28);
-                    graphic.DrawString("Ping:" + ping + " ms", new Font("Comic Sans MS", ClientSize.Width / 50), Brushes.White, 0, 0);
-
-                    
-                    DrawScores();
-                    //GoldenTooth
-                    if(goldenTooth != null)
-                        graphic.FillRectangle(new SolidBrush(Color.Yellow), GetDistance(goldenTooth.position.x) - GetDistance(Config.GOLDENTOOTHSIZE / 2), GetDistance(goldenTooth.position.y) - GetDistance(Config.GOLDENTOOTHSIZE / 2), GetDistance(Config.GOLDENTOOTHSIZE), GetDistance(Config.GOLDENTOOTHSIZE));
-                }
-                Invalidate();
-            }
+            (new MainWindow(BackBuffer)).Draw();
+            (new CornerSquares(BackBuffer)).Draw();
+            (new MiddleSquare(BackBuffer)).Draw();
         }
 
         void Tick(object sender, EventArgs e)
         {
-            if (currentPlayer != null)
-            {
-                scoreTextBox = currentPlayer.name + ": " + bestScore.ToString();
-                Draw();
-            }
-        }
+            if (currentGame == null)
+                return;
 
-        void DrawScores()
-        {
-            if (this.showScoreTable)
-            {
-                if (FrontBuffer != null && currentGame != null != null && currentPlayer != null)
-                {
-                    using (var graphic = Graphics.FromImage(FrontBuffer))
-                    {
-                        Rectangle mainScoreSquare = new Rectangle(0, GetDistance(Config.CORNERSIZE) / 2, ClientSize.Width, GetDistance(Config.INNERSQUARESIZE) + GetDistance(Config.CORNERSIZE));
-                        graphic.FillRectangle(new SolidBrush(Color.FromArgb(230, Color.Black)), mainScoreSquare);
-                        graphic.DrawString("High Scores", new Font("Comic Sans MS", ClientSize.Width / 25), Brushes.White, (float)(ClientSize.Width / 2 - 75), (float)(GetDistance(Config.CORNERSIZE) / 1.5));
-                        graphic.DrawString("Player", new Font("Comic Sans MS", ClientSize.Width / 40), Brushes.White, 20, (float)(GetDistance(Config.CORNERSIZE)));
-                        graphic.DrawString("Score", new Font("Comic Sans MS", ClientSize.Width / 40), Brushes.White, (float)(ClientSize.Width - 60), (float)(GetDistance(Config.CORNERSIZE)));
+            graphicItems.Clear();
+            BlockList blocks = new BlockList();
 
-                        GamePlayers currentPlayers = this.currentGame.gamePlayers;
-                        int index = 0;
-                        int positionReduce = 20;
-                        lock (playerLock)
-                        {
-                            foreach (GamePlayer player in currentPlayers.getPlayers())
-                            {
-                                graphic.DrawString("Player" + index, new Font("Comic Sans MS", ClientSize.Width / 40), Brushes.White, 20, (float)(GetDistance(Config.CORNERSIZE) + positionReduce));
-                                graphic.DrawString(player.score.ToString(), new Font("Comic Sans MS", ClientSize.Width / 40), Brushes.White, (float)(ClientSize.Width - 60), (float)(GetDistance(Config.CORNERSIZE) + positionReduce));
-                                index++;
-                                positionReduce += positionReduce;
-                            }
-                        }
-                    }
-                }
-            }
+            lock (playerLock)
+                foreach (GamePlayer player in currentGame.gamePlayers.getPlayers())
+                    blocks.Add(new PlayerBlock(FrontBuffer, player.color, player.position));
+
+            lock (x)
+                foreach (Enemy enemy in enemies)
+                    blocks.Add(new EnemyBlock(FrontBuffer, enemy.getColor(), enemy.position));
+
+            lock (bulletLock)
+                foreach (Bullet bullet in bullets)
+                    blocks.Add(new BulletBlock(FrontBuffer, bullet.color, bullet.position));
+            if (goldenTooth != null)
+                blocks.Add(new GoldenToothBlock(FrontBuffer, goldenTooth.position));
+
+            graphicItems.Add(blocks);
+            graphicItems.Add(new PlayerScore(FrontBuffer));
+            if (showScoreTable)
+                graphicItems.Add(new ScoreTable(FrontBuffer, currentGame.gamePlayers));
+
+            if (BackBuffer != null)
+                using (var graphic = Graphics.FromImage(FrontBuffer))
+                    graphic.Clear(Color.Transparent);
+            Invalidate();
+
+            graphicItems.ForEach(x => x.Draw());
         }
     }
 }
