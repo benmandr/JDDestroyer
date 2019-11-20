@@ -62,6 +62,17 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GraphicItems\CornerSquares.cs" />
+    <Compile Include="GraphicItems\BulletBlock.cs" />
+    <Compile Include="GraphicItems\PlayerBlock.cs" />
+    <Compile Include="GraphicItems\EnemyBlock.cs" />
+    <Compile Include="GraphicItems\BlockList.cs" />
+    <Compile Include="GraphicItems\GraphicItem.cs" />
+    <Compile Include="GraphicItems\MainWindow.cs" />
+    <Compile Include="GraphicItems\MiddleSquare.cs" />
+    <Compile Include="GraphicItems\PlayerScore.cs" />
+    <Compile Include="GraphicItems\Proportion.cs" />
+    <Compile Include="GraphicItems\ScoreTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
