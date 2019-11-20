@@ -62,6 +62,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GraphicItems\GoldenToothBlock.cs" />
     <Compile Include="GraphicItems\CornerSquares.cs" />
     <Compile Include="GraphicItems\BulletBlock.cs" />
     <Compile Include="GraphicItems\PlayerBlock.cs" />

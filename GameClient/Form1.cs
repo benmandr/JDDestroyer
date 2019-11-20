@@ -292,6 +292,8 @@ namespace GameClient
             lock (bulletLock)
                 foreach (Bullet bullet in bullets)
                     blocks.Add(new BulletBlock(FrontBuffer, bullet.color, bullet.position));
+            if (goldenTooth != null)
+                blocks.Add(new GoldenToothBlock(FrontBuffer, goldenTooth.position));
 
             graphicItems.Add(blocks);
             graphicItems.Add(new PlayerScore(FrontBuffer));
