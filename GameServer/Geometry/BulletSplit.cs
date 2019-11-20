@@ -19,7 +19,7 @@ namespace GameServer.Geometry
         abstract public void adjustDirection();
         abstract public void adjustPosition();
 
-        public Bullet getBullet()
+        public Bullet splitBullet()
         {
             bullet = bullet.deepClone();
 

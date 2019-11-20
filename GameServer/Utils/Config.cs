@@ -14,11 +14,15 @@
 
 
         //Enemies settings
-        public const double MAXENEMIES = 20;
+        public const double MAXENEMIES = 5;
         public const int ENEMYMOVESPEED = 2;
         public const int ENEMYMOVERATE = 200;
         public const int ENEMYSPAWNSPEED = 500;
         public const double ENEMYSIZE = 5;
+
+        //Enemy states
+        public const int ENEMYANGRYTIME = 4000;
+        public const int ENEMYFREEZETIME = 4000;
 
         //Golden Tooth
         public const double GOLDENTOOTHSIZE = 2;

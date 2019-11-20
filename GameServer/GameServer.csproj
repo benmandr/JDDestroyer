@@ -97,6 +97,11 @@
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
+    <Compile Include="Models\EnemyStates\SmartEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\AngryEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\FrozenEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\DefaultEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\EnemyState.cs" />
     <Compile Include="Models\GoldenTooth.cs" />
     <Compile Include="Utils\Mover.cs" />
     <Compile Include="Utils\Config.cs" />

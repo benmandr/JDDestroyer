@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using GameServer.Models;
+using GameServer.Geometry;
 namespace GameServer
 {
     public class Mover
@@ -49,6 +50,21 @@ namespace GameServer
         {
             observers.Add(observer);
 
+        }
+
+        public Enemy enemyHit(Bullet bullet)
+        {
+            foreach(Enemy enemy in GetEnemies())
+            {
+                Bounds enemyBounds = new Bounds(enemy.position, Config.ENEMYSIZE);
+                Bounds bulletBounds = new Bounds(bullet.position, Config.BULLETWIDTH);
+                if (enemyBounds.intersects(bulletBounds))
+                {
+                    return enemy;
+                }
+            }
+
+            return null;
         }
 
         public void Start()

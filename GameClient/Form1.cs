@@ -19,7 +19,6 @@ namespace GameClient
         string scoreTextBox;
 
         Player currentPlayer = null;
-        GamePlayer currentGamePlayer = null;
         GameFacade currentGame = null;
         List<Enemy> enemies = new List<Enemy>();
 
@@ -126,16 +125,6 @@ namespace GameClient
                     if (currentPlayer == null)
                     {
                         currentPlayer = new Player(playerData.id, playerData.name);
-                        currentGamePlayer = new GamePlayer(currentPlayer)
-                        {
-                            game = currentGame,
-                            position = playerData.position,
-                            color = playerData.color
-                        };
-                        lock (playerLock)
-                        {
-                            ConnectPlayerWithGame();
-                        }
                     }
                     break;
                 case GameDataMessage.TYPE:
@@ -175,49 +164,8 @@ namespace GameClient
                             currentGame.gamePlayers.P4.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P4.position);
                             currentGame.gamePlayers.P4.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P4.position);
                         }
-                        if (currentGamePlayer != null)
-                        {
-                            currentGamePlayer.game = currentGame;
-                        }
-                        ConnectPlayerWithGame();
                     }
                     break;
-            }
-        }
-
-        void ConnectPlayerWithGame()
-        {
-            if (currentGame != null && currentPlayer != null && currentGamePlayer != null)
-            {
-                if (currentGame.gamePlayers.P1 != null && currentGame.gamePlayers.P1.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P1.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P1.moveRight;
-                    currentGame.gamePlayers.P1 = currentGamePlayer;
-                    return;
-                }
-
-                if (currentGame.gamePlayers.P2 != null && currentGame.gamePlayers.P2.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P2.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P2.moveRight;
-                    currentGame.gamePlayers.P2 = currentGamePlayer;
-                    return;
-                }
-                if (currentGame.gamePlayers.P3 != null && currentGame.gamePlayers.P3.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P3.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P3.moveRight;
-                    currentGame.gamePlayers.P3 = currentGamePlayer;
-                    return;
-                }
-                if (currentGame.gamePlayers.P4 != null && currentGame.gamePlayers.P4.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P4.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P4.moveRight;
-                    currentGame.gamePlayers.P4 = currentGamePlayer;
-                    return;
-                }
             }
         }
 
@@ -235,25 +183,21 @@ namespace GameClient
         {
             if (e.KeyCode == Keys.Left)
             {
-                if (currentGamePlayer.MoveLeft())
-                {
                     SocketMessage message = new SocketMessage
                     {
                         type = MoveLeftMessage.TYPE
                     };
                     SendMessage(JsonConvert.SerializeObject(message));
-                }
+                
             }
             else if (e.KeyCode == Keys.Right)
             {
-                if (currentGamePlayer.MoveRight())
-                {
                     SocketMessage message = new SocketMessage
                     {
                         type = MoveRightMessage.TYPE
                     };
                     SendMessage(JsonConvert.SerializeObject(message));
-                }
+                
             }
             else if (e.KeyCode == Keys.Space)
             {
@@ -337,7 +281,7 @@ namespace GameClient
 
         void DrawPlayers()
         {
-            if (FrontBuffer != null && currentGame != null && currentGamePlayer != null && currentPlayer != null)
+            if (FrontBuffer != null && currentGame != null && currentPlayer != null)
             {
                 using (var graphic = Graphics.FromImage(FrontBuffer))
                 {
@@ -389,7 +333,7 @@ namespace GameClient
         {
             if (this.showScoreTable)
             {
-                if (FrontBuffer != null && currentGame != null && currentGamePlayer != null && currentPlayer != null)
+                if (FrontBuffer != null && currentGame != null != null && currentPlayer != null)
                 {
                     using (var graphic = Graphics.FromImage(FrontBuffer))
                     {

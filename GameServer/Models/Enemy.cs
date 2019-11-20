@@ -8,6 +8,7 @@ using GameServer.Messages;
 using Newtonsoft.Json;
 using GameServer.Geometry;
 using System.Reflection;
+using GameServer.Models.EnemyStates;
 
 namespace GameServer.Models
 {
@@ -16,14 +17,15 @@ namespace GameServer.Models
         public Position position { get; set; }
 
         [JsonIgnore]
-        private static Random randomInstance = new Random();
+        public EnemyState state { get; set; }
 
-        private long lastMoveTime;
+        public long lastMoveTime { get; set; }
 
         public Enemy(Position position)
         {
             this.position = position;
             this.lastMoveTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            this.state = new SmartEnemyState();
         }
         public Enemy()
         {
@@ -43,26 +45,7 @@ namespace GameServer.Models
 
         public bool Walk()
         {
-            long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            if (currentTime - lastMoveTime > Config.ENEMYMOVERATE) //Remove *3
-            {
-                lastMoveTime = currentTime;
-                string[] moves = { "subtractX", "addX", "subtractY", "addY" };
-                int x = 1;
-                for(int i = randomInstance.Next(0, moves.Length); x < moves.Length; i = (i + 1) % moves.Length)
-                {
-                    Position copiedPosition = new Position(position.x, position.y);
-                    MethodInfo moveCopy = copiedPosition.GetType().GetMethod(moves[i]);
-                    copiedPosition = (Position)moveCopy.Invoke(copiedPosition, new object[] { Config.ENEMYMOVESPEED });
-                    Bounds enemyBounds = new Bounds(copiedPosition, Config.ENEMYSIZE);
-                    if (Bounds.InnerSquare().inBounds(enemyBounds))
-                    {
-                        position = copiedPosition;
-                    }
-                    x++;
-                }
-            }
-            return true;
+            return state.Walk(this);
         }
 
         public object Clone()

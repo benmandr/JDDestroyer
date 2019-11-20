@@ -4,6 +4,7 @@ using System.Drawing;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using GameServer.Geometry;
+using GameServer.Models.EnemyStates;
 
 namespace GameServer.Models
 {
@@ -42,6 +43,12 @@ namespace GameServer.Models
 
         public bool Fly()
         {
+            Enemy hitEnemy = mover.enemyHit(this);
+            if (hitEnemy!= null)
+            {
+                hitEnemy.state = new AngryEnemyState();
+                return false;
+            }
             Position delta = (Position)direction.Clone();
             delta.multiply(Config.BULLETSPEED);
             position.add(delta);
@@ -64,13 +71,13 @@ namespace GameServer.Models
                     Console.WriteLine("cloning bullet");
 
                     //to front
-                    mover.addNew(new BulletAdapter((new BulletSplitFront(this)).getBullet()));
+                    mover.addNew(new BulletAdapter((new BulletSplitFront(this)).splitBullet()));
 
                     //to right
-                    mover.addNew(new BulletAdapter((new BulletSplitRight(this)).getBullet()));
+                    mover.addNew(new BulletAdapter((new BulletSplitRight(this)).splitBullet()));
 
                     //to left
-                    mover.addNew(new BulletAdapter((new BulletSplitLeft(this)).getBullet()));
+                    mover.addNew(new BulletAdapter((new BulletSplitLeft(this)).splitBullet()));
 
                     inner = true;
                 }
