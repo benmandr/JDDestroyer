@@ -64,23 +64,13 @@ namespace GameServer.Models
                     Console.WriteLine("cloning bullet");
 
                     //to front
-                    Bullet front = deepClone();
-                    front.position.invert();
-                    mover.addNew(new BulletAdapter(front));
+                    mover.addNew(new BulletAdapter((new BulletSplitFront(this)).getBullet()));
 
                     //to right
-                    Bullet right = deepClone();
-                    right.position.swap();
-                    right.direction.swap();
-                    right.direction.negative();
-                    mover.addNew(new BulletAdapter(right));
-                    //to left
-                    Bullet left = deepClone();
-                    left.position.swap();
-                    left.position.invert();
-                    left.direction.swap();
-                    mover.addNew(new BulletAdapter(left));
+                    mover.addNew(new BulletAdapter((new BulletSplitRight(this)).getBullet()));
 
+                    //to left
+                    mover.addNew(new BulletAdapter((new BulletSplitLeft(this)).getBullet()));
 
                     inner = true;
                 }
