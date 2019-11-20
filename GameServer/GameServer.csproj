@@ -89,6 +89,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geometry\BulletSplit.cs" />
+    <Compile Include="Geometry\BulletSplitLeft.cs" />
+    <Compile Include="Geometry\BulletSplitFront.cs" />
+    <Compile Include="Geometry\BulletSplitRight.cs" />
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
