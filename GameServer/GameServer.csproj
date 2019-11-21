@@ -103,6 +103,8 @@
     <Compile Include="Models\EnemyStates\DefaultEnemyState.cs" />
     <Compile Include="Models\EnemyStates\EnemyState.cs" />
     <Compile Include="Models\GoldenTooth.cs" />
+    <Compile Include="Utils\IMovableCollection.cs" />
+    <Compile Include="Utils\IMovableIterator.cs" />
     <Compile Include="Utils\Mover.cs" />
     <Compile Include="Utils\Config.cs" />
     <Compile Include="Geometry\Bounds.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IMovable.cs" />
+    <Compile Include="Utils\MoverIterator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

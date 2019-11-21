@@ -5,12 +5,18 @@ using System.Text;
 using System.Threading;
 using GameServer.Models;
 using GameServer.Geometry;
+using GameServer.Utils;
 namespace GameServer
 {
-    public class Mover
+    public class Mover : IMovableCollection
     {
         public List<IMovable> items;
         public List<IMovable> newItems = new List<IMovable>();
+
+        public IMovableIterator createIterator()
+        {
+            return new MoverIterator(this);
+        }
 
         private readonly object x = new object();
 
@@ -54,7 +60,7 @@ namespace GameServer
 
         public Enemy enemyHit(Bullet bullet)
         {
-            foreach(Enemy enemy in GetEnemies())
+            foreach (Enemy enemy in GetEnemies())
             {
                 Bounds enemyBounds = new Bounds(enemy.position, Config.ENEMYSIZE);
                 Bounds bulletBounds = new Bounds(bullet.position, Config.BULLETWIDTH);
@@ -75,12 +81,21 @@ namespace GameServer
                 {
                     lock (x)
                     {
-                        if (items.Count > 0)
+                        //Iterator pattern used
+                        IMovableIterator iterator = createIterator();
+                        for (IMovable item = iterator.First(); !iterator.IsDone(); item = iterator.Next())
                         {
-                            items.RemoveAll(item => !item.Move());
-                            notify();
+                            if (!item.Move())
+                            {
+                                iterator.Remove();
+                            }
                         }
-                        foreach(IMovable item in newItems)
+
+
+                        if(items.Count != 0)
+                            notify();
+
+                        foreach (IMovable item in newItems)
                         {
                             items.Add(item);
                         }
@@ -113,8 +128,15 @@ namespace GameServer
             observers.ForEach(x => x.EnemyListChange(enemies));
 
             GoldenTooth goldenTooth = GetGoldenTooth();
-            if(goldenTooth != null)
+            if (goldenTooth != null)
                 observers.ForEach(x => x.GoldenToothPosition(goldenTooth));
+        }
+
+        // Indexer
+        public IMovable this[int index]
+        {
+            get { return items[index]; }
+            set { items.Add(value); }
         }
     }
 }
