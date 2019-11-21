@@ -17,7 +17,6 @@ namespace GameClient
         Bitmap FrontBuffer;
 
         Player currentPlayer = null;
-        GamePlayer currentGamePlayer = null;
         GameFacade currentGame = null;
         List<Enemy> enemies = new List<Enemy>();
 
@@ -116,14 +115,6 @@ namespace GameClient
                     if (currentPlayer == null)
                     {
                         currentPlayer = new Player(playerData.id, playerData.name);
-                        currentGamePlayer = new GamePlayer(currentPlayer)
-                        {
-                            game = currentGame,
-                            position = playerData.position,
-                            color = playerData.color
-                        };
-                        lock (playerLock)
-                            ConnectPlayerWithGame();
                     }
                     break;
                 case GameDataMessage.TYPE:
@@ -161,49 +152,11 @@ namespace GameClient
                             currentGame.gamePlayers.P4.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P4.position);
                             currentGame.gamePlayers.P4.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P4.position);
                         }
-                        if (currentGamePlayer != null)
-                            currentGamePlayer.game = currentGame;
-                        ConnectPlayerWithGame();
                     }
                     break;
             }
         }
 
-        void ConnectPlayerWithGame()
-        {
-            if (currentGame != null && currentPlayer != null && currentGamePlayer != null)
-            {
-                if (currentGame.gamePlayers.P1 != null && currentGame.gamePlayers.P1.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P1.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P1.moveRight;
-                    currentGame.gamePlayers.P1 = currentGamePlayer;
-                    return;
-                }
-
-                if (currentGame.gamePlayers.P2 != null && currentGame.gamePlayers.P2.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P2.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P2.moveRight;
-                    currentGame.gamePlayers.P2 = currentGamePlayer;
-                    return;
-                }
-                if (currentGame.gamePlayers.P3 != null && currentGame.gamePlayers.P3.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P3.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P3.moveRight;
-                    currentGame.gamePlayers.P3 = currentGamePlayer;
-                    return;
-                }
-                if (currentGame.gamePlayers.P4 != null && currentGame.gamePlayers.P4.Equals(currentGamePlayer))
-                {
-                    currentGamePlayer.moveLeft = currentGame.gamePlayers.P4.moveLeft;
-                    currentGamePlayer.moveRight = currentGame.gamePlayers.P4.moveRight;
-                    currentGame.gamePlayers.P4 = currentGamePlayer;
-                    return;
-                }
-            }
-        }
 
         void SendMessage(string data)
         {
@@ -213,7 +166,7 @@ namespace GameClient
 
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left && currentGamePlayer.MoveLeft())
+            if (e.KeyCode == Keys.Left)
             {
                 SocketMessage message = new SocketMessage
                 {
@@ -221,7 +174,7 @@ namespace GameClient
                 };
                 SendMessage(JsonConvert.SerializeObject(message));
             }
-            else if (e.KeyCode == Keys.Right && currentGamePlayer.MoveRight())
+            else if (e.KeyCode == Keys.Right)
             {
                 SocketMessage message = new SocketMessage
                 {
