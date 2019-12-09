@@ -15,6 +15,7 @@ namespace GameServer.Geometry
         {
 
         }
+
         public Bounds(Position nw, Position se)
         {
             this.nw = nw;
@@ -37,16 +38,8 @@ namespace GameServer.Geometry
             nw = new Position(enemyPos.x - width / 2, enemyPos.y - width / 2);
             se = new Position(enemyPos.x + width / 2, enemyPos.y + width / 2);
         }
-        public bool inBounds(Position position)
-        {
-            if (nw.x < position.x || nw.y < position.y || se.x > position.x || se.y > position.y)
-            {
-                return false;
-            }
-            return true;
-        }
 
-        public bool intersects(Bounds bounds)
+        public bool Intersects(Bounds bounds)
         {
             if (nw.x > bounds.se.x || bounds.nw.x > se.x)
                 return false;
@@ -57,39 +50,13 @@ namespace GameServer.Geometry
         }
 
         
-        public bool inBounds(Bounds bounds)
+        public bool InBounds(Bounds bounds)
         {
             if (nw.x > bounds.nw.x || nw.y > bounds.nw.y || se.x < bounds.se.x || se.y < bounds.se.y)
             {
                 return false;
             }
             return true;
-        }
-
-        public void addPoint(Position point)
-        {
-            if (nw == null && se == null)
-            {
-                nw = point;
-                se = point;
-                return;
-            }
-            if (nw.x < point.x)
-            {
-                nw.x = point.x;
-            }
-            if (nw.y < point.y)
-            {
-                nw.y = point.y;
-            }
-            if (se.x > point.x)
-            {
-                se.x = point.x;
-            }
-            if (se.y > point.y)
-            {
-                se.y = point.y;
-            }
         }
 
         public override string ToString()

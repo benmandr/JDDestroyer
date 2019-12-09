@@ -4,8 +4,8 @@ namespace GameServer
 {
     public class BulletAdapter : IMovable
     {
-        public Bullet bullet { get; set; }
-        public BulletAdapter(Bullet bullet) {
+        public IBullet bullet { get; set; }
+        public BulletAdapter(IBullet bullet) {
             this.bullet = bullet;
         }
         

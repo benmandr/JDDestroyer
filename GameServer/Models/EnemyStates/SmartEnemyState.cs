@@ -63,7 +63,7 @@ namespace GameServer.Models.EnemyStates
                 copiedPosition.add(movePos);
 
                 Bounds enemyBounds = new Bounds(copiedPosition, Config.ENEMYSIZE);
-                if (!Bounds.InnerSquare().inBounds(enemyBounds))
+                if (!Bounds.InnerSquare().InBounds(enemyBounds))
                 {
                     movePos.negative();
                     context.position.add(movePos);

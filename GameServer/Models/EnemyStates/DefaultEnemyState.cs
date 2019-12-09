@@ -27,7 +27,7 @@ namespace GameServer.Models.EnemyStates
                     MethodInfo moveCopy = copiedPosition.GetType().GetMethod(moves[i]);
                     copiedPosition = (Position)moveCopy.Invoke(copiedPosition, new object[] { Config.ENEMYMOVESPEED });
                     Bounds enemyBounds = new Bounds(copiedPosition, Config.ENEMYSIZE);
-                    if (Bounds.InnerSquare().inBounds(enemyBounds))
+                    if (Bounds.InnerSquare().InBounds(enemyBounds))
                     {
                         context.position = copiedPosition;
                     }

@@ -139,7 +139,6 @@ namespace GameServer.Models
         public void SendMessage(string message)
         {
             foreach (GamePlayer player in getPlayers())
-
                 player.sendMessage(message);
         }
     }

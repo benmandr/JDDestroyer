@@ -28,7 +28,7 @@ namespace GameServer
             items = new List<IMovable>();
         }
 
-        public List<Bullet> GetBullets()
+        public List<IBullet> GetBullets()
         {
             lock (x)
             {
@@ -48,7 +48,10 @@ namespace GameServer
         {
             lock (x)
             {
-                return (GoldenTooth)items.Find(x => x is GoldenTooth);
+                GoldenTooth item = (GoldenTooth)items.Find(x => x is GoldenTooth);
+                if (item == null)
+                    item = (GoldenTooth)GoldenTooth.Null;
+                return item;
             }
         }
 
@@ -64,7 +67,7 @@ namespace GameServer
             {
                 Bounds enemyBounds = new Bounds(enemy.position, Config.ENEMYSIZE);
                 Bounds bulletBounds = new Bounds(bullet.position, Config.BULLETWIDTH);
-                if (enemyBounds.intersects(bulletBounds))
+                if (enemyBounds.Intersects(bulletBounds))
                 {
                     return enemy;
                 }
@@ -121,7 +124,7 @@ namespace GameServer
 
         public void notify()
         {
-            List<Bullet> bullets = GetBullets();
+            List<IBullet> bullets = GetBullets();
             observers.ForEach(x => x.BulletListChange(bullets));
 
             List<IEnemy> enemies = GetEnemies();

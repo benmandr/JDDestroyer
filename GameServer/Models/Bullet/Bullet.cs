@@ -8,7 +8,7 @@ using GameServer.Models.EnemyStates;
 
 namespace GameServer.Models
 {
-    public class Bullet : ICloneable
+    public class Bullet : ICloneable, IBullet
     {
         //  private static long bulletIncremental = 1;
 
@@ -34,7 +34,7 @@ namespace GameServer.Models
 
         public Bullet(GamePlayer gamePlayer, Position direction, Mover mover)
         {
-            //    id = bulletIncremental++;
+            //id = bulletIncremental++;
             position = (Position)gamePlayer.position.Clone();
             color = gamePlayer.color;
             this.direction = direction;
@@ -61,7 +61,7 @@ namespace GameServer.Models
 
             Bounds Square = Bounds.MainSquare();
             Bounds bulletBound = new Bounds(position, Config.BULLETWIDTH);
-            if (!Square.intersects(bulletBound))
+            if (!Square.Intersects(bulletBound))
             {
 
                 return false;
@@ -70,7 +70,7 @@ namespace GameServer.Models
             Bounds innerSquare = Bounds.InnerSquare();
             if (!split)
             {
-                if (innerSquare.intersects(bulletBound))
+                if (innerSquare.Intersects(bulletBound))
                 {
                     split = true;
 
@@ -89,12 +89,12 @@ namespace GameServer.Models
                 }
             }
 
-            if(inner && innerSquare.inBounds(bulletBound))
+            if(inner && innerSquare.InBounds(bulletBound))
             {
                 fullyInside = true;
             }
 
-            if (inner && fullyInside && !innerSquare.inBounds(bulletBound))
+            if (inner && fullyInside && !innerSquare.InBounds(bulletBound))
             {
                 return false;
             }
