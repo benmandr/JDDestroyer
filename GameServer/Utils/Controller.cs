@@ -50,12 +50,11 @@ namespace GameServer.Models
                     }
                     else if (addGreenEnemy.Interpret(input))
                     {
-                        while(true)
-                            addNewEnemyViaInterpreter(GreenEnemy.TYPE);
+                        addNewEnemyViaInterpreter(GreenEnemy.TYPE);
                     }
                     else
                     {
-                        Console.WriteLine("expression fail");
+                        Console.WriteLine("Expression fail.");
                     }
                 }
             }).Start();
