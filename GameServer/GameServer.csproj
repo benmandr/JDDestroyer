@@ -102,7 +102,13 @@
     <Compile Include="Models\EnemyStates\FrozenEnemyState.cs" />
     <Compile Include="Models\EnemyStates\DefaultEnemyState.cs" />
     <Compile Include="Models\EnemyStates\EnemyState.cs" />
+    <Compile Include="Models\EnemyStates\StateChange.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeFrozen.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeDefault.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeSmart.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeAngry.cs" />
     <Compile Include="Models\GoldenTooth.cs" />
+    <Compile Include="Models\IEnemy.cs" />
     <Compile Include="Utils\IMovableCollection.cs" />
     <Compile Include="Utils\IMovableIterator.cs" />
     <Compile Include="Utils\Mover.cs" />
@@ -117,7 +123,7 @@
     <Compile Include="Messages\MoveMessages.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="Utils\Controller.cs" />
-    <Compile Include="Models\Bullet.cs" />
+    <Compile Include="Models\Bullet\Bullet.cs" />
     <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\BlueEnemy.cs" />
     <Compile Include="Models\Directions.cs" />

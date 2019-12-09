@@ -36,11 +36,6 @@ namespace GameServer.Models.EnemyStates
                 }
             }
 
-            if(currentTime - startState > Config.ENEMYANGRYTIME)
-            {
-                context.state = new FrozenEnemyState();
-            }
-
             return true;
         }
     }

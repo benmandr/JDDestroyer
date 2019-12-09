@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GameServer.Geometry;
-using System.Reflection;
 
 namespace GameServer.Models.EnemyStates
 {
-    class FrozenEnemyState : EnemyState
+    class StateChangeDefault : StateChange
     {
-        public bool Walk(Enemy context)
+        protected override void InitiateState(IEnemy enemy)
         {
-            return true;
+            enemy.state = new DefaultEnemyState();
         }
     }
 }

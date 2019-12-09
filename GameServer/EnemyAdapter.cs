@@ -5,8 +5,8 @@ namespace GameServer
     public class EnemyAdapter : IMovable
     {
 
-        public Enemy enemy { get; set; }
-        public EnemyAdapter(Enemy enemy)
+        public IEnemy enemy { get; set; }
+        public EnemyAdapter(IEnemy enemy)
         {
             this.enemy = enemy;
         }

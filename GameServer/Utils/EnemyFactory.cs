@@ -9,7 +9,7 @@ namespace GameServer.Models
 {
     class EnemyFactory
     {
-        private static Dictionary<int, Enemy> enemyStore = new Dictionary<int, Enemy>();
+        private static Dictionary<int, IEnemy> enemyStore = new Dictionary<int, IEnemy>();
         private static EnemyFactory instance = new EnemyFactory();
     
         public EnemyFactory()

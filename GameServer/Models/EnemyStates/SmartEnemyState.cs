@@ -49,11 +49,8 @@ namespace GameServer.Models.EnemyStates
         public SmartEnemyState()
         {
             nextStep = randomInstance.Next(0, directionList.Length - 1);
-            startStep = nextStep;
         }
         private int nextStep;
-        private int startStep;
-        private int times = 0;
 
         public bool Walk(Enemy context)
         {
@@ -79,14 +76,6 @@ namespace GameServer.Models.EnemyStates
                 if (nextStep >= directionList.Length)
                 {
                     nextStep = 0;
-                }
-                if(nextStep == startStep)
-                {
-                    times++;
-                }
-                if(times >= 1)
-                {
-                    context.state = new DefaultEnemyState();
                 }
             }
             return true;

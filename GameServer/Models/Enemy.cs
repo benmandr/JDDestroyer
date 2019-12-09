@@ -12,7 +12,7 @@ using GameServer.Models.EnemyStates;
 
 namespace GameServer.Models
 {
-    public abstract class Enemy : ICloneable
+    public abstract class Enemy : ICloneable, IEnemy
     {
         public Position position { get; set; }
 

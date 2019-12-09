@@ -43,10 +43,16 @@ namespace GameServer.Models
 
         public bool Fly()
         {
-            Enemy hitEnemy = mover.enemyHit(this);
+            IEnemy hitEnemy = mover.enemyHit(this);
             if (hitEnemy!= null)
             {
-                hitEnemy.state = new AngryEnemyState();
+                StateChange stateChanger = (new StateChangeSmart()).setNext(new StateChangeAngry()).setNext(new StateChangeFrozen()).setNext(new StateChangeDefault());
+
+                new Thread(() =>
+                {
+                    stateChanger.ChangeState(hitEnemy);
+
+                }).Start();
                 return false;
             }
             Position delta = (Position)direction.Clone();

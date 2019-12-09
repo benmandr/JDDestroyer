@@ -36,7 +36,7 @@ namespace GameServer
             }
         }
 
-        public List<Enemy> GetEnemies()
+        public List<IEnemy> GetEnemies()
         {
             lock (x)
             {
@@ -58,9 +58,9 @@ namespace GameServer
 
         }
 
-        public Enemy enemyHit(Bullet bullet)
+        public IEnemy enemyHit(Bullet bullet)
         {
-            foreach (Enemy enemy in GetEnemies())
+            foreach (IEnemy enemy in GetEnemies())
             {
                 Bounds enemyBounds = new Bounds(enemy.position, Config.ENEMYSIZE);
                 Bounds bulletBounds = new Bounds(bullet.position, Config.BULLETWIDTH);
@@ -124,7 +124,7 @@ namespace GameServer
             List<Bullet> bullets = GetBullets();
             observers.ForEach(x => x.BulletListChange(bullets));
 
-            List<Enemy> enemies = GetEnemies();
+            List<IEnemy> enemies = GetEnemies();
             observers.ForEach(x => x.EnemyListChange(enemies));
 
             GoldenTooth goldenTooth = GetGoldenTooth();

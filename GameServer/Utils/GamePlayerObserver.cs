@@ -28,7 +28,7 @@ namespace GameServer.Models
             gamePlayer.sendMessage(JsonConvert.SerializeObject(message));
         }
 
-        public void EnemyListChange(List<Enemy> enemies)
+        public void EnemyListChange(List<IEnemy> enemies)
         {
             EnemiesDataMessage messageData = new EnemiesDataMessage(enemies.Select(x => new EnemyDummy(x)).ToList());
 

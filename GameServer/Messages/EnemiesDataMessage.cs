@@ -23,7 +23,7 @@ namespace GameServer.Messages
 
         public EnemyDummy() {
         }
-        public EnemyDummy(Enemy enemy)
+        public EnemyDummy(IEnemy enemy)
         {
             position = enemy.position;
             type = enemy.getType;

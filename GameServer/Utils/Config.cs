@@ -2,11 +2,10 @@
 {
     public static class Config
     {
-
         //Server settings
         public const int SERVER_PORT = 8088;
         public const string SERVER_HOST = "ws://localhost";//AZURE: "ws://23.101.139.207";
-       // public const string SERVER_HOST = "ws://25.51.59.235";//AZURE: "ws://23.101.139.207";
+        //public const string SERVER_HOST = "ws://192.168.43.110"; //AZURE: "ws://23.101.139.207";
 
         //Player settings
         public const double MOVESPEED = 5;
@@ -21,8 +20,7 @@
         public const double ENEMYSIZE = 5;
 
         //Enemy states
-        public const int ENEMYANGRYTIME = 4000;
-        public const int ENEMYFREEZETIME = 4000;
+        public const int ENEMYSTATECHANGETIME = 2000;
 
         //Golden Tooth
         public const double GOLDENTOOTHSIZE = 2;
