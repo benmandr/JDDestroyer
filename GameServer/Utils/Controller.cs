@@ -41,6 +41,7 @@ namespace GameServer.Models
                     ExpressionFactory expressionFactory = ExpressionFactory.getInstance();
                     Expression addRedEnemy = expressionFactory.getExpression(RedEnemy.TYPE);
                     Expression addBlueEnemy = expressionFactory.getExpression(BlueEnemy.TYPE);
+                    Expression addGreenEnemy = expressionFactory.getExpression(GreenEnemy.TYPE);
                     Expression viewScore = new AndExpression(new TerminalExpression("view"), new TerminalExpression("score"));
 
                     if (addRedEnemy.Interpret(input))
