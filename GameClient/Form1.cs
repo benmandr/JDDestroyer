@@ -30,7 +30,7 @@ namespace GameClient
         private readonly object playerLock = new object();
         private bool showScoreTable = false;
 
-        List<IBullet> bullets = new List<IBullet>();
+        List<Bullet> bullets = new List<Bullet>();
         List<GraphicItem> graphicItems = new List<GraphicItem>();
 
         public int GetDistance(double value)
@@ -93,11 +93,11 @@ namespace GameClient
                     gamePlayer.position = positionChange.position;
                     break;
 
-                case BulletsDataMessage.TYPE:
-                    BulletsDataMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataMessage>(bsObj.data);
+                case BulletsDataReceiveMessage.TYPE:
+                    BulletsDataReceiveMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataReceiveMessage>(bsObj.data);
                     lock (bulletLock)
                     {
-                        bullets = new List<IBullet>();
+                        bullets = new List<Bullet>();
                         if (bulletsData.bulletList != null)
                             bullets = bulletsData.bulletList;
                     }
