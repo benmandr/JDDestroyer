@@ -18,4 +18,10 @@ namespace GameServer.Messages
             bulletList = bullets;
         }
     }
+
+    public class BulletsDataReceiveMessage
+    {
+        public const int TYPE = 9;
+        public List<Bullet> bulletList { get; set; }
+    }
 }
