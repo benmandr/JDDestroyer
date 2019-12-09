@@ -3,6 +3,7 @@ using SuperWebSocket;
 using Newtonsoft.Json;
 using GameServer.Messages;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace GameServer.Models
 {
@@ -12,6 +13,8 @@ namespace GameServer.Models
         private Dictionary<string, GamePlayer> sessionPlayers = new Dictionary<string, GamePlayer>();
         private GameFacade game = null;
         private int playerCount = 0;
+        private static Controller instance = new Controller();
+
 
         public void initiateConnection()
         {
@@ -23,10 +26,45 @@ namespace GameServer.Models
             wsServer.SessionClosed += Disconnect;
             wsServer.Start();
             Console.WriteLine("Server is running on port " + port + ". Press ENTER to exit....");
+            StartInterpreter();
             Console.ReadKey();
         }
 
-        private static Controller instance = new Controller();
+        public void StartInterpreter()
+        {
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    string input = Console.ReadLine();
+                    Expression addRedEnemy = RedEnemy.AddEnemyExpression();
+                    Expression addBlueEnemy = BlueEnemy.AddEnemyExpression();
+                    Expression addGreenEnemy = GreenEnemy.AddEnemyExpression();
+                    if (addRedEnemy.Interpret(input))
+                    {
+                        addNewEnemyViaInterpreter(RedEnemy.TYPE);
+                    }
+                    else if (addBlueEnemy.Interpret(input))
+                    {
+                        addNewEnemyViaInterpreter(BlueEnemy.TYPE);
+                    }
+                    else if (addGreenEnemy.Interpret(input))
+                    {
+                        addNewEnemyViaInterpreter(GreenEnemy.TYPE);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Expression fail.");
+                    }
+                }
+            }).Start();
+        }
+
+        public void addNewEnemyViaInterpreter(int type)
+        {
+            game.mover.addItem(new EnemyAdapter(EnemyFactory.getInstance().getEnemy(type)));
+        }
+
         public static Controller getInstance()
         {
             return instance;
@@ -35,7 +73,7 @@ namespace GameServer.Models
         private void Disconnect(WebSocketSession session, SuperSocket.SocketBase.CloseReason value)
         {
             GamePlayer gamePlayer = getGamePlayer(session);
-            Console.WriteLine("player " + gamePlayer.player.name + " disconnected");
+            //Console.WriteLine("player " + gamePlayer.player.name + " disconnected");
             if (gamePlayer != null)
             {
                 gamePlayer.game.gamePlayers.removePlayer(gamePlayer);
@@ -50,8 +88,8 @@ namespace GameServer.Models
 
         private void ParseMessage(WebSocketSession session, string value)
         {
-            Console.WriteLine("Geting");
-            Console.WriteLine(value);
+            //Console.WriteLine("Geting");
+            //Console.WriteLine(value);
 
             SocketMessage bsObj = JsonConvert.DeserializeObject<SocketMessage>(value);
             GamePlayer gamePlayer = getGamePlayer(session);
@@ -109,7 +147,7 @@ namespace GameServer.Models
             SocketMessage playerDataMessage = new SocketMessage();
             playerDataMessage.type = PlayerDataMessage.TYPE;
             playerDataMessage.data = JsonConvert.SerializeObject(playerData);
-            Console.WriteLine(JsonConvert.SerializeObject(playerDataMessage));
+            //Console.WriteLine(JsonConvert.SerializeObject(playerDataMessage));
             gamePlayer.sendMessage(JsonConvert.SerializeObject(playerDataMessage));
 
 

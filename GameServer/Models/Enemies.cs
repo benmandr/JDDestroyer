@@ -19,7 +19,6 @@ namespace GameServer.Models
             this.mover = mover;
         }
 
-
         public void Start()
         {
             new Thread(() =>

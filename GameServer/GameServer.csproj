@@ -94,6 +94,7 @@
     <Compile Include="Geometry\BulletSplitFront.cs" />
     <Compile Include="Geometry\BulletSplitRight.cs" />
     <Compile Include="Messages\GoldenToothMessage.cs" />
+    <Compile Include="Models\AndExpression.cs" />
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
@@ -107,10 +108,12 @@
     <Compile Include="Models\EnemyStates\StateChangeDefault.cs" />
     <Compile Include="Models\EnemyStates\StateChangeSmart.cs" />
     <Compile Include="Models\EnemyStates\StateChangeAngry.cs" />
+    <Compile Include="Models\Expression.cs" />
     <Compile Include="Models\GoldenTooth.cs" />
     <Compile Include="Models\IBullet.cs" />
     <Compile Include="Models\IEnemy.cs" />
     <Compile Include="Models\IGoldenTooth.cs" />
+    <Compile Include="Models\TerminalExpression.cs" />
     <Compile Include="Utils\IMovableCollection.cs" />
     <Compile Include="Utils\IMovableIterator.cs" />
     <Compile Include="Utils\Mover.cs" />

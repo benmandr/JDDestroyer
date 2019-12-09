@@ -89,42 +89,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
+    <Compile Include="Geometry\BulletSplit.cs" />
+    <Compile Include="Geometry\BulletSplitLeft.cs" />
+    <Compile Include="Geometry\BulletSplitFront.cs" />
+    <Compile Include="Geometry\BulletSplitRight.cs" />
+    <Compile Include="Messages\GoldenToothMessage.cs" />
+    <Compile Include="Models\Commands.cs" />
+    <Compile Include="Models\Enemies.cs" />
     <Compile Include="BulletAdapter.cs" />
-    <Compile Include="BulletMover.cs" />
-    <Compile Include="Config.cs" /> 
+    <Compile Include="Models\EnemyStates\SmartEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\AngryEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\FrozenEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\DefaultEnemyState.cs" />
+    <Compile Include="Models\EnemyStates\EnemyState.cs" />
+    <Compile Include="Models\EnemyStates\StateChange.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeFrozen.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeDefault.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeSmart.cs" />
+    <Compile Include="Models\EnemyStates\StateChangeAngry.cs" />
+    <Compile Include="Models\GoldenTooth.cs" />
+<<<<<<< HEAD
+    <Compile Include="Models\IEnemy.cs" />
+=======
+    <Compile Include="Models\IBullet.cs" />
+    <Compile Include="Models\IGoldenTooth.cs" />
+>>>>>>> di
+    <Compile Include="Utils\IMovableCollection.cs" />
+    <Compile Include="Utils\IMovableIterator.cs" />
+    <Compile Include="Utils\Mover.cs" />
+    <Compile Include="Utils\Config.cs" />
     <Compile Include="Geometry\Bounds.cs" />
-    <Compile Include="Geometry\Directions\Direction.cs" />
-    <Compile Include="Geometry\Directions\DirectionRight.cs" />
-    <Compile Include="Geometry\Directions\DirectionLeft.cs" />
-    <Compile Include="Geometry\Directions\DirectionBottom.cs" />
-    <Compile Include="Geometry\Directions\DirectionTop.cs" />
     <Compile Include="Geometry\Position.cs" />
     <Compile Include="EnemyAdapter.cs" />
-=======
-    <Compile Include="Models\Enemies.cs" />
-    <Compile Include="Utils\BulletMover.cs" />
-    <Compile Include="Utils\Config.cs" />
->>>>>>> Main/facade_pattern
-    <Compile Include="Messages\EnemyMoveMessage.cs" />
-    <Compile Include="Messages\EnemySpawnMessage.cs" />
+    <Compile Include="Messages\EnemiesDataMessage.cs" />
     <Compile Include="Messages\GameDataMessage.cs" />
     <Compile Include="Messages\ShootMessage.cs" />
     <Compile Include="Messages\PlayerDataMessage.cs" />
     <Compile Include="Messages\MoveMessages.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="Utils\Controller.cs" />
-    <Compile Include="Models\Bullet.cs" />
+    <Compile Include="Models\Bullet\Bullet.cs" />
     <Compile Include="Models\Enemy.cs" />
-<<<<<<< HEAD
-    <Compile Include="Models\BlueEnemy.cs" /> 
-    <Compile Include="Models\Directions.cs" />
-    <Compile Include="GamePlayerEnemyObserver.cs" />
-=======
     <Compile Include="Models\BlueEnemy.cs" />
+    <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\GamePlayers.cs" />
-    <Compile Include="Utils\GamePlayerEnemyObserver.cs" />
->>>>>>> Main/facade_pattern
+    <Compile Include="Utils\GamePlayerObserver.cs" />
     <Compile Include="Models\GreenEnemy.cs" />
     <Compile Include="Models\RedEnemy.cs" />
     <Compile Include="Utils\EnemyFactory.cs" />
@@ -134,11 +143,8 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
-    <Compile Include="ToBullet.cs" />
-=======
-    <Compile Include="Utils\Notifier.cs" />
->>>>>>> Main/facade_pattern
+    <Compile Include="IMovable.cs" />
+    <Compile Include="Utils\MoverIterator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -14,11 +14,9 @@ namespace GameServer.Models
 
         Color color { get; set; }
 
-
         bool Fly();
 
         object Clone();
-
 
         Bullet deepClone();
 
