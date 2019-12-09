@@ -75,7 +75,6 @@ namespace GameServer.Models
             socketMessage.type = PositionChangedMessage.TYPE;
             socketMessage.data = JsonConvert.SerializeObject(message);
 
-            Console.WriteLine("player position message");
             game.SendMessage(JsonConvert.SerializeObject(socketMessage));
         }
 

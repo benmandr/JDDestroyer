@@ -16,5 +16,10 @@ namespace GameServer.Models
         }
 
         public GreenEnemy(Position position) : base(position) { }
+
+        public static Expression AddEnemyExpression()
+        {
+            return new AndExpression(new TerminalExpression("add enemy"), new TerminalExpression("green"));
+        }
     }
 }

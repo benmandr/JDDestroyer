@@ -55,7 +55,7 @@ namespace GameServer.Models
             SocketMessage gameMessage = new SocketMessage();
             gameMessage.type = GameDataMessage.TYPE;
             gameMessage.data = JsonConvert.SerializeObject(game);
-            Console.WriteLine(JsonConvert.SerializeObject(gameMessage));
+            //Console.WriteLine(JsonConvert.SerializeObject(gameMessage));
 
             gamePlayer.sendMessage(JsonConvert.SerializeObject(gameMessage));
         }

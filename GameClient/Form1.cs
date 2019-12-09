@@ -111,7 +111,6 @@ namespace GameClient
                     break;
                 case PlayerDataMessage.TYPE:
                     PlayerDataMessage playerData = JsonConvert.DeserializeObject<PlayerDataMessage>(bsObj.data);
-                    Console.WriteLine(playerData.name);
                     if (currentPlayer == null)
                     {
                         currentPlayer = new Player(playerData.id, playerData.name);

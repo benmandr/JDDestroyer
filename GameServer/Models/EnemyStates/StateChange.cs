@@ -22,11 +22,9 @@ namespace GameServer.Models.EnemyStates
         public void ChangeState(IEnemy enemy)
         {
             InitiateState(enemy);
-            System.Console.WriteLine("CHANGING STATE");
 
             if (next != null)
             {
-                System.Console.WriteLine("CHANGING STATE2");
                 Thread.Sleep(Config.ENEMYSTATECHANGETIME);
                 next.ChangeState(enemy);
             }

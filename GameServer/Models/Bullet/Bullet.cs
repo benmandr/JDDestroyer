@@ -74,8 +74,6 @@ namespace GameServer.Models
                 {
                     split = true;
 
-                    Console.WriteLine("cloning bullet");
-
                     //to front
                     mover.addNew(new BulletAdapter((new BulletSplitFront(this)).splitBullet()));
 
