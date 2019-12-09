@@ -87,5 +87,15 @@ namespace GameServer.Models
             }
             return player.id == obj.player.id;
         }
+
+        public void addScore(long score)
+        {
+            this.score += score;
+        }
+
+        public void removeScore(long score)
+        {
+            this.score -= score;
+        }
     }
 }
