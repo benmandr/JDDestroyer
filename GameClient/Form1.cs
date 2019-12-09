@@ -93,6 +93,12 @@ namespace GameClient
                     gamePlayer.position = positionChange.position;
                     break;
 
+                case PlayerScoreMessage.TYPE:
+                    PlayerScoreMessage data = JsonConvert.DeserializeObject<PlayerScoreMessage>(bsObj.data);
+
+                    currentGame.gamePlayers = data.players;
+
+                    break;
                 case BulletsDataReceiveMessage.TYPE:
                     BulletsDataReceiveMessage bulletsData = JsonConvert.DeserializeObject<BulletsDataReceiveMessage>(bsObj.data);
                     lock (bulletLock)

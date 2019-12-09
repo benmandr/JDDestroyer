@@ -29,7 +29,8 @@ namespace GameServer.Models
         {
             if (game.mover != null)
             {
-                game.mover.addItem(new BulletAdapter(new Bullet(this, game.gamePlayers.getDirection(this), game.mover)));
+                removeScore(Config.SHOOTSCOST);
+                game.mover.addItem(new BulletAdapter(new Bullet(game.gamePlayers, this, game.gamePlayers.getDirection(this), game.mover)));
             }
         }
 
@@ -90,11 +91,27 @@ namespace GameServer.Models
         public void addScore(long score)
         {
             this.score += score;
+
+            PlayerScoreMessage message = new PlayerScoreMessage(game.gamePlayers);
+
+            SocketMessage socketMessage = new SocketMessage();
+            socketMessage.type = PlayerScoreMessage.TYPE;
+            socketMessage.data = JsonConvert.SerializeObject(message);
+            game.SendMessage(JsonConvert.SerializeObject(socketMessage));
         }
 
         public void removeScore(long score)
         {
             this.score -= score;
+            if (this.score < 0)
+                this.score = 0;
+
+            PlayerScoreMessage message = new PlayerScoreMessage(game.gamePlayers);
+
+            SocketMessage socketMessage = new SocketMessage();
+            socketMessage.type = PlayerScoreMessage.TYPE;
+            socketMessage.data = JsonConvert.SerializeObject(message);
+            game.SendMessage(JsonConvert.SerializeObject(socketMessage));
         }
     }
 }

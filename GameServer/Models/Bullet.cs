@@ -10,10 +10,6 @@ namespace GameServer.Models
 {
     public class Bullet : ICloneable, IBullet
     {
-        //  private static long bulletIncremental = 1;
-
-        //   private long id { get; set; }
-
         public Position position { get; set; }
         public Color color { get; set; }
         [JsonIgnore]
@@ -26,15 +22,20 @@ namespace GameServer.Models
         public Position direction;
         [JsonIgnore]
         public Mover mover;
+        [JsonIgnore]
+        GamePlayers gamePlayers = null;
+        [JsonIgnore]
+        GamePlayer shooter = null;
 
         public Bullet()
         {
 
         }
 
-        public Bullet(GamePlayer gamePlayer, Position direction, Mover mover)
+        public Bullet(GamePlayers gamePlayers, GamePlayer gamePlayer, Position direction, Mover mover)
         {
-            //id = bulletIncremental++;
+            this.gamePlayers = gamePlayers;
+            this.shooter = gamePlayer;
             position = (Position)gamePlayer.position.Clone();
             color = gamePlayer.color;
             this.direction = direction;
@@ -50,11 +51,30 @@ namespace GameServer.Models
 
                 new Thread(() =>
                 {
+                    shooter.addScore(Config.ENEMYHITSCORE);
                     stateChanger.ChangeState(hitEnemy);
 
                 }).Start();
                 return false;
             }
+
+            if(gamePlayers != null)
+            {
+                foreach(GamePlayer gamePlayer in gamePlayers.getPlayers())
+                {
+                    if (gamePlayer.Equals(shooter))
+                        continue;
+                    Bounds playerBounds = new Bounds(gamePlayer.position, Config.PLAYERSIZE);
+                    Bounds bulletBounds = new Bounds(position, Config.BULLETWIDTH);
+                    if (playerBounds.Intersects(bulletBounds))
+                    {
+                        gamePlayer.removeScore(Config.HITCOST);
+                        shooter.addScore(Config.PLAYERHITSCORE);
+                        return false;
+                    }
+                }
+            }
+
             Position delta = (Position)direction.Clone();
             delta.multiply(Config.BULLETSPEED);
             position.add(delta);

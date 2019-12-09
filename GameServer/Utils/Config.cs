@@ -30,6 +30,12 @@
         public const double BULLETWIDTH = 2;
         public const double BULLETSPEED = 1;
 
+        //Scores
+        public const int ENEMYHITSCORE = 50;
+        public const int PLAYERHITSCORE = 200;
+        public const int SHOOTSCOST = 30;
+        public const int HITCOST = 50;
+
         //Map settings
         public const int FRAMESPEED = 20;
         public const double INNERSQUARESIZE = 50;

@@ -94,6 +94,7 @@
     <Compile Include="Geometry\BulletSplitFront.cs" />
     <Compile Include="Geometry\BulletSplitRight.cs" />
     <Compile Include="Messages\GoldenToothMessage.cs" />
+    <Compile Include="Messages\PlayerScoreMessage.cs" />
     <Compile Include="Models\AndExpression.cs" />
     <Compile Include="Models\Commands.cs" />
     <Compile Include="Models\Enemies.cs" />
