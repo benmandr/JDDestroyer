@@ -73,7 +73,6 @@
     <Compile Include="GraphicItems\MiddleSquare.cs" />
     <Compile Include="GraphicItems\PlayerScore.cs" />
     <Compile Include="GraphicItems\Proportion.cs" />
-    <Compile Include="GraphicItems\ScoreBlock\ScoreVisitor.cs" />
     <Compile Include="GraphicItems\ScoreTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

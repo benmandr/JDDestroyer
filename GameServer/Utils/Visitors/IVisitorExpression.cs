@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameClient.GraphicItems.ScoreBlock
+namespace GameServer.Utils.Visitors
 {
-    interface ScoreVisitor
+    interface IVisitorExpression
     {
-
+        void Accept(IVisitor visitor);
     }
 }
