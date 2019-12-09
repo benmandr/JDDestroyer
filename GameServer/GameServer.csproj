@@ -109,6 +109,7 @@
     <Compile Include="Models\EnemyStates\StateChangeSmart.cs" />
     <Compile Include="Models\EnemyStates\StateChangeAngry.cs" />
     <Compile Include="Models\Expression.cs" />
+    <Compile Include="Models\ExpressionFactory.cs" />
     <Compile Include="Models\GoldenTooth.cs" />
     <Compile Include="Models\IBullet.cs" />
     <Compile Include="Models\IEnemy.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Messages\MoveMessages.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="Utils\Controller.cs" />
-    <Compile Include="Models\Bullet\Bullet.cs" />
+    <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\Enemy.cs" />
     <Compile Include="Models\BlueEnemy.cs" />
     <Compile Include="Models\Directions.cs" />

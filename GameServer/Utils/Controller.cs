@@ -37,9 +37,10 @@ namespace GameServer.Models
                 while (true)
                 {
                     string input = Console.ReadLine();
-                    Expression addRedEnemy = RedEnemy.AddEnemyExpression();
-                    Expression addBlueEnemy = BlueEnemy.AddEnemyExpression();
-                    Expression addGreenEnemy = GreenEnemy.AddEnemyExpression();
+                    ExpressionFactory expressionFactory = ExpressionFactory.getInstance();
+                    Expression addRedEnemy = expressionFactory.getExpression(RedEnemy.TYPE);
+                    Expression addBlueEnemy = expressionFactory.getExpression(BlueEnemy.TYPE);
+                    Expression addGreenEnemy = expressionFactory.getExpression(GreenEnemy.TYPE);
                     if (addRedEnemy.Interpret(input))
                     {
                         addNewEnemyViaInterpreter(RedEnemy.TYPE);
