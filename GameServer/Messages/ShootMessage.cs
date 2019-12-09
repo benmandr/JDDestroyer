@@ -11,9 +11,9 @@ namespace GameServer.Messages
     public class BulletsDataMessage
     {
         public const int TYPE = 9;
-        public List<Bullet> bulletList { get; set; }
+        public List<IBullet> bulletList { get; set; }
 
-        public BulletsDataMessage(List<Bullet> bullets)
+        public BulletsDataMessage(List<IBullet> bullets)
         {
             bulletList = bullets;
         }

@@ -17,7 +17,7 @@ namespace GameServer.Models
             this.gamePlayer = gamePlayer;
         }
 
-        public void BulletListChange(List<Bullet> bullets)
+        public void BulletListChange(List<IBullet> bullets)
         {
             BulletsDataMessage messageData = new BulletsDataMessage(bullets);
 
