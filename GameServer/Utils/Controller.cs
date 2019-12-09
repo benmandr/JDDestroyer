@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using GameServer.Messages;
 using System.Collections.Generic;
 using System.Threading;
+using GameServer.Utils.Visitors;
 
 namespace GameServer.Models
 {
@@ -40,7 +41,8 @@ namespace GameServer.Models
                     ExpressionFactory expressionFactory = ExpressionFactory.getInstance();
                     Expression addRedEnemy = expressionFactory.getExpression(RedEnemy.TYPE);
                     Expression addBlueEnemy = expressionFactory.getExpression(BlueEnemy.TYPE);
-                    Expression addGreenEnemy = expressionFactory.getExpression(GreenEnemy.TYPE);
+                    Expression viewScore = new AndExpression(new TerminalExpression("view"), new TerminalExpression("score"));
+
                     if (addRedEnemy.Interpret(input))
                     {
                         addNewEnemyViaInterpreter(RedEnemy.TYPE);
@@ -53,12 +55,39 @@ namespace GameServer.Models
                     {
                         addNewEnemyViaInterpreter(GreenEnemy.TYPE);
                     }
+                    else if (viewScore.Interpret(input))
+                    {
+                        writeScores();
+                    }
                     else
                     {
                         Console.WriteLine("Expression fail.");
                     }
                 }
             }).Start();
+        }
+
+        public void writeScores()
+        {
+            RowExpression title = new RowExpression(new TextExpression("Player name"), new TextExpression("Score"));
+
+            List <RowExpression> rows = new List<RowExpression>();
+            int cnt = 0;
+            foreach(GamePlayer player in game.gamePlayers.getPlayers())
+            {
+                rows.Add(new RowExpression(new TextExpression("Player" + cnt++), new TextExpression(player.score.ToString())));
+            }
+
+            List<TableBlockExpression> blocks = new List<TableBlockExpression>();
+            blocks.Add(new TableBlockExpression(rows));
+
+            TableExpression table = new TableExpression(title, blocks);
+
+            ScoreVisitor visitor = new ScoreVisitor(new System.Text.StringBuilder());
+            visitor.Visit(table);
+
+            Console.WriteLine(visitor);
+
         }
 
         public void addNewEnemyViaInterpreter(int type)
