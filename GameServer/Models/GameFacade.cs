@@ -47,8 +47,6 @@ namespace GameServer.Models
 
         public void SendMessage(string message)
         {
-            Console.WriteLine("sending");
-            Console.WriteLine(message);
             gamePlayers.SendMessage(message);
         }
 

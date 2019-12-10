@@ -15,6 +15,8 @@ namespace GameServer.Models
         [JsonIgnore]
         public bool split = false;
         [JsonIgnore]
+        public bool hitTooth = false;
+        [JsonIgnore]
         public bool inner = false;
         [JsonIgnore]
         public bool fullyInside = false;
@@ -58,6 +60,18 @@ namespace GameServer.Models
                 return false;
             }
 
+            GoldenTooth tooth = mover.GetGoldenTooth();
+            if (tooth != null)
+            {
+                Bounds toothBounds = new Bounds(tooth.position, Config.GOLDENTOOTHSIZE);
+                Bounds bulletBounds = new Bounds(position, Config.BULLETWIDTH);
+                if (toothBounds.Intersects(bulletBounds))
+                {
+                    shooter.addScore(Config.GOLDENTOOTHSCORE);
+                    return false;
+                }
+            }
+
             if(gamePlayers != null)
             {
                 foreach(GamePlayer gamePlayer in gamePlayers.getPlayers())
@@ -93,7 +107,6 @@ namespace GameServer.Models
                 if (innerSquare.Intersects(bulletBound))
                 {
                     split = true;
-
                     //to front
                     mover.addNew(new BulletAdapter((new BulletSplitFront(this)).splitBullet()));
 

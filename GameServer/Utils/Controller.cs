@@ -163,7 +163,7 @@ namespace GameServer.Models
             {
                 game = new GameFacade();
                 game.StartGame();
-                Console.WriteLine("Game created");
+               // Console.WriteLine("Game created");
             }
 
 
@@ -178,11 +178,10 @@ namespace GameServer.Models
             SocketMessage playerDataMessage = new SocketMessage();
             playerDataMessage.type = PlayerDataMessage.TYPE;
             playerDataMessage.data = JsonConvert.SerializeObject(playerData);
-            //Console.WriteLine(JsonConvert.SerializeObject(playerDataMessage));
             gamePlayer.sendMessage(JsonConvert.SerializeObject(playerDataMessage));
 
 
-            Console.WriteLine("Game joined");
+           // Console.WriteLine("Game joined");
 
             sessionPlayers[session.SessionID] = gamePlayer;
         }
