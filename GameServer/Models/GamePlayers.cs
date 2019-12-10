@@ -106,6 +106,8 @@ namespace GameServer.Models
                 return;
             }
         }
+
+
         public bool isEmpty()
         {
             foreach (GamePlayer gamePlayer in getPlayers())

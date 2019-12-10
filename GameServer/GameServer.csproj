@@ -95,6 +95,7 @@
     <Compile Include="Geometry\BulletSplitRight.cs" />
     <Compile Include="Messages\GoldenToothMessage.cs" />
     <Compile Include="Messages\PlayerAngleMessage.cs" />
+    <Compile Include="Messages\BestScoreMessage.cs" />
     <Compile Include="Messages\PlayerScoreMessage.cs" />
     <Compile Include="Models\AndExpression.cs" />
     <Compile Include="Models\Commands.cs" />

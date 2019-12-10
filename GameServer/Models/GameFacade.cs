@@ -10,6 +10,7 @@ namespace GameServer.Models
 {
     public class GameFacade
     {
+        public long bestScore { get; set; }
         public string name { get; set; }
 
         public GamePlayers gamePlayers { get; set; }
@@ -26,6 +27,7 @@ namespace GameServer.Models
             mover = new Mover();
             gamePlayers = new GamePlayers();
             enemySpawner = new Enemies(mover);
+            bestScore = 0;
         }
 
         public void StartGame()
@@ -45,6 +47,11 @@ namespace GameServer.Models
             mover.notify();
         }
 
+        public void removePlayer()
+        {
+
+        }
+
         public void SendMessage(string message)
         {
             gamePlayers.SendMessage(message);
@@ -56,6 +63,21 @@ namespace GameServer.Models
             goldenTooth.position = new Position(50, 50);
             goldenTooth.direction = Position.DirectionRight();
             mover.addItem(goldenTooth);
+        }
+
+        public void newBestScore(long score)
+        {
+            if(score > bestScore)
+            {
+                bestScore = score;
+
+                BestScoreMessage message = new BestScoreMessage(bestScore);
+
+                SocketMessage socketMessage = new SocketMessage();
+                socketMessage.type = BestScoreMessage.TYPE;
+                socketMessage.data = JsonConvert.SerializeObject(message);
+                SendMessage(JsonConvert.SerializeObject(socketMessage));
+            }
         }
     }
 }

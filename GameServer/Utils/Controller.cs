@@ -108,10 +108,15 @@ namespace GameServer.Models
             if (gamePlayer != null)
             {
                 gamePlayer.game.gamePlayers.removePlayer(gamePlayer);
+                game.mover.removeObserver(gamePlayer);
                 if (gamePlayer.game.gamePlayers.isEmpty())
                 {
                     gamePlayer.game = null;
                     game = null;
+                } else
+                {
+                    Console.WriteLine("notify delete");
+                    game.mover.observers.ForEach(x => x.PlayerListChange(game));
                 }
             }
             sessionPlayers[session.SessionID] = null;

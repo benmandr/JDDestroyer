@@ -143,12 +143,20 @@ namespace GameClient
                             currentGame.gamePlayers.P1.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P1.position);
                             currentGame.gamePlayers.P1.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P1.position);
                         }
+                        else
+                        {
+                            currentGame.gamePlayers.P1 = null;
+                        }
                         if (game.gamePlayers.P2 != null)
                         {
                             currentGame.gamePlayers.P2 = game.gamePlayers.P2;
                             IMoveStrategy strategy = new P2MoveStrategy();
                             currentGame.gamePlayers.P2.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P2.position);
                             currentGame.gamePlayers.P2.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P2.position);
+                        }
+                        else
+                        {
+                            currentGame.gamePlayers.P2 = null;
                         }
                         if (game.gamePlayers.P3 != null)
                         {
@@ -157,12 +165,20 @@ namespace GameClient
                             currentGame.gamePlayers.P3.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P3.position);
                             currentGame.gamePlayers.P3.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P3.position);
                         }
+                        else
+                        {
+                            currentGame.gamePlayers.P3 = null;
+                        }
                         if (game.gamePlayers.P4 != null)
                         {
                             currentGame.gamePlayers.P4 = game.gamePlayers.P4;
                             IMoveStrategy strategy = new P4MoveStrategy();
                             currentGame.gamePlayers.P4.moveLeft = new MoveLeftCommand(strategy, game.gamePlayers.P4.position);
                             currentGame.gamePlayers.P4.moveRight = new MoveRightCommand(strategy, game.gamePlayers.P4.position);
+                        }
+                        else
+                        {
+                            currentGame.gamePlayers.P4 = null;
                         }
                     }
                     break;

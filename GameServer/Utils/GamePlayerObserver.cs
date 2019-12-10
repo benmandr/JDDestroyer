@@ -10,7 +10,7 @@ namespace GameServer.Models
 {
     public class GamePlayerObserver
     {
-        GamePlayer gamePlayer { get; set; }
+        public GamePlayer gamePlayer { get; set; }
 
         public GamePlayerObserver(GamePlayer gamePlayer)
         {

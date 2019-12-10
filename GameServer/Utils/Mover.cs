@@ -55,6 +55,11 @@ namespace GameServer
             }
         }
 
+        public void removeObserver(GamePlayer player)
+        {
+            observers.RemoveAll(x => x.gamePlayer.Equals(player));
+        }
+
         public void addObserver(GamePlayerObserver observer)
         {
             observers.Add(observer);
