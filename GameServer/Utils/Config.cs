@@ -29,6 +29,7 @@
         //Bullet settings
         public const double BULLETWIDTH = 2;
         public const double BULLETSPEED = 2;
+        public const double SHOOTINGRATE = 300;
 
         //Scores
         public const int ENEMYHITSCORE = 50;

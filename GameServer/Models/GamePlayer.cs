@@ -12,6 +12,7 @@ namespace GameServer.Models
 {
     public class GamePlayer
     {
+
         public Player player { get; set; }
         public Position position { get; set; }
         public Color color { get; set; }
@@ -23,14 +24,19 @@ namespace GameServer.Models
         [JsonIgnore]
         public GameFacade game { get; set; }
         public long score { get; set; }
-
+        [JsonIgnore]
+        public long lastShootTime { get; set; }
 
         public void Shoot()
         {
-            if (game.mover != null)
+
+            long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            if (game.mover != null && currentTime - lastShootTime > Config.SHOOTINGRATE)
             {
                 removeScore(Config.SHOOTSCOST);
                 game.mover.addItem(new BulletAdapter(new Bullet(game.gamePlayers, this, game.gamePlayers.getDirection(this), game.mover)));
+                lastShootTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
             }
         }
 
@@ -38,6 +44,7 @@ namespace GameServer.Models
         {
             this.player = player;
             score = 0;
+            lastShootTime = 0;
         }
 
         public void sendMessage(string message)
