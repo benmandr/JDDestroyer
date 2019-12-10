@@ -26,6 +26,7 @@ namespace GameServer.Models
                 IMoveStrategy strategy = new P1MoveStrategy();
                 gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
                 gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
+                gamePlayer.sendAngleMessage(0);
             }
             else if (P2 == null)
             {
@@ -35,6 +36,7 @@ namespace GameServer.Models
                 IMoveStrategy strategy = new P2MoveStrategy();
                 gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
                 gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
+                gamePlayer.sendAngleMessage(90);
             }
             else if (P3 == null)
             {
@@ -44,6 +46,7 @@ namespace GameServer.Models
                 IMoveStrategy strategy = new P3MoveStrategy();
                 gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
                 gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
+                gamePlayer.sendAngleMessage(180);
             }
             else if (P4 == null)
             {
@@ -53,6 +56,7 @@ namespace GameServer.Models
                 IMoveStrategy strategy = new P4MoveStrategy();
                 gamePlayer.moveLeft = new MoveLeftCommand(strategy, gamePlayer.position);
                 gamePlayer.moveRight = new MoveRightCommand(strategy, gamePlayer.position);
+                gamePlayer.sendAngleMessage(270);
             }
             gamePlayer.game = game;
         }

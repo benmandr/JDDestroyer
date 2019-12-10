@@ -52,6 +52,15 @@ namespace GameServer.Models
             player.sendMessage(message);
         }
 
+        public void sendAngleMessage(int angle)
+        {
+            PlayerAngleMessage playerAngle = new PlayerAngleMessage(angle);
+            SocketMessage playerAngleMessage = new SocketMessage();
+            playerAngleMessage.type = PlayerAngleMessage.TYPE;
+            playerAngleMessage.data = JsonConvert.SerializeObject(playerAngle);
+            sendMessage(JsonConvert.SerializeObject(playerAngleMessage));
+        }
+
         public bool MoveRight()
         {
             moveRight.Execute();

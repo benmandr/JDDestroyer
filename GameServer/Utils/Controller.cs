@@ -180,8 +180,7 @@ namespace GameServer.Models
             playerDataMessage.data = JsonConvert.SerializeObject(playerData);
             gamePlayer.sendMessage(JsonConvert.SerializeObject(playerDataMessage));
 
-
-           // Console.WriteLine("Game joined");
+            // Console.WriteLine("Game joined");
 
             sessionPlayers[session.SessionID] = gamePlayer;
         }

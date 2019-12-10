@@ -15,6 +15,7 @@ namespace GameClient
     {
         Bitmap BackBuffer;
         Bitmap FrontBuffer;
+        Bitmap TopBuffer;
 
         Player currentPlayer = null;
         GameFacade currentGame = null;
@@ -32,6 +33,8 @@ namespace GameClient
 
         List<Bullet> bullets = new List<Bullet>();
         List<GraphicItem> graphicItems = new List<GraphicItem>();
+
+        private static int angle = 0;
 
         public int GetDistance(double value)
         {
@@ -107,6 +110,10 @@ namespace GameClient
                         if (bulletsData.bulletList != null)
                             bullets = bulletsData.bulletList;
                     }
+                    break;
+                case PlayerAngleMessage.TYPE:
+                    PlayerAngleMessage angleData = JsonConvert.DeserializeObject<PlayerAngleMessage>(bsObj.data);
+                    angle = angleData.angle;
                     break;
 
                 case GoldenToothMessage.TYPE:
@@ -213,6 +220,7 @@ namespace GameClient
             {
                 e.Graphics.DrawImageUnscaled(BackBuffer, Point.Empty);
                 e.Graphics.DrawImageUnscaled(FrontBuffer, Point.Empty);
+                e.Graphics.DrawImageUnscaled(TopBuffer, Point.Empty);
             }
         }
 
@@ -222,10 +230,12 @@ namespace GameClient
             {
                 BackBuffer.Dispose();
                 FrontBuffer.Dispose();
+                TopBuffer.Dispose();
             }
             Proportion.windowWidth = ClientSize.Width;
             BackBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
             FrontBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
+            TopBuffer = new Bitmap(ClientSize.Width, ClientSize.Height);
             (new MainWindow(BackBuffer)).Draw();
             (new CornerSquares(BackBuffer)).Draw();
             (new MiddleSquare(BackBuffer)).Draw();
@@ -254,16 +264,49 @@ namespace GameClient
                 blocks.Add(new GoldenToothBlock(FrontBuffer, goldenTooth.position));
 
             graphicItems.Add(blocks);
-            graphicItems.Add(new PlayerScore(FrontBuffer));
+            graphicItems.Add(new PlayerScore(TopBuffer));
             if (showScoreTable)
-                graphicItems.Add(new ScoreTable(FrontBuffer, currentGame.gamePlayers));
+                graphicItems.Add(new ScoreTable(TopBuffer, currentGame.gamePlayers));
 
             if (BackBuffer != null)
+            {
                 using (var graphic = Graphics.FromImage(FrontBuffer))
+                {
                     graphic.Clear(Color.Transparent);
+                }
+                using (var graphic = Graphics.FromImage(TopBuffer))
+                {
+                    graphic.Clear(Color.Transparent);
+                }
+            }
             Invalidate();
-
             graphicItems.ForEach(x => x.Draw());
+            if (FrontBuffer != null)
+            {
+                FrontBuffer = RotateImage(FrontBuffer, angle);
+            }
+
+        }
+
+        public static Bitmap RotateImage(Bitmap b, float angle)
+        {
+            if (angle == 0)
+                return b;
+            //create a new empty bitmap to hold rotated image
+            Bitmap returnBitmap = new Bitmap(b.Width, b.Height);
+            //make a graphics object from the empty bitmap
+            using (Graphics g = Graphics.FromImage(returnBitmap))
+            {
+                //move rotation point to center of image
+                g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
+                //rotate
+                g.RotateTransform(angle);
+                //move image back
+                g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
+                //draw passed in image onto graphics object
+                g.DrawImage(b, new Point(0, 0));
+            }
+            return returnBitmap;
         }
     }
 }
