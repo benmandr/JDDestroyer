@@ -114,6 +114,7 @@ namespace GameServer.Models
             socketMessage.type = PlayerScoreMessage.TYPE;
             socketMessage.data = JsonConvert.SerializeObject(message);
             game.SendMessage(JsonConvert.SerializeObject(socketMessage));
+            game.newBestScore(this.score);
         }
 
         public void removeScore(long score)
@@ -128,6 +129,8 @@ namespace GameServer.Models
             socketMessage.type = PlayerScoreMessage.TYPE;
             socketMessage.data = JsonConvert.SerializeObject(message);
             game.SendMessage(JsonConvert.SerializeObject(socketMessage));
+
+            game.newBestScore(this.score);
         }
     }
 }

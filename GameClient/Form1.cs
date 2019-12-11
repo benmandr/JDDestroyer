@@ -115,6 +115,11 @@ namespace GameClient
                     PlayerAngleMessage angleData = JsonConvert.DeserializeObject<PlayerAngleMessage>(bsObj.data);
                     angle = angleData.angle;
                     break;
+                case BestScoreMessage.TYPE:
+                    BestScoreMessage scoreData = JsonConvert.DeserializeObject<BestScoreMessage>(bsObj.data);
+                    if (currentGame != null)
+                        currentGame.bestScore = scoreData.score;
+                    break;
 
                 case GoldenToothMessage.TYPE:
                     GoldenToothMessage goldenToothData = JsonConvert.DeserializeObject<GoldenToothMessage>(bsObj.data);
@@ -280,7 +285,7 @@ namespace GameClient
                 blocks.Add(new GoldenToothBlock(FrontBuffer, goldenTooth.position));
 
             graphicItems.Add(blocks);
-            graphicItems.Add(new PlayerScore(TopBuffer));
+            graphicItems.Add(new PlayerScore(TopBuffer, currentGame.bestScore));
             if (showScoreTable)
                 graphicItems.Add(new ScoreTable(TopBuffer, currentGame.gamePlayers));
 

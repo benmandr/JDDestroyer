@@ -115,7 +115,6 @@ namespace GameServer.Models
                     game = null;
                 } else
                 {
-                    Console.WriteLine("notify delete");
                     game.mover.observers.ForEach(x => x.PlayerListChange(game));
                 }
             }
